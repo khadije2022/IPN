@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categorie', function (Blueprint $table) {
-            $table->id();
-            $table->string('type');
+        Schema::create('mouvement_stocks', function (Blueprint $table) {
+            $table->id('idMouvement');
+            $table->timestamp('date');
+            $table->string('typeStock');
+            $table->foreignId('idBonDeSortie')->nullable()->constrained('bon_de_sorties');
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categorie');
+        Schema::dropIfExists('mouvement_stocks');
     }
 };

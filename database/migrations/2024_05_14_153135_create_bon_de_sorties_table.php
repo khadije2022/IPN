@@ -6,21 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('mouvement_stock', function (Blueprint $table) {
-            $table->id('idMouvement');
+        Schema::create('bon_de_sorties', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('id_Magasin')->constrained('magasins', 'idMagasin');
             $table->timestamp('date');
-            $table->string('typeStock');
-            $table->foreignId('idBonDeSortie')->nullable()->constrained('bon_de_sortie');
             $table->timestamps();
         });
     }
 
-
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
-        Schema::dropIfExists('mouvement_stock');
+        Schema::dropIfExists('bon_de_sorties');
     }
 };
