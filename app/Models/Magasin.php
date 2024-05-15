@@ -8,5 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Magasin extends Model
 {
     use HasFactory;
-    
+    public fonction(){
+        return has
+    }
 }
