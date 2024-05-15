@@ -15,8 +15,8 @@ class MagasinResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'idMagasin'=>$this->idMagasin
+            'idMagasin'=>$this->idMagasin,
             'nomMagasin'=>$this->nomMagasin
-            ]
+        ];
     }
 }

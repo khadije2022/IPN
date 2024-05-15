@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mouvement_stocks', function (Blueprint $table) {
-            $table->id('idMouvement');
+            $table->id();
             $table->timestamp('date');
             $table->string('typeStock');
-            $table->foreignId('idBonDeSortie')->nullable()->constrained('bon_de_sorties');
+            // $table->foreignId('idBonDeSortie')->nullable()->constrained('bon_sortie_achats');
             $table->timestamps();
         });
     }

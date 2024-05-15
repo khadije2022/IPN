@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('type');
-            $table->foreignId('parent_id')->nullable()->constrained('categories');
-            $table->timestamps();
+        Schema::table('mouvement_stocks', function (Blueprint $table) {
+                        $table->foreignId('idBonDeSortieAchats')->nullable()->constrained('bon_sortie_achats');
+
         });
     }
 
@@ -24,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categories');
+        Schema::table('mouvment_stocks', function (Blueprint $table) {
+            //
+        });
     }
 };
