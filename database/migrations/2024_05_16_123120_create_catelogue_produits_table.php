@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bon_de_sorties', function (Blueprint $table) {
+        Schema::create('catelogue_produits', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_Magasin')->constrained('magasins', 'idMagasin');
-            $table->timestamp('date');
+            $table->string('designation');
+            $table->foreignId('idCategorie')->constrained('categories');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bon_de_sorties');
+        Schema::dropIfExists('catelogue_produits');
     }
 };

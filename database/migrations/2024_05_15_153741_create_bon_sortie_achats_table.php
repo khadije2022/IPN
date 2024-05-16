@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mouvement_stocks', function (Blueprint $table) {
+        Schema::create('bon_sortie_achats', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date');
-            $table->string('typeStock');
+            $table->enum('type',['Sortie','Achat']);
+            $table->foreignId('id_magasin')->constrained('magasins');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mouvement_stocks');
+        Schema::dropIfExists('bon_sortie_achats');
     }
 };

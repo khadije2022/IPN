@@ -13,9 +13,8 @@ return new class extends Migration
     {
         Schema::create('details_mouvements', function (Blueprint $table) {
             $table->id('idDetails');
-            $table->foreignId('idMouvement')->constrained('mouvement_stocks', 'idMouvement');
-            $table->foreignId('idProduit')->constrained('catalogue_produits', 'NProduit');
-            $table->foreignId('id_Magasin')->constrained('magasins', 'idMagasin');
+            $table->foreignId('idMouvement')->constrained('mouvement_stocks');
+            $table->foreignId('id_magasin')->constrained('magasins');
             $table->integer('qte');
             $table->timestamps();
         });
