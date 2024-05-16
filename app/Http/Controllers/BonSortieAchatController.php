@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Catalogue_produit;
-use App\Http\Requests\StoreCatalogue_produitRequest;
-use App\Http\Requests\UpdateCatalogue_produitRequest;
+use App\Models\BonSortieAchat;
+use App\Http\Requests\StoreBonSortieAchatRequest;
+use App\Http\Requests\UpdateBonSortieAchatRequest;
 
-class Catatogue_produitController extends Controller
+class BonSortieAchatController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class Catatogue_produitController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCatalogue_produitRequest $request)
+    public function store(StoreBonSortieAchatRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class Catatogue_produitController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Catalogue_produit $catalogue_produit)
+    public function show(BonSortieAchat $bonSortieAchat)
     {
         //
     }
@@ -43,7 +43,7 @@ class Catatogue_produitController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Catalogue_produit $catalogue_produit)
+    public function edit(BonSortieAchat $bonSortieAchat)
     {
         //
     }
@@ -51,7 +51,7 @@ class Catatogue_produitController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCatalogue_produitRequest $request, Catalogue_produit $catalogue_produit)
+    public function update(UpdateBonSortieAchatRequest $request, BonSortieAchat $bonSortieAchat)
     {
         //
     }
@@ -59,7 +59,7 @@ class Catatogue_produitController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Catalogue_produit $catalogue_produit)
+    public function destroy(BonSortieAchat $bonSortieAchat)
     {
         //
     }

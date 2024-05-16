@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\CatalogueProduit;
 
 class Categorie extends Model
 {
     use HasFactory;
     protected $fillable = [
-        
+
     ];
 
-    public function catalogue_produit(){
-        return $this->hasMany(Catalogue_produit::class);
+    public function catalogueProduits(){
+        return $this->hasMany(CatelogueProduit::class,'idCategorie');
     }
 }

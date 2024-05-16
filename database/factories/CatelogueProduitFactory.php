@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Catalogue_produit>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\CatelogueProduit>
  */
-class CatalogueProduitFactory extends Factory
+class CatelogueProduitFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,8 @@ class CatalogueProduitFactory extends Factory
     public function definition(): array
     {
         return [
-            
+            'designation' => fake()->name(),
+            'idCategorie' => 1
         ];
     }
 }
