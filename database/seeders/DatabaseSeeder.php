@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use App\Models\Magasin;
+use App\Models\Categorie;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,5 +23,6 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('123.321A')
         ]);
         Magasin::factory()->count(30)->create();
+        Categorie::factory()->count(30)->create();
     }
 }

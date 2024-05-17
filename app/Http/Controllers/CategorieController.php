@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Categorie;
 use App\Http\Requests\StoreCategorieRequest;
 use App\Http\Requests\UpdateCategorieRequest;
+use App\Http\Resources\CategorieResource;
+use Inertia\Inertia;
 
 class CategorieController extends Controller
 {
@@ -13,9 +15,12 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        $query=Categorie::query();
-        $categories=$query->paginate(10)->onEachPage(1);
-        return Inertia('Categorie/Index',[]);
+        $categories = Categorie::paginate(10);
+        
+        return Inertia::render('Categorie/Index', [
+            'categories' => CategorieResource::collection($categories),
+            'success' => session('success')
+        ]);
     }
 
     /**
@@ -23,7 +28,7 @@ class CategorieController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia("Categorie/Create");
     }
 
     /**
@@ -31,7 +36,10 @@ class CategorieController extends Controller
      */
     public function store(StoreCategorieRequest $request)
     {
-        //
+        $data=$request->validated();
+        Categorie::create($data);
+
+        return to_route('categorie.index')->with('success','Categorie was create');
     }
 
     /**
@@ -47,7 +55,9 @@ class CategorieController extends Controller
      */
     public function edit(Categorie $categorie)
     {
-        //
+        return Inertia('Categorie/Edit',[
+            'categorie' => $categorie
+        ]);
     }
 
     /**
@@ -55,12 +65,18 @@ class CategorieController extends Controller
      */
     public function update(UpdateCategorieRequest $request, Categorie $categorie)
     {
-        //
+        $data= $request->all();
+        
+        $categorie->update($data);
+        return to_route('categorie.index')->with('success','Categorie was update');
     }
 
-
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy(Categorie $categorie)
     {
-        //
+        $categorie->delete();
+        return to_route('categorie.index')->with('success','Categorie was deleted');
     }
 }

@@ -14,9 +14,7 @@ class MagasinResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
-            'idMagasin'=>$this->idMagasin
-            'nomMagasin'=>$this->nomMagasin
-            ]
+        return parent::toArray($request);
+
     }
 }

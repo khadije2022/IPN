@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Magasin;
 use App\Http\Requests\StoreMagasinRequest;
 use App\Http\Requests\UpdateMagasinRequest;
+use App\Http\Resources\MagasinResource;
 
 class MagasinController extends Controller
 {
@@ -13,8 +14,9 @@ class MagasinController extends Controller
      */
     public function index()
     {
+        $magasins=Magasin::paginate(10);
         return Inertia('Magasin/Index',[
-
+            'magasins' =>MagasinResource::collection($magasins)
         ]);
     } 
 
