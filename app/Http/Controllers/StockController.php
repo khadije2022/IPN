@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Bon_de_sortie;
-use App\Http\Requests\StoreBon_de_sortieRequest;
-use App\Http\Requests\UpdateBon_de_sortieRequest;
+use App\Models\Stock;
+use App\Http\Requests\StoreStockRequest;
+use App\Http\Requests\UpdateStockRequest;
 
-class BonDeSortieController extends Controller
+class StockController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class BonDeSortieController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBon_de_sortieRequest $request)
+    public function store(StoreStockRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class BonDeSortieController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Bon_de_sortie $bon_de_sortie)
+    public function show(Stock $stock)
     {
         //
     }
@@ -43,7 +43,7 @@ class BonDeSortieController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Bon_de_sortie $bon_de_sortie)
+    public function edit(Stock $stock)
     {
         //
     }
@@ -51,7 +51,7 @@ class BonDeSortieController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBon_de_sortieRequest $request, Bon_de_sortie $bon_de_sortie)
+    public function update(UpdateStockRequest $request, Stock $stock)
     {
         //
     }
@@ -59,7 +59,7 @@ class BonDeSortieController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Bon_de_sortie $bon_de_sortie)
+    public function destroy(Stock $stock)
     {
         //
     }
