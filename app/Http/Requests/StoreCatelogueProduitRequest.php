@@ -11,7 +11,7 @@ class StoreCatelogueProduitRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return false;
     }
 
     /**
@@ -22,7 +22,7 @@ class StoreCatelogueProduitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => ['required','max:255']
+            //
         ];
     }
 }

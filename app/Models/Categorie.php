@@ -9,14 +9,12 @@ use App\Models\CatalogueProduit;
 class Categorie extends Model
 {
     use HasFactory;
-<<<<<<< HEAD
+
     protected $fillable=['type'];
-=======
-    protected $fillable = [
 
-    ];
 
-    public function catalogueProduits(){
-        return $this->hasMany(CatelogueProduit::class,'idCategorie');
-    }
+
+    // public function catalogueProduits(){
+    //     return $this->hasMany(CatalogueProduit::class,'idCategorie');
+    // }
 }
