@@ -25,9 +25,12 @@ class DatabaseSeeder extends Seeder
         ]);
         Magasin::factory()->count(30)->create();
 
+        Categorie::factory()->count(30)->create();
+
         Categorie::factory()
         ->count(30)
         ->has(CatelogueProduit::factory()->count(30),'catalogueProduits')
         ->create();
+
     }
 }
