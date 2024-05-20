@@ -25,7 +25,7 @@ function Index({auth,categories,success}){
             </div>
           }    >
         <Head title="Categories" />
-            
+
 
                     <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -43,7 +43,7 @@ function Index({auth,categories,success}){
                               <tr className='text-nowrap'>
                                 <th className='px-3 py-3'>ID</th>
                                <th className='px-3 py-3'>type</th>
-                                
+
                                 <th className='px-3 py-3 text-right'>Action</th>
                               </tr>
                             </thead>
@@ -52,7 +52,7 @@ function Index({auth,categories,success}){
                                 <tr key={categorie.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                                   <td className='px-3 py-2' >{categorie.id}</td>
                                   <td className='px-3 py-2'>{categorie.type}</td>
-                                  
+
                                   <td className='px-3 py-2 text-nowrap'>
                                     <Link
                                       href={route("categorie.edit", categorie.id)}
@@ -77,7 +77,7 @@ function Index({auth,categories,success}){
 
                             </tbody>
                           </table>
-                          
+
                         <Pagination links={categories.meta.links}/>
                         </div>
                     </div>

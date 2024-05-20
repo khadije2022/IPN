@@ -15,13 +15,19 @@ class CategorieController extends Controller
      */
     public function index()
     {
-        $categories = Categorie::paginate(10);
+        // Initialize the query builder for the Categorie model
+        $query = Categorie::query();
 
-        return Inertia::render('Categorie/Index', [
-            // 'categories' => CategorieResource::collection($categories),
+        // Execute the query with pagination
+        $categories = $query->paginate(10);
+
+        // Return the Inertia.js response with the categories data and any success message from the session
+        return inertia('Categorie/Index', [
+            'categories' => $categories,
             'success' => session('success')
         ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
