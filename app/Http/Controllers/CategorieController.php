@@ -16,9 +16,9 @@ class CategorieController extends Controller
     public function index()
     {
         $categories = Categorie::paginate(10);
-        
+
         return Inertia::render('Categorie/Index', [
-            'categories' => CategorieResource::collection($categories),
+            // 'categories' => CategorieResource::collection($categories),
             'success' => session('success')
         ]);
     }
@@ -34,7 +34,7 @@ class CategorieController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCategorieRequest $request)
+    public function store( $request)
     {
         $data=$request->validated();
         Categorie::create($data);
@@ -63,10 +63,10 @@ class CategorieController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateCategorieRequest $request, Categorie $categorie)
+    public function update( $request, Categorie $categorie)
     {
         $data= $request->all();
-        
+
         $categorie->update($data);
         return to_route('categorie.index')->with('success','Categorie was update');
     }

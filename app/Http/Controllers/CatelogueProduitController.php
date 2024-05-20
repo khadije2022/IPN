@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\CatelogueProduit;
 use App\Http\Requests\StoreCatelogueProduitRequest;
 use App\Http\Requests\UpdateCatelogueProduitRequest;
-use Inertia\Inertia;
 
 class CatelogueProduitController extends Controller
 {
@@ -14,7 +13,7 @@ class CatelogueProduitController extends Controller
      */
     public function index()
     {
-        return Inertia('CatalogueProduit/Index');
+        //
     }
 
     /**
