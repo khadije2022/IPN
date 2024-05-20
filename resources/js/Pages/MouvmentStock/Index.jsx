@@ -20,7 +20,7 @@ export default function Index({auth, produits,success}) {
               <div className='flex justify-between items-center'>
                 <h2 className='font-semibold text-xl text-gray-800
                 dark:text-gray-200 leading-tight'>
-                    Catalogue Produit
+                    produits
                 </h2>
                 <Link href={route('catalogueProduit.create')} className='bg-emerald-500 py-1 px-3 text-white rounded
                 shadow transition-all hover:bg-emerald-600'>
