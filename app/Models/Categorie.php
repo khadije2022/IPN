@@ -9,7 +9,9 @@ use App\Models\CatalogueProduit;
 class Categorie extends Model
 {
     use HasFactory;
-
+<<<<<<< HEAD
+    protected $fillable=['type'];
+=======
     protected $fillable = [
 
     ];

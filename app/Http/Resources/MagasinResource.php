@@ -14,12 +14,14 @@ class MagasinResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+<<<<<<< HEAD
+        return parent::toArray($request);
 
-
-
+=======
         return [
             'idMagasin'=>$this->idMagasin,
-            'nomMagasin'=>$this->nomMagasin
+            'nomMagasin'=>$this->nomMagasin,
         ];
+>>>>>>> a65ad1700c5ff5ecbf7a73ea263923d489260253
     }
 }

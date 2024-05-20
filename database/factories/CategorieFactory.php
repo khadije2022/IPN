@@ -16,15 +16,9 @@ class CategorieFactory extends Factory
      */
     public function definition(): array
     {
-        
         return [
-<<<<<<< HEAD
-            'type' => fake()->sentence(),
-=======
             'type' => fake()->randomElement(['A4',"Cartoche","Bic"]),
             'parent_id' => 1
->>>>>>> a65ad1700c5ff5ecbf7a73ea263923d489260253
         ];
-        
     }
 }
