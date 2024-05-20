@@ -1,12 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Resources\CategorieResource;
 use App\Models\Categorie;
 use App\Http\Requests\StoreCategorieRequest;
 use App\Http\Requests\UpdateCategorieRequest;
-use App\Http\Resources\CategorieResource;
-use Inertia\Inertia;
 
 class CategorieController extends Controller
 {
@@ -17,8 +15,8 @@ class CategorieController extends Controller
     {
         $categories = Categorie::paginate(10);
 
-        return Inertia::render('Categorie/Index', [
-            // 'categories' => CategorieResource::collection($categories),
+        return inertia('Categorie/Index', [
+            'categories' => CategorieResource::collection($categories),
             'success' => session('success')
         ]);
     }
@@ -28,15 +26,15 @@ class CategorieController extends Controller
      */
     public function create()
     {
-        return Inertia("Categorie/Create");
+        return inertia("Categorie/Create");
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store( $request)
+    public function store(StoreCategorieRequest $request)
     {
-        $data=$request->validated();
+        $data=$request->all();
         Categorie::create($data);
 
         return to_route('categorie.index')->with('success','Categorie was create');
@@ -55,7 +53,7 @@ class CategorieController extends Controller
      */
     public function edit(Categorie $categorie)
     {
-        return Inertia('Categorie/Edit',[
+        return inertia('Categorie/Edit',[
             'categorie' => $categorie
         ]);
     }
@@ -63,7 +61,7 @@ class CategorieController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update( $request, Categorie $categorie)
+    public function update(UpdateCategorieRequest $request, Categorie $categorie)
     {
         $data= $request->all();
 
@@ -80,3 +78,4 @@ class CategorieController extends Controller
         return to_route('categorie.index')->with('success','Categorie was deleted');
     }
 }
+

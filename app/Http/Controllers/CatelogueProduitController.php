@@ -13,7 +13,7 @@ class CatelogueProduitController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
