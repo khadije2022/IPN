@@ -2,10 +2,11 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategorieResource extends JsonResource
+class CatelogueResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,8 +17,10 @@ class CategorieResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => $this->type,
-            // 'parent_id' => $this->parent,
+            'designation' => $this->designation,
+            'type' => new CategorieResource($this->typeCategorie),
+            'created_at' =>   (new Carbon($this->created_at))->format
+            ( 'Y-m-d'),
         ];
     }
 }

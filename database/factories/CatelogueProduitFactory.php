@@ -18,7 +18,7 @@ class CatelogueProduitFactory extends Factory
     {
         return [
             'designation' => fake()->name(),
-            'idCategorie' => 1,
+            'type' => 1,
         ];
     }
 }

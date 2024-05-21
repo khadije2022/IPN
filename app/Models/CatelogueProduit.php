@@ -9,7 +9,13 @@ class CatelogueProduit extends Model
 {
     use HasFactory;
 
-    public function categorie(){
-        return $this->belongTo(Categorie::class,'idCategorie');
+    protected $fillable =[
+        'designation',
+        'type',
+        'created_at'
+    ];
+
+    public function typeCategorie(){
+        return $this->belongsTo(Categorie::class,'type');
     }
 }
