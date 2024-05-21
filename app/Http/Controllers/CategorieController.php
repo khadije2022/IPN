@@ -22,7 +22,7 @@ class CategorieController extends Controller
 
         // Return the Inertia.js response with the categories data and any success message from the session
         return inertia('Categorie/Index', [
-            'categories' => $categories,
+            'categories' => CategorieResource::collection($categories),
         ]);
     }
 

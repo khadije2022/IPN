@@ -9,7 +9,7 @@ use App\Models\CatelogueProduit;
 class Categorie extends Model
 {
     use HasFactory;
-
+    protected $table = 'categories';
     protected $fillable=[
         'type',
     ];
@@ -17,6 +17,10 @@ class Categorie extends Model
 
 
     public function catalogueProduits(){
-        return $this->hasMany(CatelogueProduit::class,'idCategorie');
+        return $this->hasMany(CatelogueProduit::class,'type');
     }
+    public function parents()
+{
+    return $this->belongsTo(Categorie::class, 'parent_id');
+}
 }

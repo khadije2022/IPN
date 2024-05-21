@@ -23,12 +23,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'khadi@dkdkd.com',
             'password' => bcrypt('123.321A')
         ]);
-        Magasin::factory()->count(30)->create();
+        // Magasin::factory()->count(30)->create();
 
-        Categorie::factory()->count(30)->create();
+        // Categorie::factory()->count(30)->create();
 
         Categorie::factory()
-        ->count(30)
+        ->count(3)
         ->has(CatelogueProduit::factory()->count(30),'catalogueProduits')
         ->create();
 
