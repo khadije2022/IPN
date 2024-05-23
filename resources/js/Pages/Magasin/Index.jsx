@@ -8,7 +8,7 @@ function Index({auth,magasins,success}){
         if(!confirm('Are you wan t to delete this prject')){
           return;
         }
-        router.delete(route('magasin.destroy',magasin.idMagasin))
+        router.delete(route('magasin.destroy',magasin.idmagasin))
     }
     return(
         <AuthenticatedLayout   user={auth.user}
@@ -29,7 +29,7 @@ function Index({auth,magasins,success}){
 
                     <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="bg-white dark:bg-gray-800 overflow-hidMagasinden shadow-sm sm:rounded-lg">
+                    <div className="bg-white dark:bg-gray-800 overflow-hidmagasinden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
@@ -48,7 +48,7 @@ function Index({auth,magasins,success}){
 
                                   <td className='px-3 py-2 text-nowrap'>
                                     <Link
-                                      href={route("magasin.edit", magasin.idMagasin)}
+                                      href={route("magasin.edit", magasin.idmagasin)}
                                       className='font-medium text-blue-600
                                       dark:text-blue-500  hover:underline mx-1'
                                      >

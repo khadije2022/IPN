@@ -28,6 +28,9 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))
     ->name('dashboard');
 
+
+
+
     Route::resource('magasin',MagasinController::class);
     Route::resource('catelogueProduit',CatelogueProduitController::class);
     Route::resource('categorie',CategorieController::class);
@@ -35,7 +38,8 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::resource('detailsMouvment',DetailsMouvementController::class);
     Route::resource('bonsortieAchat',BonSortieAchatController::class);
     Route::resource('stock',StockController::class);
-
+    Route::get('/export-pdf', [CategorieController::class, 'exportPdf'])->name('export-pdf');
+    // Route::get('/export-excel', [CategorieController::class, 'exportExcel'])->name('export-excel');
 
 });
 
@@ -43,6 +47,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
 });
 
 require __DIR__.'/auth.php';

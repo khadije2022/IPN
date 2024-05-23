@@ -6,11 +6,12 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-dompdf": "*",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "maatwebsite/excel": "^1.1",
+        "maatwebsite/excel": "*",
         "psr/simple-cache": "1.0",
         "tightenco/ziggy": "^2.0"
     },
