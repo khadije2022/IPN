@@ -12,7 +12,7 @@ export default function Create({auth}) {
   const {data , setData , post,errors} =useForm({
     'designation': "",
     'description': "",
-    'status': "",
+    'date': "",
     'due_Date':"",
     'image_Path':""
   })

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Mouvement_stock;
 use App\Http\Requests\StoreMouvement_stockRequest;
 use App\Http\Requests\UpdateMouvement_stockRequest;
+use App\Models\BonSortieAchat;
 
 class MouvementStockController extends Controller
 {
@@ -13,7 +14,9 @@ class MouvementStockController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('MouvmentStock/Index',[
+            'mouvmentStock' => "hello"
+        ]);
     }
 
     /**
@@ -21,7 +24,10 @@ class MouvementStockController extends Controller
      */
     public function create()
     {
-        //
+
+        return inertia('MouvementStock/create',[
+
+        ]);
     }
 
     /**
