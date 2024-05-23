@@ -33,6 +33,12 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 <NavLink href={route('catelogueProduit.index')} active={route().current('catelogueProduit.index')}>
                                     Produits
                                 </NavLink>
+                                <NavLink href={route('bonsortieAchat.index')} active={route().current('bonsortieAchat.index')}>
+                                    Cree un devis
+                                </NavLink>
+                                <NavLink href={route('mouvmentStock.index')} active={route().current('mouvmentStock.index')}>
+                                    mouvmentStock
+                                </NavLink>
                             </div>
                         </div>
 

@@ -13,7 +13,7 @@ class BonSortieAchatController extends Controller
      */
     public function index()
     {
-        //
+        return inertia('BonSortieAchat/Create');
     }
 
     /**
@@ -29,7 +29,12 @@ class BonSortieAchatController extends Controller
      */
     public function store(StoreBonSortieAchatRequest $request)
     {
-        //
+        $data = $request->all();
+        $bonsortie = BonSortieAchat::create($data);
+        return inertia('MouvmentStock/Index',[
+            'bonSortie' => $bonsortie,
+            
+        ]);
     }
 
     /**

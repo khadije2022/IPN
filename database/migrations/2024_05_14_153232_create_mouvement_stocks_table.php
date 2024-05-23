@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('mouvement_stocks', function (Blueprint $table) {
             $table->id();
             $table->timestamp('date');
-            $table->string('typeStock');
+            $table->string('typeMouvment');
+            $table->integer('quantite');
+            // $table->foreignId('id_produit')->constrained('catelogue_produits');
             $table->timestamps();
         });
     }

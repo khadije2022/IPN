@@ -25,18 +25,18 @@ function Index({auth,magasins,success}){
             </div>
           }    >
         <Head title="magasins" />
-            
+
 
                     <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidMagasinden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                        <table className='className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-                            <thead className='className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500"'>
+                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                               <tr className='text-nowrap'>
                                 <th className='px-3 py-3'>idMagasin</th>
                                <th className='px-3 py-3'>nomMagasin</th>
-                                
+
                                 <th className='px-3 py-3 text-right'>Action</th>
                               </tr>
                             </thead>
@@ -45,7 +45,7 @@ function Index({auth,magasins,success}){
                                 <tr key={magasin.idMagasin} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                                   <td className='px-3 py-2' >{magasin.idMagasin}</td>
                                   <td className='px-3 py-2'>{magasin.nomMagasin}</td>
-                                  
+
                                   <td className='px-3 py-2 text-nowrap'>
                                     <Link
                                       href={route("magasin.edit", magasin.idMagasin)}
@@ -70,7 +70,7 @@ function Index({auth,magasins,success}){
 
                             </tbody>
                           </table>
-                          
+
                         <Pagination links={magasins.meta.links}/>
                         </div>
                     </div>

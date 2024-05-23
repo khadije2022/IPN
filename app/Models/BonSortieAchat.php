@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class BonSortieAchat extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'type',
+        'description',
+        'created_at'
+    ];
+    
 }

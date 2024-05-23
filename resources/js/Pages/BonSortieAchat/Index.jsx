@@ -25,7 +25,7 @@ function Index({auth,bonsortieAchats,success}){
             </div>
           }    >
         <Head title="bonsortieAchats" />
-            
+
 
                     <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -43,7 +43,7 @@ function Index({auth,bonsortieAchats,success}){
                               <tr className='text-nowrap'>
                                 <th className='px-3 py-3'>ID</th>
                                <th className='px-3 py-3'>type</th>
-                                
+
                                 <th className='px-3 py-3 text-right'>Action</th>
                               </tr>
                             </thead>
@@ -77,7 +77,7 @@ function Index({auth,bonsortieAchats,success}){
 
                             </tbody>
                           </table>
-                          
+
                         <Pagination links={bonsortieAchats.meta.links}/>
                         </div>
                     </div>
