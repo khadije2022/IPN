@@ -5,7 +5,10 @@ use App\Http\Resources\CategorieResource;
 use App\Models\Categorie;
 use App\Http\Requests\StoreCategorieRequest;
 use App\Http\Requests\UpdateCategorieRequest;
+use Barryvdh\DomPDF\Facade\Pdf;
 
+// use App\Exports\CategoriesExport;
+use Maatwebsite\Excel\Facades\Excel;
 class CategorieController extends Controller
 {
     /**
@@ -52,7 +55,7 @@ class CategorieController extends Controller
      */
     public function show(Categorie $categorie)
     {
-        //
+        
     }
 
     /**
@@ -84,5 +87,23 @@ class CategorieController extends Controller
         $categorie->delete();
         return to_route('categorie.index')->with('success','Categorie was deleted');
     }
+
+
+    public function exportPdf()
+    {
+        $categories = Categorie::get();
+    
+        $pdf = Pdf::loadView('pdf.categories', ['categories' => $categories]);
+        
+    
+        return $pdf->download('categories.pdf');
+    }
+
+
+    // public function exportExcel()
+    // {
+    //     $categories = Categorie::get();   
+    //     return Excel::download(new CategoriesExport, 'bulkData.xlsx');
+    // }
 }
 
