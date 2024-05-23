@@ -55,7 +55,7 @@ export default function Index({auth, produits,success}) {
                                 <tr key={produit.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                                   <td className='px-3 py-2' >{produit.id}</td>
                                   <td className='px-3 py-2'>{produit.designation}</td>
-                                  <td className='px-3 py-2'>{produit.type.type}</td>
+                                  <td className='px-3 py-2'>{produit.typegit }</td>
                                   <td className='px-3 py-2'>{produit.created_at}</td>
                                   <td className='px-3 py-2 text-nowrap'>
                                     <Link
