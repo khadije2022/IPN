@@ -5,12 +5,14 @@ import TextInput from '@/Components/TextInput'
 import InputLabel from '@/Components/InputLabel'
 import InputError from '@/Components/InputError'
 import {Link} from '@inertiajs/react'
+import TextInputArea from '@/Components/TextInputArea'
+import SelectInput from '@/Components/SelectInput'
 
 
 export default function Create({auth}) {
   const {data , setData , post , errors} =useForm({
     'type': "",
-    'id_magasin':""
+    'date':""
   })
 
   const onSubmit = (e) =>{
@@ -41,33 +43,37 @@ export default function Create({auth}) {
                 <div className='mt-4'>
                   <InputLabel
                   htmlFor='type'
-                  value='bonsortieAchat_type'
+                  value='type mouvments'
                   />
-                  <TextInput
+                  <SelectInput
                   type="text"
                   name="type"
                   id="type"
                   value={data.type}
                   className="mt-1 block w-full"
                   onChange={(e) => setData('type',e.target.value)}
-                  />
-
-
-                  <InputLabel
-                  htmlFor='id_magasin'
-                  value='id_magasin'
-                  />
-                  <TextInput
-                  type="text"
-                  name="id_magasin"
-                  id="id_magasin"
-                  value={data.id_magasin}
-                  className="mt-1 block w-full"
-                  onChange={(e) => setData('type',e.target.value)}
-                  />
-                  <InputError message={errors.type} className='mt-2' />
+                  >
+                     <option value=" ">select option</option>
+                     <option value="Sortie">Sortie</option>
+                     <option value="Achat">Achat</option>
+                     <option value="Expression besoin">Expression besoin</option>
+                  </SelectInput>
                 </div>
-         
+                <div className='mt-4'>
+                  <InputLabel
+                  htmlFor='description'
+                  value='description'
+                  />
+                  <TextInputArea
+                  type="text"
+                  name="type"
+                  id="type"
+                  value={data.description}
+                  className="mt-1 block w-full"
+                  onChange={(e) => setData('description',e.target.value)}
+                  />
+                </div>
+
 
 
                 <div className='mt-4 text-right'>
@@ -79,7 +85,7 @@ export default function Create({auth}) {
                   <button
                   className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
                   >
-                    submit
+                    Create
                   </button>
                 </div>
               </form>
