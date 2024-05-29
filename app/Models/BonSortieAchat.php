@@ -9,9 +9,12 @@ class BonSortieAchat extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'type',
         'description',
         'created_at'
     ];
-    
+
+    public function DetailStock(){
+        return $this->hasMany(Mouvement_stock::class,'idBonDeSortieAchats');
+    }
+
 }

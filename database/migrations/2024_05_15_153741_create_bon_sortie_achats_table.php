@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('bon_sortie_achats', function (Blueprint $table) {
             $table->id();
-            $table->enum('type',['Sortie','Achat']);
             $table->text('description');
+            $table->string('status')->nullable();
             // $table->foreignId('id_magasin')->constrained('magasins');
             $table->timestamps();
         });

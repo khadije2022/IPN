@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('mouvement_stocks', function (Blueprint $table) {
-                        $table->foreignId('idBonDeSortieAchats')->constrained('bon_sortie_achats');
-
+        Schema::create('services', function (Blueprint $table) {
+            $table->id();
+            $table->string('nom_responsabiliter'); // Consider renaming to 'nom_responsabilite' for correct French spelling
+            $table->timestamps();
         });
     }
 
@@ -22,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('mouvment_stocks', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('services');
     }
 };

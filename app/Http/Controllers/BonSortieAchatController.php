@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\BonSortieAchat;
 use App\Http\Requests\StoreBonSortieAchatRequest;
 use App\Http\Requests\UpdateBonSortieAchatRequest;
+use App\Http\Resources\CategorieResource;
+use App\Models\Categorie;
+use App\Models\CatelogueProduit;
+use App\Models\Mouvement_stock;
 
 class BonSortieAchatController extends Controller
 {
@@ -30,11 +34,8 @@ class BonSortieAchatController extends Controller
     public function store(StoreBonSortieAchatRequest $request)
     {
         $data = $request->all();
-        $bonsortie = BonSortieAchat::create($data);
-        return inertia('MouvmentStock/Index',[
-            'bonSortie' => $bonsortie,
-            
-        ]);
+        $bonSortie = BonSortieAchat::create($data);
+        return redirect()->route('mouvmentStock.create', ['bonSortie' => $bonSortie->id]);
     }
 
     /**

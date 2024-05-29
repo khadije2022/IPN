@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('mouvement_stocks', function (Blueprint $table) {
-                        $table->foreignId('idBonDeSortieAchats')->constrained('bon_sortie_achats');
-
+        Schema::create('expression_besoins', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('id_service')->constrained('services')->onDelete('cascade'); // Add onDelete for referential integrity
+            $table->text('description');
+            $table->timestamps();
         });
     }
 
@@ -22,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('mouvment_stocks', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('expression_besoins');
     }
 };

@@ -14,11 +14,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex">
-                            <div className="shrink-0 flex items-center">
+                            {/* <div className="shrink-0 flex items-center">
                                 <Link href="/">
                                     <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                                 </Link>
-                            </div>
+                            </div> */}
 
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
@@ -33,11 +33,20 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 <NavLink href={route('catelogueProduit.index')} active={route().current('catelogueProduit.index')}>
                                     Produits
                                 </NavLink>
+
+                                <NavLink href={route('expressionbesoin.index')} active={route().current('expressionbesoin.index')}>
+                                    Expression Besoin
+                                </NavLink>
+
+                                <NavLink href={route('detailsexpresionbesoin.index')} active={route().current('detailsexpresionbesoin.index')}>
+                                    Details ExpBesoin
+</NavLink>
                                 <NavLink href={route('bonsortieAchat.index')} active={route().current('bonsortieAchat.index')}>
                                     Cree un devis
                                 </NavLink>
                                 <NavLink href={route('mouvmentStock.index')} active={route().current('mouvmentStock.index')}>
                                     mouvmentStock
+
                                 </NavLink>
                             </div>
                         </div>

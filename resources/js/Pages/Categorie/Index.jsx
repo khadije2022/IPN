@@ -1,18 +1,17 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout'
 import React from 'react'
-
-
-
-
 import { Head, Link, router } from '@inertiajs/react';
 import Pagination from '@/Components/Pagination';
+
 function Index({ auth, categories, success }) {
-  const deletecategorie = (categorie) => {
-    if (!confirm('Are you wan t to delete this prject')) {
+  const deleteCategorie = (categorie) => {
+    if (!confirm('Are you sure you want to delete this project?')) {
       return;
     }
     router.delete(route('categorie.destroy', categorie.id))
+    
   }
+
   return (
     <AuthenticatedLayout user={auth.user}
       header={
