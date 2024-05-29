@@ -20,10 +20,10 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'trt',
-            'email' => 'khadi@dkdkd.com',
-            'password' => bcrypt('123.321A')
+            'email' => '21039@supnum.mr',
+            'password' => bcrypt('Taher 41')
         ]);
-        // Magasin::factory()->count(30)->create();
+        Magasin::factory()->count(30)->create();
 
         // Categorie::factory()->count(30)->create();
 

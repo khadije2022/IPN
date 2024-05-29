@@ -46,6 +46,7 @@ export default function Index({auth, produits,success}) {
                                 <th className='px-3 py-3'>ID</th>
                                <th className='px-3 py-3'>designation</th>
                                 <th className='px-3 py-3'>Type</th>
+                                <th className='px-3 py-3'>Stock</th>
                                 <th className='px-3 py-3'>date</th>
                                 <th className='px-3 py-3 text-right'>Action</th>
                               </tr>
@@ -56,6 +57,7 @@ export default function Index({auth, produits,success}) {
                                   <td className='px-3 py-2' >{produit.id}</td>
                                   <td className='px-3 py-2'>{produit.designation}</td>
                                   <td className='px-3 py-2'>{produit.typegit }</td>
+                                  <td className='px-3 py-2'>{produit.stock}</td>
                                   <td className='px-3 py-2'>{produit.created_at}</td>
                                   <td className='px-3 py-2 text-nowrap'>
                                     <Link

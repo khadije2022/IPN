@@ -12,7 +12,6 @@ export default function Create({auth}) {
     'type': "",
     
   })
-
   const onSubmit = (e) =>{
     e.preventDefault();
     post(route("categorie.store"));

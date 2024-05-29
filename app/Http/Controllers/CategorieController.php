@@ -6,6 +6,7 @@ use App\Models\Categorie;
 use App\Http\Requests\StoreCategorieRequest;
 use App\Http\Requests\UpdateCategorieRequest;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\CategoriesExport;
 
 // use App\Exports\CategoriesExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -100,10 +101,11 @@ class CategorieController extends Controller
     }
 
 
-    // public function exportExcel()
-    // {
-    //     $categories = Categorie::get();   
-    //     return Excel::download(new CategoriesExport, 'bulkData.xlsx');
-    // }
+    public function exportExcel()
+{
+    return Excel::download(new CategoriesExport, 'categories.xlsx');
+    
+}
+
 }
 
