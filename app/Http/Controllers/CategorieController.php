@@ -55,7 +55,7 @@ class CategorieController extends Controller
      */
     public function show(Categorie $categorie)
     {
-        
+
     }
 
     /**
@@ -89,20 +89,20 @@ class CategorieController extends Controller
     }
 
 
-    public function exportPdf()
-    {
-        $categories = Categorie::get();
-    
-        $pdf = Pdf::loadView('pdf.categories', ['categories' => $categories]);
-        
-    
-        return $pdf->download('categories.pdf');
-    }
+    // public function exportPdf()
+    // {
+    //     $categories = Categorie::get();
+
+    //     $pdf = Pdf::loadView('pdf.categories', ['categories' => $categories]);
+
+
+    //     return $pdf->download('categories.pdf');
+    // }
 
 
     // public function exportExcel()
     // {
-    //     $categories = Categorie::get();   
+    //     $categories = Categorie::get();
     //     return Excel::download(new CategoriesExport, 'bulkData.xlsx');
     // }
 }

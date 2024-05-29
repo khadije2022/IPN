@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('mouvement_stocks', function (Blueprint $table) {
-                        $table->foreignId('idBonDeSortieAchats')->constrained('bon_sortie_achats');
-
+        Schema::create('bon_achats', function (Blueprint $table) {
+            $table->id();
+            $table->text('description');
+            $table->string('status');
+            $table->string('prix');
+            $table->timestamps();
         });
     }
 
@@ -22,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('mouvment_stocks', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('bon_achats');
     }
 };

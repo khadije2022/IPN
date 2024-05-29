@@ -38,9 +38,12 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::resource('detailsMouvment',DetailsMouvementController::class);
     Route::resource('bonsortieAchat',BonSortieAchatController::class);
     Route::resource('stock',StockController::class);
+
+    Route::get('mouvmentStock/create/{bonSortie}', [MouvementStockController::class, 'create'])->name('mouvmentStock.create');
+
     Route::get('/export-pdf', [CategorieController::class, 'exportPdf'])->name('export-pdf');
     // Route::get('/export-excel', [CategorieController::class, 'exportExcel'])->name('export-excel');
-
+    Route::post('/mouvmentStock/finalize', [MouvementStockController::class, 'finalize'])->name('mouvmentStock.finalize');
 });
 
 Route::middleware('auth')->group(function () {
