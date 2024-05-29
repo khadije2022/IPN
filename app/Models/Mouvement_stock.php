@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Mouvement_stock extends Model
 {
     use HasFactory;
+    public $timestamps = false;
+    protected $fillable = [
+        'idBonDeSortieAchats',
+        'id_produit',
+        'quantite',
+    ];
 
     // public function detailsMouvementStock()
     // {
@@ -21,5 +27,9 @@ class Mouvement_stock extends Model
     public function produits()
     {
         return $this->belongsTo(CatelogueProduit::class,'id_produit');
+    }
+
+    public function bonSortie(){
+        return $this->belongsTo(BonSortieAchat::class,'idBonDeSortieAchats');
     }
 }

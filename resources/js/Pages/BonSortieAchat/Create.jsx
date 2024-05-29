@@ -11,8 +11,8 @@ import SelectInput from '@/Components/SelectInput'
 
 export default function Create({auth}) {
   const {data , setData , post , errors} =useForm({
-    'type': "",
-    'date':""
+    'description': "",
+    'created_at':""
   })
 
   const onSubmit = (e) =>{
@@ -40,24 +40,20 @@ export default function Create({auth}) {
               <form onSubmit={onSubmit}
               className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg'
               >
+
                 <div className='mt-4'>
                   <InputLabel
-                  htmlFor='type'
-                  value='type mouvments'
+                  htmlFor='Date'
+                  value='date'
                   />
-                  <SelectInput
-                  type="text"
-                  name="type"
-                  id="type"
-                  value={data.type}
+                  <TextInput
+                  type="date"
+                  name="created_date"
+                  id="Date"
+                  value={data.created_at}
                   className="mt-1 block w-full"
-                  onChange={(e) => setData('type',e.target.value)}
-                  >
-                     <option value=" ">select option</option>
-                     <option value="Sortie">Sortie</option>
-                     <option value="Achat">Achat</option>
-                     <option value="Expression besoin">Expression besoin</option>
-                  </SelectInput>
+                  onChange={(e) => setData('created_at',e.target.value)}
+                  />
                 </div>
                 <div className='mt-4'>
                   <InputLabel
