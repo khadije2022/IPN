@@ -12,21 +12,35 @@ function Index({ auth, categories, success }) {
   }
 
   return (
-    <AuthenticatedLayout user={auth.user}
-      header={
-        <div className='flex justify-between items-center'>
-          <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
-            Categories
-          </h2>
-          <Link href={route('categorie.create')} className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'>
-            Add new
-          </Link>
-          <a href={route('export-pdf')} download className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
-            Export PDF
-          </a>
-        </div>
-      }
-    >
+<AuthenticatedLayout
+  user={auth.user}
+  header={
+    <div className='flex justify-between items-center'>
+      <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
+        Categories
+      </h2>
+      <div className='flex space-x-2'>
+        <Link
+          href={route('categorie.create')}
+          className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
+        >
+          Add new
+        </Link>
+        <a
+          href={route('export-pdf')}
+          download
+          className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
+        >
+          Export PDF
+        </a>
+      </div>
+    </div>
+  }
+>
+
+
+
+        
       <Head title="Categories" />
 
       <div className="py-12">

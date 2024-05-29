@@ -36,12 +36,18 @@ class Details_ExpBesoinController extends Controller
      
          $detailsexpresionbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->get();
      
+         $categories = Categorie::all();
+         $catelogue_produits = CatelogueProduit::all();
+     
          return inertia('Details_exprebesoin/Index_par_expbesoin', [
              'detailsexpresionbesoins' => Details_ExpBesoinResource::collection($detailsexpresionbesoins),
              'expressionbesoin' => $expressionbesoin,
-             'id_expbesoin' => $id_expbesoin
+             'id_expbesoin' => $id_expbesoin,
+             'categories' => $categories,
+             'catelogue_produits' => $catelogue_produits
          ]);
      }
+     
      
      
      
