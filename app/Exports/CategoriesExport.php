@@ -1,28 +1,41 @@
 <?php
 namespace App\Exports;
-use App\Models\CategorieModel;
+
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
-class CategoriesExport implements FromQuery, WithHeadings
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use App\Models\Categorie;
+
+class CategoriesExport implements FromQuery, WithHeadings, FromCollection, WithMapping
 {
+    public function collection()
+    {
+        return Categorie::all([
+            'id', 'type'
+        ]);
+    }
+
     public function headings(): array
     {
         return [
             'ID',
-            'type',
+            'Type',
         ];
     }
 
-    public function query(){
-            return CategorieModel:: query();
+    public function query()
+    {
+        return Categorie::query();
     }
 
-    public function map($bulk): array{
+    public function map($bulk): array
+    {
         return [
             $bulk->id,
             $bulk->type,
         ];
-    } 
-    
+    }
 }
+
 ?>

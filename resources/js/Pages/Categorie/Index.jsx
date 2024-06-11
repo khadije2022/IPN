@@ -25,12 +25,12 @@ function Index({ auth, categories, success }) {
             Add new
           </Link>
           <a href={route('export-pdf')} download className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
-            Export PDF
+            Export en PDF
           </a>
 
-          {/* <a href={route('export-excel')} className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
-            Export Excel
-          </a> */}
+          <a href={route('export-excel')} className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
+            Export en Excel
+          </a>
 
 
 
@@ -50,8 +50,8 @@ function Index({ auth, categories, success }) {
           </div>
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
-              <table className='className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-                <thead className='className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500"'>
+              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                   <tr className='text-nowrap'>
                     <th className='px-3 py-3'>ID</th>
                     <th className='px-3 py-3'>type</th>
@@ -59,33 +59,7 @@ function Index({ auth, categories, success }) {
                     <th className='px-3 py-3 text-right'>Action</th>
                   </tr>
                 </thead>
-                <tbody>
-                  {categories.data.map((categorie) =>
-                    <tr key={categorie.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                      <td className='px-3 py-2' >{categorie.id}</td>
-                      <td className='px-3 py-2'>{categorie.type}</td>
-
-<<<<<<< HEAD
-                    <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div className="py-12">
-                <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                {success && (<div className='bg-emerald-400  py-2 px-4 rounded mb-4'>
-              {success}
-            </div>)}
-            </div>
-            </div>
-                    <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                        <div className="p-6 text-gray-900 dark:text-gray-100">
-                        <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
-                              <tr className='text-nowrap'>
-                                <th className='px-3 py-3'>ID</th>
-                               <th className='px-3 py-3'>type</th>
-
-                                <th className='px-3 py-3 text-right'>Action</th>
-                              </tr>
-                            </thead>
+                
                             <tbody>
                               {categories.data.map((categorie)=>
                                 <tr key={categorie.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
@@ -96,12 +70,7 @@ function Index({ auth, categories, success }) {
                                     <Link
                                       href={route("categorie.edit", categorie.id)}
                                       className='font-medium text-blue-600
-=======
-                      <td className='px-3 py-2 text-nowrap'>
-                        <Link
-                          href={route("categorie.edit", categorie.id)}
-                          className='font-medium text-blue-600
->>>>>>> b9d6fdda7abaecaa5694c9e558cf2cd1d4b2a8f4
+
                                       dark:text-blue-500  hover:underline mx-1'
                         >
                           Edit

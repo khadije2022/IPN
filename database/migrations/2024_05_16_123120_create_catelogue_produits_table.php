@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('designation');
             $table->foreignId('type')->constrained('categories');
+
+            $table->integer('stock');
+            // $table->foreignId('')->constrained('magasins');
+
             $table->timestamps();
         });
     }

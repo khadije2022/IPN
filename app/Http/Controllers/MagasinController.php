@@ -13,19 +13,34 @@ class MagasinController extends Controller
      * Display a listing of the resource.
      */
     public function index()
-    {
-        $magasins=Magasin::paginate(10);
-        return Inertia('Magasin/Index',[
-            'magasins' =>MagasinResource::collection($magasins)
-        ]);
-    } 
+{
+    $query = Magasin::query();
+
+    $sortField = request("sort_field", 'created_at');
+    $sortDirection = request("sort_direction", "desc");
+
+    if (request("nomMagasin")) {
+        $query->where("nomMagasin", "like", "%" . request("nomMagasin") . "%");
+    }
+
+    $magasins = $query->orderBy($sortField, $sortDirection)
+        ->paginate(10)
+        ->onEachSide(1);
+    return inertia("Magasin/Index", [
+        'magasins' => MagasinResource::collection($magasins),
+        'queryParams' => request()->query() ?: null,
+        'success' => session('success'),
+    ]);
+}
+
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        //
+        return inertia("Magasin/Create");
     }
 
     /**
@@ -33,7 +48,10 @@ class MagasinController extends Controller
      */
     public function store(StoreMagasinRequest $request)
     {
-        //
+        $data = $request->all();
+        Magasin::create($data);
+        return to_route('magasin.index')
+            ->with('success' , 'Vous avez cree votre magasin');
     }
 
     /**
@@ -41,7 +59,7 @@ class MagasinController extends Controller
      */
     public function show(Magasin $magasin)
     {
-        //
+        
     }
 
     /**
@@ -49,7 +67,9 @@ class MagasinController extends Controller
      */
     public function edit(Magasin $magasin)
     {
-        //
+        return inertia('Magasin/Edit' , [
+            'magasin' => $magasin,
+        ]);
     }
 
     /**
@@ -57,7 +77,9 @@ class MagasinController extends Controller
      */
     public function update(UpdateMagasinRequest $request, Magasin $magasin)
     {
-        //
+        $magasin->update($request->all());
+        return to_route('magasin.index')
+            ->with('success', "Vous avez modifier votre Magasin .");
     }
 
     /**
@@ -65,6 +87,8 @@ class MagasinController extends Controller
      */
     public function destroy(Magasin $magasin)
     {
-        //
+        $magasin->delete();
+        return to_route('magasin.index')
+        ->with('success', "Vous avez supprimer votre Magasin .");
     }
 }
