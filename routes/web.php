@@ -38,7 +38,7 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::resource('detailsMouvment',DetailsMouvementController::class);
     Route::resource('bonsortieAchat',BonSortieAchatController::class);
     Route::resource('stock',StockController::class);
-<<<<<<< HEAD
+
     Route::resource('expressionbesoin',ExpressionBesoinController::class);
     Route::resource('detailsexpresionbesoin', Details_ExpBesoinController::class);
     Route::get('detailsexpresionbesoin/create/{id_expbesoin}', [Details_ExpBesoinController::class, 'create'])->name('detailsexpresionbesoin.create');
@@ -49,14 +49,12 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::get('/pdf-details-expbesoin/{id_expbesoin}', [ExpressionBesoinController::class, 'exportPdf'])->name('pdf-DetailsExpbesoin');
 
 
-=======
 
     Route::get('mouvmentStock/create/{bonSortie}', [MouvementStockController::class, 'create'])->name('mouvmentStock.create');
 
     Route::get('/export-pdf', [CategorieController::class, 'exportPdf'])->name('export-pdf');
     // Route::get('/export-excel', [CategorieController::class, 'exportExcel'])->name('export-excel');
     Route::post('/mouvmentStock/finalize', [MouvementStockController::class, 'finalize'])->name('mouvmentStock.finalize');
->>>>>>> 72872a44bca1ad84a80cc856b8e603a561702c1d
 });
 
 Route::middleware('auth')->group(function () {
