@@ -42,12 +42,12 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     Details ExpBesoin
 </NavLink>
                                 <NavLink href={route('bonsortieAchat.index')} active={route().current('bonsortieAchat.index')}>
-                                    Cree un devis
+                                    Cree un Bon sortie
                                 </NavLink>
-                                <NavLink href={route('mouvmentStock.index')} active={route().current('mouvmentStock.index')}>
-                                    mouvmentStock
+                                <NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
+                                    Cree un Bon achats
+                                </NavLink>
 
-                                </NavLink>
                             </div>
                         </div>
 

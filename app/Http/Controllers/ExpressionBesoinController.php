@@ -32,7 +32,7 @@ class ExpressionBesoinController extends Controller
 {
     $services = Service::all();
     return inertia('ExpressionBesoin/Create', [
-        'services' => $services,
+        'services' => $services, 
     ]);
 }
 
@@ -41,19 +41,19 @@ public function store(StoreExpressionBesoinRequest $request)
 {
     $data = $request->all();
     $expressionBesoin = ExpressionBesoin::create($data);
-    
+
     // Redirection vers la page de création de détails d'expression de besoin en passant l'id_expbesoin
     return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $expressionBesoin->id])->with('success', 'Detailsexpresionbesoin was created');
 }
 
-    
+
 
     /**
      * Display the specified resource.
      */
     public function show(ExpressionBesoin $expressionbesoin)
     {
-        
+
     }
 
     /**
@@ -89,38 +89,38 @@ public function store(StoreExpressionBesoinRequest $request)
     public function exportPdf($id_expbesoin)
     {
         $expressionbesoin = ExpressionBesoin::with('service')->findOrFail($id_expbesoin);
-        
+
         $details_expbesoins = Details_ExpBesoin::with('categorie', 'catalogueProduit')
             ->where('id_expbesoin', $id_expbesoin)
             ->get();
-        
+
         $totalQuantite = $details_expbesoins->sum('quantite');
-        
+
         $pdf = Pdf::loadView('pdf.details_expbesoin', [
             'details_expbesoins' => $details_expbesoins,
             'expressionbesoin' => $expressionbesoin,
             'totalQuantite' => $totalQuantite
         ]);
-    
+
         return $pdf->download('details_expressionbesoins.pdf');
     }
-    
-    
-    
+
+
+
 
     public function valider($id_expbesoin)
     {
         $expressionbesoin = ExpressionBesoin::with('service')->findOrFail($id_expbesoin);
-        
+
         $details_expbesoins = Details_ExpBesoin::with('categorie', 'catalogueProduit')
             ->where('id_expbesoin', $id_expbesoin)
             ->get();
             return inertia('ExpressionBesoin/valider',[
                 'expressionbesoin' => $expressionbesoin,
                 'details_expbesoins' =>$details_expbesoins
-            ]);        
+            ]);
 
     }
-    
+
 }
 

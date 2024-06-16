@@ -9,7 +9,7 @@ import InputError from '@/Components/InputError';
 export default function Index({ auth, categories, produits,mouvmentStocks,bonSortie ,success}) {
   const { data, setData, post, errors } = useForm({
     quantite: "",
-    id_produit: "",
+    produit: "",
     idBonDeSortieAchats: bonSortie
   });
 
@@ -18,7 +18,7 @@ export default function Index({ auth, categories, produits,mouvmentStocks,bonSor
 
   useEffect(() => {
     if (selectedCategory && produits?.data) {
-      const filtered = produits.data.filter(product => product.id === parseInt(selectedCategory));
+      const filtered = produits.data.filter(product => product.type.id === parseInt(selectedCategory));
       setFilteredProducts(filtered);
     } else {
       setFilteredProducts([]);
@@ -65,6 +65,8 @@ export default function Index({ auth, categories, produits,mouvmentStocks,bonSor
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                     <tr className='text-nowrap'>
+                    <th className='px-3 py-3'>ID</th>
+
                       <th className='px-3 py-3'>Produits</th>
                       <th className='px-3 py-3'>Categorie</th>
                       <th className='px-3 py-3'>Qte</th>
@@ -72,10 +74,11 @@ export default function Index({ auth, categories, produits,mouvmentStocks,bonSor
                     </tr>
                   </thead>
                   <tbody>
-                    {mouvmentStocks  && mouvmentStocks.map((mouvmentStock) =>
+                    {mouvmentStocks && mouvmentStocks.data  && mouvmentStocks.data.map((mouvmentStock) =>
                       <tr key={mouvmentStock.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                        <td className='px-3 py-2'>{mouvmentStock.id_produit}</td>
-                        <td className='px-3 py-2'>{mouvmentStock.quantite}</td>
+                        <td className='px-3 py-2'>{mouvmentStock.id}</td>
+                        <td className='px-3 py-2'>{mouvmentStock.produit.designation}</td>
+                        <td className='px-3 py-2'>{mouvmentStock.produit.type.type}</td>
                         <td className='px-3 py-2'>{mouvmentStock.quantite}</td>
                         <td className='px-3 py-2 text-nowrap'>
                           <Link
@@ -93,9 +96,8 @@ export default function Index({ auth, categories, produits,mouvmentStocks,bonSor
                         </td>
                       </tr>
                     )}
-                    {/* <pre>
-                      {JSON.stringify(mouvmentStocks)}
-                    </pre> */}
+
+
                   </tbody>
                 </table>
                 <form className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg' onSubmit={handleSubmit}>
@@ -108,7 +110,7 @@ export default function Index({ auth, categories, produits,mouvmentStocks,bonSor
                         className="mt-1 block w-full"
                         onChange={(e) => {
                           setSelectedCategory(e.target.value);
-                          setData('id_produit', ''); // Reset produit when category changes
+                          setData('produit', ''); // Reset produit when category changes
                         }}
                       >
                         <option value="">Select option</option>
@@ -122,18 +124,18 @@ export default function Index({ auth, categories, produits,mouvmentStocks,bonSor
                     <div className='mt-4'>
                       <InputLabel htmlFor='produit' value='Produit' />
                       <SelectInput
-                        name="id_produit"
+                        name="produit"
                         id="produit"
-                        value={data.id_produit}
+                        value={data.produit}
                         className="mt-1 block w-full"
-                        onChange={(e) => setData('id_produit', e.target.value)}
+                        onChange={(e) => setData('produit', e.target.value)}
                       >
                         <option value="">Select Product</option>
                         {filteredProducts.map((product) => (
                           <option key={product.id} value={product.id}>{product.designation}</option>
                         ))}
                       </SelectInput>
-                      <InputError message={errors.id_produit} className='mt-2' />
+                      <InputError message={errors.produit} className='mt-2' />
                     </div>
 
                     <div className='mt-4'>
@@ -150,7 +152,7 @@ export default function Index({ auth, categories, produits,mouvmentStocks,bonSor
                     </div>
 
                     <div className='mt-4 text-right'>
-                      <button type="submit" className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
+                      <button type="submit" className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600" onClick={handleSubmit}>
                         Submit
                       </button>
                       <button type="button" className="bg-blue-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-blue-600 ml-2" onClick={handleFinalize}>

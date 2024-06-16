@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('mouvement_stocks', function (Blueprint $table) {
+        Schema::create('detail_bon_achats', function (Blueprint $table) {
+            $table->id();
+            $table->integer('quantite');
             $table->foreignId('produit')->constrained('catelogue_produits');
-
+            $table->foreignId('idBonAchat')->constrained('bon_achats');
+            $table->float('prix');
         });
     }
 
@@ -22,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('mouvement_stocks', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('detail_bon_achats');
     }
 };

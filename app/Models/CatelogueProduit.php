@@ -19,7 +19,7 @@ class CatelogueProduit extends Model
         return $this->belongsTo(Categorie::class,'type');
     }
     public function mouvments(){
-        return $this->belongsTo(Mouvement_stock::class,'id_produit');
+        return $this->belongsTo(Mouvement_stock::class,'produit');
     }
 
 }

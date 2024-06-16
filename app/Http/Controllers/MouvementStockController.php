@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateMouvement_stockRequest;
 use App\Http\Resources\CategorieResource;
 use App\Models\Categorie;
 use App\Http\Controllers\Request;
+use App\Http\Resources\CatelogueResource;
+use App\Http\Resources\MouvementStockResource;
 use App\Models\CatelogueProduit;
 
 class MouvementStockController extends Controller
@@ -37,8 +39,8 @@ class MouvementStockController extends Controller
 
         return inertia('MouvmentStock/Index',[
             'categories' => CategorieResource::collection($categorie),
-            'produits' => CategorieResource::collection($produits),
-            'mouvmentStocks' => $MouvmentStck,
+            'produits' => CatelogueResource::collection($produits),
+            'mouvmentStocks' => MouvementStockResource::collection($MouvmentStck),
             'bonSortie' => $bonSortie
         ]);
     }
@@ -52,10 +54,10 @@ class MouvementStockController extends Controller
 
         $data = $request->validate([
             'quantite' => 'required|integer',
-            'id_produit' => 'required|integer',
             'idBonDeSortieAchats' => 'required|integer|exists:bon_sortie_achats,id',
+            'produit' => 'required|integer',
         ]);
-
+        // dd($data);
         Mouvement_stock::create($data);
 
         return redirect()->route('mouvmentStock.create', ['bonSortie' => $data['idBonDeSortieAchats']])
@@ -66,21 +68,6 @@ class MouvementStockController extends Controller
 
 
 
-// public function finalize($request)
-// {
-//     $idBonDeSortieAchats = $request->input('idBonDeSortieAchats');
-
-//     // Add your finalization logic here.
-//     // For example, update the status of the BonDeSortie or perform other business logic.
-
-//     $categories = Categorie::all();
-//     $produits = CatelogueProduit::all();
-//     $mouvmentStocks = Mouvement_stock::all();
-
-//     return redirect()->route('BonSortieAchat.index')->with([
-//         'bon' => "wey"
-//     ]);
-// }
 
     /**
      * Display the specified resource.
@@ -93,14 +80,19 @@ class MouvementStockController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Mouvement_stock $mouvement_stock)
+    public function edit( $mouvement_stock)
     {
-        
+        $categorie = Categorie::all();
+        $produits = CatelogueProduit::all();
+        $mouvements_stock = Mouvement_stock::find($mouvement_stock);
+
+        // dd($mouvements_stock);
         return inertia('MouvmentStock/Edit',
         [
-           'mouvementStock' => $mouvement_stock,
+           'mouvementStock' => $mouvements_stock,
+           'categories' => CategorieResource::collection($categorie),
+            'produits' => CatelogueResource::collection($produits),
         ]);
-
     }
 
     /**
@@ -108,7 +100,10 @@ class MouvementStockController extends Controller
      */
     public function update(UpdateMouvement_stockRequest $request, Mouvement_stock $mouvement_stock)
     {
-        //
+        $data= $request->all();
+
+        $mouvement_stock->update($data);
+        return to_route('mouvmentStock.index')->with('success','mouvmentStock was update');
     }
 
     /**

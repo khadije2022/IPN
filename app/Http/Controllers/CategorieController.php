@@ -62,7 +62,9 @@ class CategorieController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(Categorie $categorie)
+
     {
+
         return inertia('Categorie/Edit',[
             'categorie' => $categorie
         ]);
@@ -89,24 +91,15 @@ class CategorieController extends Controller
     }
 
 
-    // public function exportPdf()
-    // {
-    //     $categories = Categorie::get();
+    public function exportPdf()
+    {
+        $categories = Categorie::get();
 
-    //     $pdf = Pdf::loadView('pdf.categories', ['categories' => $categories]);
-
-
-    //     return $pdf->download('categories.pdf');
-    // }
+        $pdf = Pdf::loadView('pdf.categories', ['categories' => $categories]);
 
 
-<<<<<<< HEAD
-=======
-    // public function exportExcel()
-    // {
-    //     $categories = Categorie::get();
-    //     return Excel::download(new CategoriesExport, 'bulkData.xlsx');
-    // }
->>>>>>> 72872a44bca1ad84a80cc856b8e603a561702c1d
-}
+        return $pdf->download('categories.pdf');
+    }
 
+
+    }

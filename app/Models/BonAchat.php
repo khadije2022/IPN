@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BonSortieAchat extends Model
+class BonAchat extends Model
 {
     use HasFactory;
     protected $fillable = [
@@ -15,7 +15,6 @@ class BonSortieAchat extends Model
     ];
 
     public function DetailStock(){
-        return $this->hasMany(Mouvement_stock::class,'idBonDeSortieAchats');
+        return $this->hasMany(DetailBonAchat::class,'idBonAchat');
     }
-
 }

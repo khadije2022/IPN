@@ -11,7 +11,7 @@ class Mouvement_stock extends Model
     public $timestamps = false;
     protected $fillable = [
         'idBonDeSortieAchats',
-        'id_produit',
+        'produit',
         'quantite',
     ];
 
@@ -20,13 +20,13 @@ class Mouvement_stock extends Model
     //     return $this->hasMany(Details_mouvement::class);
     // }
 
-    public function bonSortieDachats()
-    {
-        return $this->belongsTo(BonSortieAchat::class);
-    }
+    // public function bonSortieDachats()
+    // {
+    //     return $this->belongsTo(BonSortieAchat::class);
+    // }
     public function produits()
     {
-        return $this->belongsTo(CatelogueProduit::class,'id_produit');
+        return $this->belongsTo(CatelogueProduit::class,'produit');
     }
 
     public function bonSortie(){

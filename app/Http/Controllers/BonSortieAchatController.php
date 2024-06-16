@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BonSortieResource;
 use App\Models\BonSortieAchat;
 use App\Http\Requests\StoreBonSortieAchatRequest;
 use App\Http\Requests\UpdateBonSortieAchatRequest;
@@ -17,7 +18,15 @@ class BonSortieAchatController extends Controller
      */
     public function index()
     {
-        return inertia('BonSortieAchat/Create');
+        $query = BonSortieAchat::query();
+
+        // Execute the query with pagination
+        $expressionbesoins = $query->paginate(10);
+
+        // Return the Inertia.js response with the expressionbesoins data and any success message from the session
+        return inertia('/Index', [
+            'bonAchats' => BonSortieResource::collection($expressionbesoins),
+        ]);
     }
 
     /**
@@ -33,9 +42,7 @@ class BonSortieAchatController extends Controller
      */
     public function store(StoreBonSortieAchatRequest $request)
     {
-        $data = $request->all();
-        $bonSortie = BonSortieAchat::create($data);
-        return redirect()->route('mouvmentStock.create', ['bonSortie' => $bonSortie->id]);
+        return inertia('BonSortieAchat/Create');
     }
 
     /**

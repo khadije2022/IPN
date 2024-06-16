@@ -17,7 +17,7 @@ function Index({ auth, detailsexpresionbesoins, success }) {
       header={
         <div className='flex justify-between items-center'>
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
-           deatil Expression des Besoins
+          
           </h2>
         </div>
       }
@@ -37,7 +37,7 @@ function Index({ auth, detailsexpresionbesoins, success }) {
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                   <tr className='text-nowrap'>
                     <th className='px-3 py-3'>ID</th>
-                    <th className='px-3 py-3'>id_categorie</th>
+                    <th className='px-3 py-3'>djdj</th>
                     <th className='px-3 py-3'>id_catproduit</th>
                     <th className='px-3 py-3'>quantite</th>
                     <th className='px-3 py-3'>id_expbesoin</th>

@@ -16,11 +16,11 @@ function Index({auth,magasins,success}){
             <div className='flex justify-between items-center'>
               <h2 className='font-semibold text-xl text-gray-800
               dark:text-gray-200 leading-tight'>
-                  magasins
+                  Mouvments Stock
               </h2>
               <Link href={route('magasin.create')} className='bg-emerald-500 py-1 px-3 text-white rounded
               shadow transition-all hover:bg-emerald-600'>
-                Add new
+
               </Link>
             </div>
           }    >
@@ -34,25 +34,34 @@ function Index({auth,magasins,success}){
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                               <tr className='text-nowrap'>
-                                <th className='px-3 py-3'>idMagasin</th>
-                               <th className='px-3 py-3'>nomMagasin</th>
-
-                                <th className='px-3 py-3 text-right'>Action</th>
+                                <th className='px-3 py-3'>description</th>
+                               <th className='px-3 py-3'>qte</th>
+                               <th className='px-3 py-3'>type mouvments</th>
+                               <th className='px-3 py-3  text-wrap'>Action</th>
                               </tr>
                             </thead>
                             <tbody>
-                              {magasins.data.map((magasin)=>
-                                <tr key={magasin.idMagasin} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                                  <td className='px-3 py-2' >{magasin.idMagasin}</td>
-                                  <td className='px-3 py-2'>{magasin.nomMagasin}</td>
+                              {/* {magasins.data.map((magasin)=> */}
+                                <tr  className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
+                                  <td className='px-3 py-2' >pour les feuilles du bac</td>
+                                  <td className='px-3 py-2'>7</td>
+                                  <td className='px-3 py-2'>sortie</td>
+
 
                                   <td className='px-3 py-2 text-nowrap'>
                                     <Link
-                                      href={route("magasin.edit", magasin.idmagasin)}
+                                      // href={route("magasin.edit", magasin.idmagasin)}
                                       className='font-medium text-blue-600
                                       dark:text-blue-500  hover:underline mx-1'
                                      >
                                       Edit
+                                    </Link>
+                                    <Link
+                                      // href={route("magasin.edit", magasin.idmagasin)}
+                                      className='font-medium text-blue-600
+                                      dark:text-blue-500  hover:underline mx-1'
+                                     >
+                                      detaille
                                     </Link>
 
 
@@ -65,7 +74,39 @@ function Index({auth,magasins,success}){
                                     </button>
                                   </td>
                                 </tr>
-                              )}
+                                <tr  className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
+                                  <td className='px-3 py-2' >ram de paquets</td>
+                                  <td className='px-3 py-2'>4</td>
+                                  <td className='px-3 py-2'>achat</td>
+
+
+                                  <td className='px-3 py-2 text-nowrap'>
+                                    <Link
+                                      // href={route("magasin.edit", magasin.idmagasin)}
+                                      className='font-medium text-blue-600
+                                      dark:text-blue-500  hover:underline mx-1'
+                                     >
+                                      Edit
+                                    </Link>
+                                    <Link
+                                      // href={route("magasin.edit", magasin.idmagasin)}
+                                      className='font-medium text-blue-600
+                                      dark:text-blue-500  hover:underline mx-1'
+                                     >
+                                      detaille
+                                    </Link>
+
+
+                                    <button
+                                    onClick={ (e) => deletemagasin(magasin)}
+                                      className='font-medium text-red-600
+                                      dark:text-red-500 hover:underline mx-1'
+                                    >
+                                      Delete
+                                    </button>
+                                  </td>
+                                </tr>
+
 
 
                             </tbody>

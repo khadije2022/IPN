@@ -75,7 +75,7 @@
             margin-bottom: 20px;
         }
 
-        
+
 
         .totals p {
             margin: 5px 0;
@@ -128,8 +128,8 @@
 </head>
 <body>
     <header>
-        <img  src="C:\wamp64\www\laravel\laravel-react-inertia\resources\images\logoipn-removebg-preview.png" alt="Description de l'image" />
-        <h1 class="Expbesoin">Expression Besoin</h1>
+        <img  src="C:\wamp64\www\IPN\IPN\resources\images\logoipn-removebg-preview.png" alt="Description de l'image" />
+        <h1 class="Expbesoin">Bon Sortie</h1>
 
         <h1 class="Expbesoin">Service: {{ $expressionbesoin->service->nom_responsabiliter }} </h1>
 
@@ -142,7 +142,7 @@
     <table class="invoice-table">
         <thead>
             <tr>
-                
+
                 <th>Catégorie</th>
                 <th>Produit</th>
                 <th>Quantité</th>
@@ -166,7 +166,7 @@
         <p>Total Quantité: {{ $totalQuantite }}</p>
 
     </section>
-    
+
     <footer>
         <div class="legalplace-footer">
             <span class="legalplace">Signature Directeur Générale</span>
