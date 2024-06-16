@@ -10,7 +10,7 @@ import { faEdit, faTrashAlt, faPlus, faFilePdf } from '@fortawesome/free-solid-s
 
 function Index_par_expbesoin({
   auth,
-  detailBonAchats = { data: [] },
+  detailsexpresionbesoins = { data: [] },
   expressionbesoin,
   id_expbesoin,
   success,
@@ -86,18 +86,9 @@ function Index_par_expbesoin({
       header={
         <div className='flex justify-between items-center'>
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
-            deatil Expression des Besoins
+            Expression des Besoins
           </h2>
           <div>
-<<<<<<< HEAD
-            <button
-              onClick={() => openModal('add')}
-              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-            >
-              Ajouter nouveau
-            </button>
-=======
->>>>>>> a6f378fd87c829b1a559bd6d1aac271cd1c33ea3
             <a
               href={route('valider', { id_expbesoin: id_expbesoin })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'

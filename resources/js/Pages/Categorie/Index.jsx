@@ -51,11 +51,6 @@ function Index({ auth, categories, success }) {
     if (!confirm('Are you sure you want to delete this category?')) {
       return;
     }
-<<<<<<< HEAD
-    router.delete(route('categorie.destroy', categorie.id))
-
-  }
-=======
     router.delete(route('categorie.destroy', categorie.id));
   };
 
@@ -67,7 +62,6 @@ function Index({ auth, categories, success }) {
     categorie.id.toString().includes(searchQuery) || 
     categorie.type.toLowerCase().includes(searchQuery.toLowerCase())
   );
->>>>>>> a6f378fd87c829b1a559bd6d1aac271cd1c33ea3
 
   return (
     <AuthenticatedLayout
@@ -115,12 +109,6 @@ function Index({ auth, categories, success }) {
           )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
-<<<<<<< HEAD
-<<<<<<< HEAD
-              <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-                <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500"'>
-=======
-=======
               <div className="mb-4">
                 <TextInput
                   type="text"
@@ -132,56 +120,20 @@ function Index({ auth, categories, success }) {
                   placeholder="Search ....."
                 />
               </div>
->>>>>>> a6f378fd87c829b1a559bd6d1aac271cd1c33ea3
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
->>>>>>> 7342363ad9872adf1943780d4edca445c9643aeb
                   <tr className='text-nowrap'>
                     <th className='px-4 py-3'>ID</th>
                     <th className='px-4 py-3'>Type</th>
                     <th className='px-4 py-3 text-right'>Action</th>
                   </tr>
                 </thead>
-<<<<<<< HEAD
-<<<<<<< HEAD
-                <tbody>
-                  {categories.data.map((categorie) =>
-                    <tr key={categorie.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                      <td className='px-3 py-2' >{categorie.id}</td>
-                      <td className='px-3 py-2'>{categorie.type}</td>
-
-                      <td className='px-3 py-2 text-nowrap'>
-                        <Link
-                          href={route("categorie.edit", categorie.id)}
-                          className='font-medium text-blue-600 dark:text-blue-500  hover:underline mx-1'
-=======
-                
-                            <tbody>
-                              {categories.data.map((categorie)=>
-                                <tr key={categorie.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                                  <td className='px-3 py-2' >{categorie.id}</td>
-                                  <td className='px-3 py-2'>{categorie.type}</td>
-
-                                  <td className='px-3 py-2 text-nowrap'>
-                                    <Link
-                                      href={route("categorie.edit", categorie.id)}
-                                      className='font-medium text-blue-600
-
-                                      dark:text-blue-500  hover:underline mx-1'
->>>>>>> 7342363ad9872adf1943780d4edca445c9643aeb
-                        >
-                          Edit
-                        </Link>
-
-
-=======
                 <tbody>
                   {filteredCategories.map((categorie) => (
                     <tr key={categorie.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                       <td className='px-4 py-3'>{categorie.id}</td>
                       <td className='px-4 py-3'>{categorie.type}</td>
                       <td className='px-4 py-3 text-right flex justify-end'>
->>>>>>> a6f378fd87c829b1a559bd6d1aac271cd1c33ea3
                         <button
                           onClick={() => openModal('edit', categorie)}
                           className='text-blue-600 dark:text-blue-500 mx-1'
