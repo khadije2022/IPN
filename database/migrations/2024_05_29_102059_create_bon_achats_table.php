@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('bon_achats', function (Blueprint $table) {
             $table->id();
             $table->text('description');
-            $table->string('status');
-            $table->string('prix');
+            $table->string('status')->default('Non-valider');
             $table->timestamps();
         });
     }

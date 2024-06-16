@@ -16,16 +16,19 @@ class ExpressionBesoinController extends Controller
     public function index()
     {
         // Initialize the query builder for the expressionbesoin model
-        $query = ExpressionBesoin::query();
-
+        $query = ExpressionBesoin::with('service'); // Assurez-vous de charger la relation avec Service
+    
         // Execute the query with pagination
         $expressionbesoins = $query->paginate(10);
-
+        $services = Service::all();
+    
         // Return the Inertia.js response with the expressionbesoins data and any success message from the session
         return inertia('ExpressionBesoin/Index', [
             'expressionbesoins' => ExpressionBesoinResource::collection($expressionbesoins),
+            'services' => $services,
         ]);
     }
+    
 
 
     public function create()

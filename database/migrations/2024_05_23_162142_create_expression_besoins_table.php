@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_service')->constrained('services')->onDelete('cascade'); // Add onDelete for referential integrity
             $table->text('description');
+            $table->string('status'); // Utilisé pour des statuts comme 'validé', 'non validé'
             $table->timestamps();
         });
     }

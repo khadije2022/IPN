@@ -20,7 +20,7 @@ function Index({auth,categories,success}){
               </h2>
               <Link href={route('categorie.create')} className='bg-emerald-500 py-1 px-3 text-white rounded
               shadow transition-all hover:bg-emerald-600'>
-                Add new
+                Ajouter
               </Link>
             </div>
           }    >
@@ -59,7 +59,7 @@ function Index({auth,categories,success}){
                                       className='font-medium text-blue-600
                                       dark:text-blue-500  hover:underline mx-1'
                                      >
-                                      Edit
+                                      Modifier
                                     </Link>
 
 
@@ -68,7 +68,7 @@ function Index({auth,categories,success}){
                                       className='font-medium text-red-600
                                       dark:text-red-500 hover:underline mx-1'
                                     >
-                                      Delete
+                                      Suprimer
                                     </button>
                                   </td>
                                 </tr>

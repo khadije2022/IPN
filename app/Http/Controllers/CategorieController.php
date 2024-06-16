@@ -86,8 +86,10 @@ class CategorieController extends Controller
     public function destroy(Categorie $categorie)
     {
         $categorie->delete();
-        return to_route('categorie.index')->with('success','Categorie was deleted');
+        return to_route('categorie.index')->with('success', 'Categorie was deleted');
     }
+    
+
 
 
     public function exportPdf()
@@ -97,11 +99,11 @@ class CategorieController extends Controller
         $pdf = Pdf::loadView('pdf.categories', ['categories' => $categories]);
 
 
-<<<<<<< HEAD
+
         return $pdf->download('categories.pdf');
     }
 
-=======
+
 
 
 
@@ -117,6 +119,5 @@ class CategorieController extends Controller
         return Excel::download(new CategoriesExport, 'bulkData.xlsx');
     }
 
->>>>>>> e0e14b198558ddc21382d6256c92a35f11ed7759
 }
 

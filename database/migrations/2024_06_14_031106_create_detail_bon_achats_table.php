@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('catelogue_produits', function (Blueprint $table) {
+        Schema::create('detail_bon_achats', function (Blueprint $table) {
             $table->id();
-            $table->string('designation');
-            $table->foreignId('type')->constrained('categories')->onDelete('cascade');
-            $table->timestamps();
+            $table->integer('quantite');
+            $table->foreignId('produit')->constrained('catelogue_produits');
+            $table->foreignId('idBonAchat')->constrained('bon_achats');
+            $table->float('prix');
         });
     }
 
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('catelogue_produits');
+        Schema::dropIfExists('detail_bon_achats');
     }
 };
