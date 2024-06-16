@@ -17,6 +17,8 @@ return new class extends Migration
             // $table->foreignId('idBonDeSortieAchats')->nullable()->constrained('bon_sortie_achats');
             // $table->string('type');
 
+            // $table->integer('description');
+
             // $table->integer('quantite');
             // $table->timestamps();
         });

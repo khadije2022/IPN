@@ -6,6 +6,8 @@ use App\Models\Mouvement_stock;
 use App\Http\Requests\StoreMouvement_stockRequest;
 use App\Http\Requests\UpdateMouvement_stockRequest;
 use App\Http\Resources\CategorieResource;
+
+
 use App\Models\Categorie;
 use App\Http\Controllers\Request;
 use App\Http\Resources\CatelogueResource;
@@ -19,8 +21,15 @@ class MouvementStockController extends Controller
      */
     public function index()
     {
-        return inertia('MouvmentStock/Index',[
-            'mouvmentStock' => "hello"
+        $query = Mouvement_stock::query();
+
+
+        // Execute the query with pagination
+        $mouvement_stocks = $query->paginate(10);
+
+        // Return the Inertia.js response with the categories data and any success message from the session
+        return inertia('MouvmentStock/Index', [
+            'mouvement_stocks' => MouvementStockResource::collection($mouvement_stocks),
         ]);
     }
 

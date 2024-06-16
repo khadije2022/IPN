@@ -13,11 +13,12 @@ class ExpressionBesoin extends Model
     protected $table = 'expression_besoins';
     protected $fillable=[
         'id_service',
-        'description'
+        'description',
+        'status'
     ];
 
     public function service()
     {
-        return $this->belongsTo(Service::class,'id_service');
+        return $this->belongsTo(Service::class, 'id_service');
     }
 }

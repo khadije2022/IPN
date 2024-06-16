@@ -1,0 +1,16 @@
+.status-valide {
+    background-color: #2ecc71;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .status-non-valide {
+    background-color: #e74c3c;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  

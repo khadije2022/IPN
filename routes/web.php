@@ -36,6 +36,7 @@ Route::middleware(['auth','verified'])->group(function() {
 
 
 
+
     Route::resource('magasin',MagasinController::class);
     Route::resource('catelogueProduit',CatelogueProduitController::class);
     Route::resource('categorie',CategorieController::class);

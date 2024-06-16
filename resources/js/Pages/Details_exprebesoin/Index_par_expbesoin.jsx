@@ -1,10 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import React, { useState } from 'react';
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrashAlt, faPlus, faFilePdf } from '@fortawesome/free-solid-svg-icons';
 
 function Index_par_expbesoin({
   auth,
@@ -16,7 +18,7 @@ function Index_par_expbesoin({
   catelogue_produits = [],
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
+  const [modalMode, setModalMode] = useState('add');
   const [currentDetail, setCurrentDetail] = useState(null);
 
   const { data, setData, post, put, errors } = useForm({
@@ -68,8 +70,15 @@ function Index_par_expbesoin({
     router.delete(route('detailsexpresionbesoin.destroy', detailsexpresionbesoin.id));
   };
 
-  // Debugging: Log the expressionb to ensure it is defined
-  console.log('expressionb:', id_expbesoin);
+  const getProduitname = (id) => {
+    const Produit = catelogue_produits.find((Produit) => Produit.id === id);
+    return Produit ? Produit.designation : 'N/A';
+  };
+
+  const getcategoriename = (id) => {
+    const categorie = categories.find((categorie) => categorie.id === id);
+    return categorie ? categorie.type : 'N/A';
+  };
 
   return (
     <AuthenticatedLayout
@@ -80,12 +89,15 @@ function Index_par_expbesoin({
             deatil Expression des Besoins
           </h2>
           <div>
+<<<<<<< HEAD
             <button
               onClick={() => openModal('add')}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
             >
               Ajouter nouveau
             </button>
+=======
+>>>>>>> a6f378fd87c829b1a559bd6d1aac271cd1c33ea3
             <a
               href={route('valider', { id_expbesoin: id_expbesoin })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
@@ -96,7 +108,7 @@ function Index_par_expbesoin({
               href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
             >
-              Export PDF
+              <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF              
             </a>
           </div>
         </div>
@@ -113,14 +125,30 @@ function Index_par_expbesoin({
           )}
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
+              <div className='flex justify-between'>
+                <div className='font-semibold'>
+                  <h1>Expression du Besoin N° {expressionbesoin.id}</h1>
+                  <h1>Nom de Responsabilité: {expressionbesoin.service.nom_responsabiliter}</h1>
+                  <h1>Description: {expressionbesoin.description}</h1>
+                  <h1 className='text-red-600'>pour Ajouter il faut cliquer sur le button en face et remplie les champs</h1>
+
+                </div>
+                <div>
+                  <button
+                    onClick={() => openModal('add')}
+                    className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                  >
+                    <FontAwesomeIcon icon={faPlus} /> Ajouter
+                  </button>
+                </div>
+              </div>
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                   <tr className='text-nowrap'>
                     <th className='px-3 py-3'>ID</th>
-                    <th className='px-3 py-3'>id_expbesoin</th>
-                    <th className='px-3 py-3'>id_categorie</th>
-                    <th className='px-3 py-3'>id_catproduit</th>
-                    <th className='px-3 py-3'>quantite</th>
+                    <th className='px-3 py-3'>Catégorie</th>
+                    <th className='px-3 py-3'>Produit</th>
+                    <th className='px-3 py-3'>Quantité</th>
                     <th className='px-3 py-3 text-right'>Action</th>
                   </tr>
                 </thead>
@@ -128,22 +156,21 @@ function Index_par_expbesoin({
                   {detailsexpresionbesoins.data.map((detailsexpresionbesoin) => (
                     <tr key={detailsexpresionbesoin.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                       <td className='px-3 py-2'>{detailsexpresionbesoin.id}</td>
-                      <td className='px-3 py-2'>{detailsexpresionbesoin.id_expbesoin}</td>
-                      <td className='px-3 py-2'>{detailsexpresionbesoin.id_categorie}</td>
-                      <td className='px-3 py-2'>{detailsexpresionbesoin.id_catproduit}</td>
+                      <td className='px-3 py-2'>{getcategoriename(detailsexpresionbesoin.id_categorie)}</td>
+                      <td className='px-3 py-2'>{getProduitname(detailsexpresionbesoin.id_catproduit)}</td>
                       <td className='px-3 py-2'>{detailsexpresionbesoin.quantite}</td>
                       <td className='px-3 py-2 text-nowrap'>
                         <button
                           onClick={() => openModal('edit', detailsexpresionbesoin)}
-                          className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
+                          className='text-blue-600 dark:text-blue-500 mx-1'
                         >
-                          Edit
+                          <FontAwesomeIcon icon={faEdit} />
                         </button>
                         <button
                           onClick={() => deleteDetailsexpresionbesoin(detailsexpresionbesoin)}
-                          className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
+                          className='text-red-600 dark:text-red-500 mx-1'
                         >
-                          Delete
+                          <FontAwesomeIcon icon={faTrashAlt} />
                         </button>
                       </td>
                     </tr>
@@ -160,7 +187,7 @@ function Index_par_expbesoin({
           <div className='relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white'>
             <form onSubmit={handleFormSubmit} className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg'>
               <div className='mt-4'>
-                <InputLabel htmlFor='id_categorie' value='Category' />
+                <InputLabel htmlFor='id_categorie' value='Catégorie' />
                 <select
                   name="id_categorie"
                   id="id_categorie"
@@ -168,7 +195,7 @@ function Index_par_expbesoin({
                   onChange={(e) => setData('id_categorie', e.target.value)}
                   className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
-                  <option value="" className="text-gray-500">Select a category</option>
+                  <option value="" className="text-gray-500">Sélectionner une catégorie</option>
                   {categories.map((category) => (
                     <option key={category.id} value={category.id} className="text-gray-800 dark:text-gray-200">
                       {category.type}
@@ -179,7 +206,7 @@ function Index_par_expbesoin({
               </div>
 
               <div className='mt-4'>
-                <InputLabel htmlFor='id_catproduit' value='Product' />
+                <InputLabel htmlFor='id_catproduit' value='Produit' />
                 <select
                   name="id_catproduit"
                   id="id_catproduit"
@@ -187,7 +214,7 @@ function Index_par_expbesoin({
                   onChange={(e) => setData('id_catproduit', e.target.value)}
                   className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
-                  <option value="" className="text-gray-500">Select a product category</option>
+                  <option value="" className="text-gray-500">Sélectionner un produit</option>
                   {catelogue_produits.map((productCategory) => (
                     <option key={productCategory.id} value={productCategory.id} className="text-gray-800 dark:text-gray-200">
                       {productCategory.designation}
@@ -198,7 +225,7 @@ function Index_par_expbesoin({
               </div>
 
               <div className='mt-4'>
-                <InputLabel htmlFor='quantite' value='Quantity' />
+                <InputLabel htmlFor='quantite' value='Quantité' />
                 <TextInput
                   type="number"
                   name="quantite"
@@ -216,13 +243,13 @@ function Index_par_expbesoin({
                   onClick={closeModal}
                   className='bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2'
                 >
-                  Cancel
+                  Annuler
                 </button>
                 <button
                   type="submit"
                   className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
                 >
-                  {modalMode === 'add' ? 'Add' : 'Save'}
+                  {modalMode === 'add' ? 'Ajouter' : 'Sauvegarder'}
                 </button>
               </div>
             </form>

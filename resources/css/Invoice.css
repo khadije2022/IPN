@@ -81,3 +81,35 @@
     font-weight: bold;
   }
   
+/* Ajoutez ceci dans votre fichier CSS */
+
+.scrollable-nav {
+  overflow-y: auto;
+  height: 100%;
+}
+
+
+
+.status {
+  padding: 5px 10px;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  width: 100px;
+}
+
+.status.in-progress {
+  background-color: #3498db; /* Blue */
+}
+
+.status.pending {
+  background-color: #f39c12; /* Orange */
+}
+
+.status.completed {
+  background-color: #2ecc71; /* Green */
+}
+
+
+
