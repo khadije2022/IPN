@@ -22,7 +22,7 @@ class StoreMagasinRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "nomMagasin"=>["required" , "max:255"],
         ];
     }
 }

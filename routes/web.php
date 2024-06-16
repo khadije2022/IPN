@@ -42,6 +42,7 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::resource('mouvmentStock',MouvementStockController::class);
     Route::resource('detailsMouvment',DetailsMouvementController::class);
     Route::resource('bonsortieAchat',BonSortieAchatController::class);
+
     Route::get('mouvmentStock/create/{bonSortie}', [MouvementStockController::class, 'create'])->name('mouvmentStock.create');
     // Route::get('mouvmentStock/{bonSortie}', [MouvementStockController::class, 'create'])->name('mouvmentStock.create');
 
@@ -49,6 +50,9 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::resource('detailBonAchat',DetailBonAchatController::class);
     Route::get('detailBonAchat/create/{bonAchat}', [DetailBonAchatController::class, 'create'])->name('detailBonAchat.create');
     Route::get('/detailBonAchat/index-par-bonAchat/{bonAchat}', [DetailBonAchatController::class, 'index_par_bonAchat'])->name('detailBonAchat.index-par-bonAchat');
+
+    Route::resource('stock',StockController::class);
+
 
     Route::resource('expressionbesoin',ExpressionBesoinController::class);
     Route::resource('detailsexpresionbesoin', Details_ExpBesoinController::class);
@@ -63,16 +67,34 @@ Route::middleware(['auth','verified'])->group(function() {
 
 
     Route::get('/export-pdf', [CategorieController::class, 'exportPdf'])->name('export-pdf');
+
+    Route::get('/export-excel', [CategorieController::class, 'exportExcel'])->name('export-excel');
+
+
+
     // Route::get('/export-excel', [CategorieController::class, 'exportExcel'])->name('export-excel');
     Route::post('/mouvmentStock/finalize', [MouvementStockController::class, 'finalize'])->name('mouvmentStock.finalize');
+
 });
 
+
 Route::middleware('auth')->group(function () {
+    // Route::resource('magasin',MagasinController::class);
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/magasin/{magasin}/edit', [MagasinController::class, 'edit'])->name('magasin.edit');
 
 
+    Route::get('/magasin', [MagasinController::class, 'index'])->name('magasin.index');
+    Route::get('/magasin/create', [MagasinController::class, 'create'])->name('magasin.create');
+    // Route::post('/magasins', [MagasinController::class, 'store'])->name('magasin.store');
+    // Route::get('/magasins/{magasin}/edit', [MagasinController::class, 'edit'])->name('magasin.edit');
+    // Route::patch('/magasins/{magasin}', [MagasinController::class, 'update'])->name('magasin.update');
+    // Route::delete('/magasins/{magasin}', [MagasinController::class, 'destroy'])->name('magasin.destroy');
+    // Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 });
+
+
 
 require __DIR__.'/auth.php';

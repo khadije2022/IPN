@@ -6,6 +6,7 @@ use App\Models\Categorie;
 use App\Http\Requests\StoreCategorieRequest;
 use App\Http\Requests\UpdateCategorieRequest;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\CategoriesExport;
 
 // use App\Exports\CategoriesExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -95,11 +96,17 @@ class CategorieController extends Controller
     {
         $categories = Categorie::get();
 
+
         $pdf = Pdf::loadView('pdf.categories', ['categories' => $categories]);
 
 
+        $pdf = Pdf::loadView('pdf.categories', ['categories' => $categories]);
+
+
+
         return $pdf->download('categories.pdf');
+
     }
 
 
-    }
+}
