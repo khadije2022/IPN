@@ -3,12 +3,12 @@ import React from 'react'
 
 import { Head, Link, router } from '@inertiajs/react';
 import Pagination from '@/Components/Pagination';
-function Index({auth,bonsortieAchats,success}){
-    const deletebonsortieAchat = (bonsortieAchat) => {
+function Index({auth,bonSorties,success}){
+    const deletebonsortieAchat = (bonsortie) => {
         if(!confirm('Are you wan t to delete this prject')){
           return;
         }
-        router.delete(route('bonsortieAchat.destroy',bonsortieAchat.id))
+        router.delete(route('bonSortie.destroy',bonsortie.id))
     }
     return(
         <AuthenticatedLayout   user={auth.user}
@@ -18,7 +18,7 @@ function Index({auth,bonsortieAchats,success}){
               dark:text-gray-200 leading-tight'>
                   bonsortie
               </h2>
-              <Link href={route('bonsortieAchat.create')} className='bg-emerald-500 py-1 px-3 text-white rounded
+              <Link href={route('bonSortie.create')} className='bg-emerald-500 py-1 px-3 text-white rounded
               shadow transition-all hover:bg-emerald-600'>
                 cree nouveau
               </Link>
@@ -38,33 +38,36 @@ function Index({auth,bonsortieAchats,success}){
             </div>
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                        <table className='className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-                            <thead className='className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500"'>
+                        <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
+                            <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                               <tr className='text-nowrap'>
-                                <th className='px-3 py-3'>ID</th>
-                               <th className='px-3 py-3'>type</th>
+                              <th className='px-3 py-3'>description</th>
+                               <th className='px-3 py-3'>status</th>
+                                <th className='px-3 py-3'>date</th>
+                                <th className='px-3 py-3'>id</th>
 
                                 <th className='px-3 py-3 text-right'>Action</th>
                               </tr>
                             </thead>
                             <tbody>
-                              {bonsortieAchats.data.map((bonsortieAchat)=>
-                                <tr key={bonsortieAchat.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                                  <td className='px-3 py-2' >{bonsortieAchat.id}</td>
-                                  <td className='px-3 py-2'>{bonsortieAchat.type}</td>
-                                  <td className='px-3 py-2'>{bonsortieAchat.id_magasin}</td>
+                              {bonSorties.data.map((bonsortie)=>
+                                <tr key={bonsortie.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
+                                  <td className='px-3 py-2' >{bonsortie.description}</td>
+                                  <td className='px-3 py-2'>{bonsortie.status}</td>
+                                  <td className='px-3 py-2'>{bonsortie.created_at}</td>
+                                  <td className='px-3 py-2'>{bonsortie.id}</td>
                                   <td className='px-3 py-2 text-nowrap'>
                                     <Link
-                                      href={route("bonsortieAchat.edit", bonsortieAchat.id)}
+                                      href={route("bonSortie.edit", bonsortie.id)}
                                       className='font-medium text-blue-600
                                       dark:text-blue-500  hover:underline mx-1'
                                      >
                                       Edit
                                     </Link>
 
-
+                                    <a href={route('detailBonSortie.index_par_bonSortie', {bonSortie: bonsortie.id})}>Details</a>
                                     <button
-                                    onClick={ (e) => deletebonsortieAchat(bonsortieAchat)}
+                                    onClick={ (e) => deletebonsortieAchat(bonsortie)}
                                       className='font-medium text-red-600
                                       dark:text-red-500 hover:underline mx-1'
                                     >
@@ -78,7 +81,7 @@ function Index({auth,bonsortieAchats,success}){
                             </tbody>
                           </table>
 
-                        <Pagination links={bonsortieAchats.meta.links}/>
+                        <Pagination links={bonSorties.meta.links}/>
                         </div>
                     </div>
                 </div>

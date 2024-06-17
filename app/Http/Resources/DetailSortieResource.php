@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MouvementStockResource extends JsonResource
+class DetailSortieResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,7 +19,7 @@ class MouvementStockResource extends JsonResource
             'quantite' => $this->quantite,
             'produit' => new CatelogueResource($this->produits),
         //    'magasin' => $this->magasin,
-           'idBonDeSortieAchats' => $this->bonSortie,
+           'idBonDeSortie' => $this->bonSortie,
         ];
     }
 }

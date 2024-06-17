@@ -17,7 +17,7 @@ export default function Create({auth}) {
 
   const onSubmit = (e) =>{
     e.preventDefault();
-    post(route("bonsortieAchat.store"));
+    post(route("bonSortie.store"));
   }
   return (
     <AuthenticatedLayout
@@ -73,7 +73,7 @@ export default function Create({auth}) {
 
 
                 <div className='mt-4 text-right'>
-                  <Link href={route('bonsortieAchat.index')}
+                  <Link href={route('bonSortie.index')}
                   className=" py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
                   >
                     Cancel

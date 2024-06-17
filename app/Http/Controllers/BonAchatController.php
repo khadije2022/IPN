@@ -56,6 +56,8 @@ class BonAchatController extends Controller
      */
     public function edit(BonAchat $bonAchat)
     {
+        
+
         return inertia('BonAchat/Edit',[
             'bonAchat' => $bonAchat
         ]);
@@ -67,7 +69,6 @@ class BonAchatController extends Controller
     public function update(UpdateBonAchatRequest $request, BonAchat $bonAchat)
     {
         $data= $request->all();
-
         $bonAchat->update($data);
         return to_route('bonAchat.index')->with('success','expressionbesoin was update');
     }
@@ -77,6 +78,7 @@ class BonAchatController extends Controller
      */
     public function destroy(BonAchat $bonAchat)
     {
+
         $bonAchat->delete();
         return to_route('bonAchat.index')->with('success','expressionbesoin was deleted');
     }

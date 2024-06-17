@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('expression_besoins', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_service')->constrained('services')->onDelete('cascade'); // Add onDelete for referential integrity
+            $table->foreignId('id_service')->constrained('services')->onDelete('cascade');
+            $table->string('status')->default('Non-Valide') ;// Add onDelete for referential integrity
             $table->text('description');
-            $table->string('status'); // Utilisé pour des statuts comme 'validé', 'non validé'
             $table->timestamps();
         });
     }

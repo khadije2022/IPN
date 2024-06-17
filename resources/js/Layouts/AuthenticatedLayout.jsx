@@ -33,11 +33,12 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         <NavLink href={route('expressionbesoin.index')} active={route().current('expressionbesoin.index')}>
                             Expression Besoin
                         </NavLink>
-                        <NavLink href={route('bonsortieAchat.index')} active={route().current('bonsortieAchat.index')}>
-                            Cree un devis
+
+                        <NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
+                            BonAchat
                         </NavLink>
-                        <NavLink href={route('mouvmentStock.index')} active={route().current('mouvmentStock.index')}>
-                            MouvmentStock
+                        <NavLink href={route('bonSortie.index')} active={route().current('bonSortie.index')}>
+                            BonSortie
                         </NavLink>
                     </div>
                 </div>

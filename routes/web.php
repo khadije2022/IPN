@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\BonAchatController;
 use App\Http\Controllers\BonSortieAchatController;
+use App\Http\Controllers\BonSortieController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\CatelogueProduitController;
 use App\Http\Controllers\DetailBonAchatController;
+use App\Http\Controllers\DetailBonSortieController;
 use App\Http\Controllers\DetailsMouvementController;
 use App\Http\Controllers\MagasinController;
 use App\Http\Controllers\MouvementStockController;
@@ -40,12 +42,14 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::resource('magasin',MagasinController::class);
     Route::resource('catelogueProduit',CatelogueProduitController::class);
     Route::resource('categorie',CategorieController::class);
-    Route::resource('mouvmentStock',MouvementStockController::class);
-    Route::resource('detailsMouvment',DetailsMouvementController::class);
-    Route::resource('bonsortieAchat',BonSortieAchatController::class);
+    // Route::resource('detailsMouvment',::class);
 
-    Route::get('mouvmentStock/create/{bonSortie}', [MouvementStockController::class, 'create'])->name('mouvmentStock.create');
-    // Route::get('mouvmentStock/{bonSortie}', [MouvementStockController::class, 'create'])->name('mouvmentStock.create');
+
+    Route::resource('bonSortie',BonSortieController::class);
+    Route::resource('detailBonSortie',DetailBonSortieController::class);
+    Route::get('detailBonSortie/create/{bonSortie}', [DetailBonSortieController::class, 'create'])->name('detailBonSortie.create');
+    Route::get('detailBonSortie/index-par-bonSortie/{bonSortie}', [DetailBonSortieController::class, 'index_par_bonSortie'])->name('detailBonSortie.index_par_bonSortie');
+    Route::get('/valider/{bonSortie}', [DetailBonSortieController::class, 'valider'])->name('detailBonSortie.valider');
 
     Route::resource('bonAchat',BonAchatController::class);
     Route::resource('detailBonAchat',DetailBonAchatController::class);
@@ -74,7 +78,7 @@ Route::middleware(['auth','verified'])->group(function() {
 
 
     // Route::get('/export-excel', [CategorieController::class, 'exportExcel'])->name('export-excel');
-    Route::post('/mouvmentStock/finalize', [MouvementStockController::class, 'finalize'])->name('mouvmentStock.finalize');
+    Route::post('/mouvmentStock/finalize', [DetailBonSortieController::class, 'finalize'])->name('mouvmentStock.finalize');
 
 });
 

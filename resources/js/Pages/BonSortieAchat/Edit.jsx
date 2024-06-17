@@ -6,16 +6,16 @@ import InputLabel from '@/Components/InputLabel'
 import InputError from '@/Components/InputError'
 import {Link} from '@inertiajs/react'
 
-export default function Edit({auth , bonsortieAchat}) {
+export default function Edit({auth , bonSortie}) {
   const {data , setData , put,errors} = useForm({
-    'type': bonsortieAchat.type || "",
-    'id_magasin':bonsortieAchat.id_magasin || ""
+    'description': bonSortie.description || "",
+    'created_at':bonSortie.created_at || ""
   })
 
 
   const onSubmit = (e) =>{
     e.preventDefault();
-    put(route('bonsortieAchat.update',bonsortieAchat.id))
+    put(route('bonSortie.update',bonSortie.id))
   }
   return (
     <AuthenticatedLayout
@@ -24,12 +24,12 @@ export default function Edit({auth , bonsortieAchat}) {
         <div className='flex justify-between items-center'>
           <h2 className='font-semibold text-xl text-gray-800
           dark:text-gray-200 leading-tight'>
-              Edit bonsortieAchat "{bonsortieAchat.type}"
+              Edit bonAchat "{bonSortie.description}"
           </h2>
         </div>
       }
       >
-         <Head title="bonsortieAchat"/>
+         <Head title="bonAchat"/>
 
 <div className="py-12">
     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -40,40 +40,40 @@ export default function Edit({auth , bonsortieAchat}) {
               >
                 <div className='mt-4'>
                   <InputLabel
-                  htmlFor='type'
-                  value='bonsortieAchat_type'
+                  htmlFor='description'
+                  value='description'
                   />
                   <TextInput
                   type="text"
-                  name="type"
-                  id="type"
-                  value={data.type}
+                  name="description"
+                  id="description"
+                  value={data.description}
                   className="mt-1 block w-full"
-                  onChange={(e) => setData('type',e.target.value)}
+                  onChange={(e) => setData('description',e.target.value)}
                   />
-
+                  <InputError message={errors.description} className='mt-2' />
                 <InputLabel
-                  htmlFor='id_magasin'
-                  value='id_magasin'
+                  htmlFor='created_at'
+                  value='date'
                   />
                   <TextInput
-                  type="text"
-                  name="id_magasin"
-                  id="id_magasin"
-                  value={data.id_magasin}
+                  type="date"
+                  name="created_at"
+                  id="created_at"
+                  value={data.created_at}
                   className="mt-1 block w-full"
-                  onChange={(e) => setData('type',e.target.value)}
+                  onChange={(e) => setData('created_at',e.target.value)}
                   />
-                  <InputError message={errors.type} className='mt-2' />
+                  <InputError message={errors.created_at} className='mt-2' />
 
                 </div>
 
-                
 
-                
+
+
                 <div className='mt-4 text-right'>
-                  <Link href={route('bonsortieAchat.index')}
-                  className=" py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+                  <Link href={route('bonSortie.index')}
+                  className=" py-1 px-3 text-black rounded shadow transition-all hover:bg-red-700"
                   >
                     Cancel
                   </Link>
