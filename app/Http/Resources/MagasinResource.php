@@ -17,7 +17,7 @@ class MagasinResource extends JsonResource
 
       
         return [
-            'idMagasin'=>$this->id,
+            'id' => $this->id,
             'nomMagasin'=>$this->nomMagasin,
         ];
 

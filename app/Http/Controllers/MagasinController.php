@@ -1,37 +1,33 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Resources\MagasinResource;
 use App\Models\Magasin;
 use App\Http\Requests\StoreMagasinRequest;
 use App\Http\Requests\UpdateMagasinRequest;
-use App\Http\Resources\MagasinResource;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Exports\MagasinsExport;
 
+use Maatwebsite\Excel\Facades\Excel;
 class MagasinController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
-{
-    $query = Magasin::query();
+    {
+        // Initialize the query builder for the Magasin model
+        $query = Magasin::query();
 
-    $sortField = request("sort_field", 'created_at');
-    $sortDirection = request("sort_direction", "desc");
 
-    if (request("nomMagasin")) {
-        $query->where("nomMagasin", "like", "%" . request("nomMagasin") . "%");
+        // Execute the query with pagination
+        $magasins = $query->paginate(10);
+
+        // Return the Inertia.js response with the Magasins data and any success message from the session
+        return inertia('Magasin/Index', [
+            'magasins' => MagasinResource::collection($magasins),
+        ]);
     }
-
-    $magasins = $query->orderBy($sortField, $sortDirection)
-        ->paginate(10)
-        ->onEachSide(1);
-    return inertia("Magasin/Index", [
-        'magasins' => MagasinResource::collection($magasins),
-        'queryParams' => request()->query() ?: null,
-        'success' => session('success'),
-    ]);
-}
 
 
 
@@ -48,10 +44,10 @@ class MagasinController extends Controller
      */
     public function store(StoreMagasinRequest $request)
     {
-        $data = $request->all();
+        $data=$request->all();
         Magasin::create($data);
-        return to_route('magasin.index')
-            ->with('success' , 'Vous avez cree votre magasin');
+
+        return to_route('magasin.index')->with('success','Magasin was create');
     }
 
     /**
@@ -59,16 +55,18 @@ class MagasinController extends Controller
      */
     public function show(Magasin $magasin)
     {
-        
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(Magasin $magasin)
+
     {
-        return inertia('Magasin/Edit' , [
-            'magasin' => $magasin,
+
+        return inertia('Magasin/Edit',[
+            'magasin' => $magasin
         ]);
     }
 
@@ -77,9 +75,10 @@ class MagasinController extends Controller
      */
     public function update(UpdateMagasinRequest $request, Magasin $magasin)
     {
-        $magasin->update($request->all());
-        return to_route('magasin.index')
-            ->with('success', "Vous avez modifier votre Magasin .");
+        $data= $request->all();
+
+        $magasin->update($data);
+        return to_route('magasin.index')->with('success','Magasin was update');
     }
 
     /**
@@ -88,7 +87,44 @@ class MagasinController extends Controller
     public function destroy(Magasin $magasin)
     {
         $magasin->delete();
-        return to_route('magasin.index')
-        ->with('success', "Vous avez supprimer votre Magasin .");
+        return to_route('magasin.index')->with('success', 'Magasin was deleted');
     }
+
+
+
+
+    public function exportPdf()
+    {
+        $Magasins = Magasin::get();
+
+
+        $pdf = Pdf::loadView('pdf.Magasins', ['Magasins' => $Magasins]);
+
+
+
+        $pdf = Pdf::loadView('pdf.Magasins', ['Magasins' => $Magasins]);
+
+
+
+
+        return $pdf->download('Magasins.pdf');
+
+    }
+
+
+
+
+
+
+
+    
+
+
+
+    public function exportExcel()
+    {
+        $Magasins = Magasin::get();
+        return Excel::download(new MagasinsExport, 'bulkData.xlsx');
+    }
+
 }

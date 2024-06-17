@@ -16,6 +16,8 @@ export default function AuthenticatedLayout({ user, header, children }) {
                             <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                         </Link>
                     </div>
+<br/><br/>
+
 
                     <div className="flex flex-col space-y-4 mt-6">
                         <NavLink href={route('dashboard')} active={route().current('dashboard')}>
@@ -33,48 +35,52 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         <NavLink href={route('expressionbesoin.index')} active={route().current('expressionbesoin.index')}>
                             Expression Besoin
                         </NavLink>
-                        <NavLink href={route('bonsortieAchat.index')} active={route().current('bonsortieAchat.index')}>
+                        {/* <NavLink href={route('bonsortieAchat.index')} active={route().current('bonsortieAchat.index')}>
                             Cree un devis
-                        </NavLink>
-                        <NavLink href={route('mouvmentStock.index')} active={route().current('mouvmentStock.index')}>
+                        </NavLink> */}
+                        {/* <NavLink href={route('mouvmentStock.index')} active={route().current('mouvmentStock.index')}>
                             MouvmentStock
+                        </NavLink> */}
+                        <NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
+                        bonAchat
                         </NavLink>
                     </div>
                 </div>
 
                 <div className="flex flex-col space-y-4">
-                    <Dropdown>
-                        <Dropdown.Trigger>
-                            <span className="inline-flex rounded-md w-full">
-                                <button
-                                    type="button"
-                                    className="inline-flex items-center w-full px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
-                                >
-                                    {user.name}
-                                    <svg
-                                        className="ml-2 -mr-0.5 h-4 w-4"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 20 20"
-                                        fill="currentColor"
-                                    >
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 011.414 1.414l-4 4a1 1 01-1.414 0l-4-4a1 1 010-1.414z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                </button>
-                            </span>
-                        </Dropdown.Trigger>
+    <Dropdown>
+        <Dropdown.Trigger>
+            <span className="inline-flex rounded-md w-full">
+                <button
+                    type="button"
+                    className="inline-flex items-center justify-between w-full px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none transition ease-in-out duration-150"
+                >
+                    {user.name}
+                    <svg
+                        className="ml-2 h-5 w-5 text-gray-400"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                    >
+                        <path
+                            fillRule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 011.414 1.414l-4 4a1 1 01-1.414 0l-4-4a1 1 010-1.414z"
+                            clipRule="evenodd"
+                        />
+                    </svg>
+                </button>
+            </span>
+        </Dropdown.Trigger>
 
-                        <Dropdown.Content>
-                            <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
-                            <Dropdown.Link href={route('logout')} method="post" as="button">
-                                Log Out
-                            </Dropdown.Link>
-                        </Dropdown.Content>
-                    </Dropdown>
-                </div>
+        <Dropdown.Content>
+            <Dropdown.Link href={route('profile.edit')}>Profil</Dropdown.Link>
+            <Dropdown.Link href={route('logout')} method="post" as="button">
+                Déconnexion
+            </Dropdown.Link>
+        </Dropdown.Content>
+    </Dropdown>
+</div>
+
             </nav>
 
             <div className="ml-64 flex-1">

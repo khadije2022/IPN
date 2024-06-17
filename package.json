@@ -29,6 +29,7 @@
         "@mui/icons-material": "^5.15.20",
         "@mui/material": "^5.15.20",
         "@mui/styles": "^5.15.20",
+        "classnames": "^2.5.1",
         "cors": "^2.8.5",
         "prop-types": "^15.8.1",
         "react-modal": "^3.16.1",

@@ -56,11 +56,24 @@ function Index_par_expbesoin({
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    if (data.quantite <= 0) {
+      alert('La quantité doit être un nombre positif.');
+      return;
+    }
     const routeName = modalMode === 'add' ? 'detailsexpresionbesoin.store' : `detailsexpresionbesoin.update`;
     const action = modalMode === 'add' ? post : put;
 
     action(route(routeName, currentDetail ? currentDetail.id : null));
     closeModal();
+  };
+
+  const handleQuantityChange = (e) => {
+    const value = e.target.value;
+    if (value >= 0) {
+      setData('quantite', value);
+    } else {
+      alert('La quantité doit être un nombre positif.');
+    }
   };
 
   const deleteDetailsexpresionbesoin = (detailsexpresionbesoin) => {
@@ -122,7 +135,6 @@ function Index_par_expbesoin({
                   <h1>Nom de Responsabilité: {expressionbesoin.service.nom_responsabiliter}</h1>
                   <h1>Description: {expressionbesoin.description}</h1>
                   <h1 className='text-red-600'>pour Ajouter il faut cliquer sur le button en face et remplie les champs</h1>
-
                 </div>
                 <div>
                   <button
@@ -223,7 +235,7 @@ function Index_par_expbesoin({
                   id="quantite"
                   value={data.quantite}
                   className="mt-1 block w-full"
-                  onChange={(e) => setData('quantite', e.target.value)}
+                  onChange={handleQuantityChange}
                 />
                 <InputError message={errors.quantite} className='mt-2' />
               </div>

@@ -6,7 +6,7 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt,faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const styles = {
   statusValide: {
@@ -42,6 +42,9 @@ const styles = {
     borderRadius: '8px',
     backgroundColor: 'white',
   },
+  searchInput: {
+    width: '150px', // Adjust the width as needed
+  },
 };
 
 function Index({ auth, expressionbesoins, services, success }) {
@@ -51,6 +54,8 @@ function Index({ auth, expressionbesoins, services, success }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchStatus, setSearchStatus] = useState('');
   const [searchService, setSearchService] = useState('');
+  const [searchDateStart, setSearchDateStart] = useState('');
+  const [searchDateEnd, setSearchDateEnd] = useState('');
 
   const { data, setData, post, put, errors } = useForm({
     id_service: '',
@@ -125,13 +130,15 @@ function Index({ auth, expressionbesoins, services, success }) {
     router.visit(route('detailsexpresionbesoin.index_par_expbesoin', { id_expbesoin: id }));
   };
 
-  const filteredExpressionBesoins = expressionbesoins.data.filter((expressionbesoin) => 
-    (expressionbesoin.id.toString().includes(searchQuery) || 
-    getServiceName(expressionbesoin.id_service).toLowerCase().includes(searchQuery.toLowerCase()) || 
-    expressionbesoin.description.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    expressionbesoin.status.toLowerCase().includes(searchQuery.toLowerCase())) &&
+  const filteredExpressionBesoins = expressionbesoins.data.filter((expressionbesoin) =>
+    (expressionbesoin.id.toString().includes(searchQuery) ||
+      getServiceName(expressionbesoin.id_service).toLowerCase().includes(searchQuery.toLowerCase()) ||
+      expressionbesoin.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      expressionbesoin.status.toLowerCase().includes(searchQuery.toLowerCase())) &&
     (searchStatus === '' || expressionbesoin.status === searchStatus) &&
-    (searchService === '' || expressionbesoin.id_service.toString() === searchService)
+    (searchService === '' || expressionbesoin.id_service.toString() === searchService) &&
+    (searchDateStart === '' || new Date(expressionbesoin.created_at) >= new Date(searchDateStart)) &&
+    (searchDateEnd === '' || new Date(expressionbesoin.created_at) <= new Date(searchDateEnd))
   );
 
   return (
@@ -164,45 +171,76 @@ function Index({ auth, expressionbesoins, services, success }) {
           )}
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
-              <div className="mb-4 flex space-x-4">
-                <TextInput
-                  type="text"
-                  name="search"
-                  id="search"
-                  value={searchQuery}
-                  className="mt-1 block w-full"
-                  onChange={handleSearchChange}
-                  placeholder="Search ..."
-                />
-                <select
-                  name="searchStatus"
-                  id="searchStatus"
-                  value={searchStatus}
-                  className="mt-1 block w-full"
-                  onChange={(e) => setSearchStatus(e.target.value)}
-                >
-                  <option value=''>All Status</option>
-                  <option value='validé'>Validé</option>
-                  <option value='non validé'>Non Validé</option>
-                </select>
-                <select
-                  name="searchService"
-                  id="searchService"
-                  value={searchService}
-                  className="mt-1 block w-full"
-                  onChange={(e) => setSearchService(e.target.value)}
-                >
-                  <option value=''>All Services</option>
-                  {services.map((service) => (
-                    <option key={service.id} value={service.id}>
-                      {service.nom_responsabiliter}
-                    </option>
-                  ))}
-                </select>
-              </div>
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
-                  <tr className='text-nowrap'>
+                  <tr>
+                    <th className='px-3 py-1'>
+                      <TextInput
+                        type="text"
+                        name="search"
+                        id="search"
+                        value={searchQuery}
+                        className="mt-1 block w-full"
+                        onChange={handleSearchChange}
+                        placeholder="Rechercher ID"
+                        style={styles.searchInput}
+                      />
+                    </th>
+                    <th className='px-3 py-1'>
+                      <select
+                        name="searchService"
+                        id="searchService"
+                        value={searchService}
+                        className="mt-1 block w-full"
+                        onChange={(e) => setSearchService(e.target.value)}
+                        style={styles.searchInput}
+                      >
+                        <option value=''>Services</option>
+                        {services.map((service) => (
+                          <option key={service.id} value={service.id}>
+                            {service.nom_responsabiliter}
+                          </option>
+                        ))}
+                      </select>
+                    </th>
+                    <th className='px-3 py-1'></th>
+                    <th className='px-3 py-1'>
+                      <select
+                        name="searchStatus"
+                        id="searchStatus"
+                        value={searchStatus}
+                        className="mt-1 block w-full"
+                        onChange={(e) => setSearchStatus(e.target.value)}
+                        style={styles.searchInput}
+                      >
+                        <option value=''>Statut</option>
+                        <option value='validé'>Validé</option>
+                        <option value='non validé'>Non Validé</option>
+                      </select>
+                    </th>
+                    <th className='px-3 py-1'>
+                      <TextInput
+                        type="date"
+                        name="searchDateStart"
+                        id="searchDateStart"
+                        value={searchDateStart}
+                        className="mt-1 block w-full"
+                        onChange={(e) => setSearchDateStart(e.target.value)}
+                        style={styles.searchInput}
+                      />
+                      <TextInput
+                        type="date"
+                        name="searchDateEnd"
+                        id="searchDateEnd"
+                        value={searchDateEnd}
+                        className="mt-1 block w-full"
+                        onChange={(e) => setSearchDateEnd(e.target.value)}
+                        style={styles.searchInput}
+                      />
+                    </th>
+                    <th className='px-3 py-1'></th>
+                  </tr>
+                  <tr>
                     <th className='px-3 py-3'>ID</th>
                     <th className='px-3 py-3'>Service</th>
                     <th className='px-3 py-3'>Description</th>
@@ -316,7 +354,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                   onClick={closeModal}
                   className='bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2'
                 >
-                  Cancel
+                  Annuler
                 </button>
                 <button
                   type='submit'

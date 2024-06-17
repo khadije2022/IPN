@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('designation');
             $table->foreignId('type')->constrained('categories')->onDelete('cascade');
+            $table->integer('stock')->default(0); // Ajout de la colonne stock avec une valeur par défaut de 0
             $table->timestamps();
         });
     }
