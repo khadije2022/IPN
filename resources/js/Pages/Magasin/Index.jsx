@@ -63,6 +63,7 @@ function Index({ auth, magasins, success }) {
     magasin.nomMagasin.toLowerCase().includes(searchQuery.toLowerCase()))
   ) || [];
 
+
   return (
     <AuthenticatedLayout
       user={auth.user}
