@@ -12,14 +12,14 @@ const styles = {
   statusValide: {
     backgroundColor: '#2ecc71',
     color: 'white',
-    padding: '5px 10px',
+    padding: '3px 8px',
     borderRadius: '5px',
     textAlign: 'center',
   },
   statusNonValide: {
     backgroundColor: '#e74c3c',
     color: 'white',
-    padding: '5px 10px',
+    padding: '3px 8px',
     borderRadius: '5px',
     textAlign: 'center',
   },
@@ -43,7 +43,14 @@ const styles = {
     backgroundColor: 'white',
   },
   searchInput: {
-    width: '150px', // Adjust the width as needed
+    width: '120px', // Adjust the width as needed
+  },
+
+  tableRow: {
+    transition: 'background-color 0.3s',
+  },
+  tableRowHover: {
+    backgroundColor: '#d3d3d3',
   },
 };
 
@@ -155,7 +162,7 @@ function Index({ auth, expressionbesoins, services, success }) {
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
             >
               <FontAwesomeIcon icon={faPlus} /> Ajouter
-              </button>
+            </button>
           </div>
         </div>
       }
@@ -174,7 +181,7 @@ function Index({ auth, expressionbesoins, services, success }) {
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                   <tr>
-                    <th className='px-3 py-1'>
+                    <th className='px-6 py-6'>
                       <TextInput
                         type="text"
                         name="search"
@@ -186,7 +193,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                         style={styles.searchInput}
                       />
                     </th>
-                    <th className='px-3 py-1'>
+                    <th className='px-2 py-1'>
                       <select
                         name="searchService"
                         id="searchService"
@@ -203,8 +210,8 @@ function Index({ auth, expressionbesoins, services, success }) {
                         ))}
                       </select>
                     </th>
-                    <th className='px-3 py-1'></th>
-                    <th className='px-3 py-1'>
+                    <th className='px-2 py-1'></th>
+                    <th className='px-2 py-1'>
                       <select
                         name="searchStatus"
                         id="searchStatus"
@@ -218,7 +225,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                         <option value='non validé'>Non Validé</option>
                       </select>
                     </th>
-                    <th className='px-3 py-1'>
+                    <th className='px-2 py-1'>
                       <TextInput
                         type="date"
                         name="searchDateStart"
@@ -238,34 +245,37 @@ function Index({ auth, expressionbesoins, services, success }) {
                         style={styles.searchInput}
                       />
                     </th>
-                    <th className='px-3 py-1'></th>
+                    <th className='px-2 py-1'></th>
                   </tr>
                   <tr>
-                    <th className='px-3 py-3'>ID</th>
-                    <th className='px-3 py-3'>Service</th>
-                    <th className='px-3 py-3'>Description</th>
-                    <th className='px-3 py-3'>Status</th>
-                    <th className='px-3 py-3'>Date</th>
-                    <th className='px-3 py-3 text-right'>Action</th>
+                    <th className='px-2 py-2'>ID</th>
+                    <th className='px-2 py-2'>Service</th>
+                    <th className='px-2 py-2'>Description</th>
+                    <th className='px-2 py-2'>Status</th>
+                    <th className='px-2 py-2'>Date</th>
+                    <th className='px-2 py-2 text-right'>Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filteredExpressionBesoins.map((expressionbesoin) => (
                     <tr 
-                      key={expressionbesoin.id} 
-                      className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer' 
-                      onClick={() => handleRowClick(expressionbesoin.id)}
+                    key={expressionbesoin.id} 
+                    className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer' 
+                    style={styles.tableRow}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = styles.tableRowHover.backgroundColor}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
+                    onClick={() => handleRowClick(expressionbesoin.id)}
                     >
-                      <td className='px-3 py-2'>{expressionbesoin.id}</td>
-                      <td className='px-3 py-2'>{getServiceName(expressionbesoin.id_service)}</td>
-                      <td className='px-3 py-2'>{expressionbesoin.description}</td>
-                      <td className='px-3 py-2'>
+                      <td className='px-2 py-1'>{expressionbesoin.id}</td>
+                      <td className='px-2 py-1'>{getServiceName(expressionbesoin.id_service)}</td>
+                      <td className='px-2 py-1'>{expressionbesoin.description}</td>
+                      <td className='px-2 py-1'>
                         <span style={expressionbesoin.status === 'validé' ? styles.statusValide : styles.statusNonValide}>
                           {expressionbesoin.status}
                         </span>
                       </td>
-                      <td className='px-3 py-2'>{formatDate(expressionbesoin.created_at)}</td>
-                      <td className='px-3 py-2 text-nowrap'>
+                      <td className='px-2 py-1'>{formatDate(expressionbesoin.created_at)}</td>
+                      <td className='px-2 py-1 text-nowrap'>
                         <button
                           onClick={(e) => {
                             e.stopPropagation();

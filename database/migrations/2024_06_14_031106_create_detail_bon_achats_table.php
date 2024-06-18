@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('detail_bon_achats', function (Blueprint $table) {
             $table->id();
             $table->integer('quantite');
-            $table->foreignId('produit')->constrained('catelogue_produits');
+            $table->foreignId('produit')->constrained('catelogue_produits')->onDelete('cascade');
             $table->foreignId('idBonAchat')->constrained('bon_achats');
             $table->float('prix')->default(0);
         });

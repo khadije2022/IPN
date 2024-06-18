@@ -42,6 +42,7 @@ function Index_par_expbesoin({
     setCurrentDetail(detail);
     if (mode === 'edit' && detail) {
       setData({
+        type:detail.produit.type.id || "",
         produit: detail.produit.id || "",
         idBonDeSortie: detail.idBonDeSortie.id || "",
         quantite: detail.quantite || "",
@@ -71,7 +72,7 @@ function Index_par_expbesoin({
   };
 
   const deleteDetailsexpresionbesoin = (detailBonSortie) => {
-    if (!confirm('Are you sure you want to delete this detail?')) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette ligne?')) {
       return;
     }
     router.delete(route('detailBonSortie.destroy', detailBonSortie.id));
@@ -182,6 +183,7 @@ function Index_par_expbesoin({
                   name="type"
                   id="type"
                   className="mt-1 block w-full"
+                value={selectedCategory}
                   onChange={(e) => {
                     setSelectedCategory(e.target.value);
                     setData('produit', ''); // Reset produit when category changes
@@ -203,7 +205,7 @@ function Index_par_expbesoin({
                   className="mt-1 block w-full"
                   onChange={(e) => setData('produit', e.target.value)}
                 >
-                  <option value={data.produit}>Select Product</option>
+                  <option value="">Select Product</option>
                   {filteredProducts.map((product) => (
                     <option key={product.id} value={product.id}>{product.designation}</option>
                   ))}

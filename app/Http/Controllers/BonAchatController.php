@@ -3,12 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\BonAchat;
+use App\Models\DetailBonAchat;
+
 use App\Http\Requests\StoreBonAchatRequest;
 use App\Http\Requests\UpdateBonAchatRequest;
 use App\Http\Resources\BonAchatResource;
+
 use App\Http\Resources\MouvmentStockResource;
-use App\Models\DetailBonAchat;
+
 use App\Models\MouvmentStock;
+
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class BonAchatController extends Controller
 {
@@ -86,6 +92,7 @@ class BonAchatController extends Controller
         return to_route('bonAchat.index')->with('success','expressionbesoin was deleted');
     }
 
+
     public function valider($bonAchat){
         $BonAchat = BonAchat::find($bonAchat);
 
@@ -142,5 +149,25 @@ class BonAchatController extends Controller
             'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
         ]);
     }
+
+
+
+    // public function exportPdf($idBonAchat)
+    // {
+    //     $BonAchat = BonAchat::findOrFail($idBonAchat);
+
+    //     $details_BonAchats = DetailBonAchat::with('catelogueProduit')->where('idBonAchat', $idBonAchat)->get();
+
+    //     $totalQuantite = $details_BonAchats->sum('quantite');
+
+    //     $pdf = Pdf::loadView('pdf.bonachat', [
+    //     'details_BonAchats' => $details_BonAchats,
+    //     'BonAchat' => $BonAchat,
+    //     'totalQuantite' => $totalQuantite
+    // ])->setPaper('a4');
+
+    //     return $pdf->download('BonAchat.pdf');
+    // }
+
 }
 

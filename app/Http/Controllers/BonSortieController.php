@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\BonSortie;
+use App\Models\DetailBonSortie;
+
 use App\Http\Requests\StoreBonSortieRequest;
 use App\Http\Requests\UpdateBonSortieRequest;
 use App\Http\Resources\BonSortieResource;
 use App\Http\Resources\MouvmentStockResource;
-use App\Models\DetailBonSortie;
+
 use App\Models\MouvmentStock;
 
 class BonSortieController extends Controller
@@ -83,6 +85,7 @@ class BonSortieController extends Controller
         return to_route('bonSortie.index')->with('success','bonSortie was deleted');
     }
 
+
     public function valider($bonSortie){
         $BonSortie = BonSortie::find($bonSortie);
 
@@ -144,8 +147,27 @@ class BonSortieController extends Controller
         return inertia('DetailsMouvement/Index', [
             'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
         ]);
-
     }
+
+    // public function exportPdf($idBonSortie)
+    // {
+    //     $BonSortie = BonSortie::findOrFail($idBonSortie);
+
+    //     $details_BonSorties = DetailBonSortie::with('catalogueProduit')
+    //         ->where('idBonSortie', $idBonSortie)
+    //         ->get();
+
+    //     $totalQuantite = $details_BonSorties->sum('quantite');
+
+    //     $pdf = Pdf::loadView('pdf.bonachat', [
+    //     'details_BonSorties' => $details_BonSorties,
+    //     'BonSortie' => $BonSortie,
+    //     'totalQuantite' => $totalQuantite
+    // ])->setPaper('a4');
+
+    //     return $pdf->download('BonSortie.pdf');
+
+    // }
 }
 
 

@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 use App\Http\Resources\ExpressionBesoinResource;
 use App\Models\ExpressionBesoin;
+use App\Models\BonAchat;
+use App\Models\DetailBonAchat;
 use App\Models\Details_ExpBesoin;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Service;
 use App\Http\Requests\StoreExpressionBesoinRequest;
 use App\Http\Requests\UpdateExpressionBesoinRequest;
-use App\Models\BonAchat;
 
 class ExpressionBesoinController extends Controller
 {
@@ -107,7 +108,7 @@ public function store(StoreExpressionBesoinRequest $request)
             'totalQuantite' => $totalQuantite
         ]);
 
-        return $pdf->download('details_expressionbesoins.pdf');
+        return $pdf->download('Expressionbesoin.pdf');
     }
 
 
@@ -116,14 +117,31 @@ public function store(StoreExpressionBesoinRequest $request)
     public function valider($id_expbesoin)
     {
         $expressionbesoin = ExpressionBesoin::with('service')->findOrFail($id_expbesoin);
-        $details_expbesoins = Details_ExpBesoin::with('categorie', 'catalogueProduit')
-            ->where('id_expbesoin', $id_expbesoin)
-            ->get();
-            return inertia('ExpressionBesoin/valider',[
-                'expressionbesoin' => $expressionbesoin,
-                'details_expbesoins' =>$details_expbesoins
-            ]);
 
+
+        $details_expbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->get();
+
+
+        $expressionbesoin->status = 'validé';
+        $expressionbesoin->save();
+        // Créer un bon d'achat avec la même description
+        $bonAchat = BonAchat::create([
+            'description' => $expressionbesoin->description,
+            'status' => 'Non-valider'
+        ]);
+
+        // Créer des détails du bon d'achat pour chaque détail d'expression de besoin
+        foreach ($details_expbesoins as $detail) {
+            DetailBonAchat::create([
+                'idBonAchat' => $bonAchat->id,
+                'produit' => $detail->id_catproduit,
+                'quantite' => $detail->quantite,
+                'prix' => 0 // Vous pouvez ajuster cela selon vos besoins
+
+            ]);
+        }
+
+        return redirect()->route('detailBonAchat.index-par-bonAchat', ['bonAchat' => $bonAchat->id]);
     }
 
 }

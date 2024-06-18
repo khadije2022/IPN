@@ -278,6 +278,12 @@ return array(
          * @var bool
          */
         "enable_html5_parser" => true,
+
+
+
+        ////ajoueter
+        'font_dir' => base_path('resources/fonts/'), // where your custom fonts are stored
+        'font_cache' => storage_path('fonts/'),
     ),
 
 
