@@ -79,6 +79,10 @@ class BonSortieController extends Controller
         $bonSortie->delete();
         return to_route('bonSortie.index')->with('success','bonSortie was deleted');
     }
+
+    public function Valider(){
+        
+    }
 }
 
 

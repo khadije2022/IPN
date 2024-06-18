@@ -107,7 +107,9 @@
 //                       <th className='px-3 py-3 text-right'>Action</th>
 //                     </tr>
 //                   </thead>
-//                   <tbody>
+// //                   <tbody>
+// <<<<<<< HEAD
+// =======
 
 //                     {mouvmentStocks && mouvmentStocks.data  && mouvmentStocks.data.map((mouvmentStock) =>
 //                       <tr key={mouvmentStock.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
@@ -137,8 +139,161 @@
 //                         </td>
 //                       </tr>
 //                     )}
+// >>>>>>> 72bbc3bd4b3e4759728f12327b59e4baed45b5d0
 
+//                     {mouvmentStocks && mouvmentStocks.data  && mouvmentStocks.data.map((mouvmentStock) =>
+//                       <tr key={mouvmentStock.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
+//                         <td className='px-3 py-2'>{mouvmentStock.id}</td>
+//                         <td className='px-3 py-2'>{mouvmentStock.produit.designation}</td>
+//                         <td className='px-3 py-2'>{mouvmentStock.produit.type.type}</td>
+//                     {mouvmentStocks && mouvmentStocks.map((mouvmentStock) =>
+//                       <tr key={mouvmentStock.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
+//                         <td className='px-3 py-2'>{mouvmentStock.id_produit}</td>
+//                         <td className='px-3 py-2'>{mouvmentStock.idBonDeSortieAchats}</td>
+//                         <td className='px-3 py-2'>{mouvmentStock.quantite}</td>
+//                         <td className='px-3 py-2 text-nowrap'>
+//                           <button
+//                             onClick={() => openModal('edit', mouvmentStock)}
+//                             className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
+//                           >
+//                             Modifier
+//                           </button>
+//                           <button
+//                             onClick={() => deleteProduit(mouvmentStock)}
+//                             className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
+//                           >
+//                             Suprimer
+//                           </button>
+//                         </td>
+//                       </tr>
+//                     )}
+//                   </tbody>
+//                 </table>
+//                 <form className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg' onSubmit={handleSubmit}>
+//                   <div>
+//                     <div className='mt-4'>
+//                       <InputLabel htmlFor='type' value='Categorie Type' />
+//                       <SelectInput
+//                         name="type"
+//                         id="type"
+//                         className="mt-1 block w-full"
+//                         onChange={(e) => {
+//                           setSelectedCategory(e.target.value);
+//                           setData('produit', ''); // Reset produit when category changes
+//                         }}
+//                       >
+//                         <option value="">Select option</option>
+//                         {categories && categories.data && categories.data.map((categorie) => (
+//                           <option key={categorie.id} value={categorie.id}>{categorie.type}</option>
+//                         ))}
+//                       </SelectInput>
+//                       <InputError message={errors.type} className='mt-2' />
+//                     </div>
 
+// <<<<<<< HEAD
+//                     <div className='mt-4'>
+//                       <InputLabel htmlFor='produit' value='Produit' />
+//                       <SelectInput
+//                         name="produit"
+//                         id="produit"
+//                         value={data.produit}
+//                         className="mt-1 block w-full"
+//                         onChange={(e) => setData('produit', e.target.value)}
+//                       >
+//                         <option value="">Select Product</option>
+//                         {filteredProducts.map((product) => (
+//                           <option key={product.id} value={product.id}>{product.designation}</option>
+//                         ))}
+//                       </SelectInput>
+//                       <InputError message={errors.produit} className='mt-2' />
+//                     </div>
+
+//                     <div className='mt-4'>
+//                       <InputLabel htmlFor='quantite' value='Quantité' />
+//                       <TextInput
+//                         type="number"
+//                         name="quantite"
+//                         id="quantite"
+//                         value={data.quantite}
+//                         className="mt-1 block w-full"
+//                         onChange={(e) => setData('quantite', e.target.value)}
+//                       />
+//                       <InputError message={errors.quantite} className='mt-2' />
+//                     </div>
+
+//                     <div className='mt-4 text-right'>
+//                       <button type="submit" className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600" onClick={handleSubmit}>
+//                         Submit
+//                       </button>
+//                       <button type="button" className="bg-blue-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-blue-600 ml-2" onClick={handleFinalize}>
+//                         Valider
+//                       </button>
+//                     </div>
+//                   </div>
+//                 </form>
+
+//                   </tbody>
+//                 </table>
+//               </div>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+
+//       {isModalOpen && (
+//         <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full'>
+//           <div className='relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white'>
+//             <form onSubmit={handleFormSubmit} className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg'>
+//               <div className='mt-4'>
+//                 <InputLabel htmlFor='type' value='Categorie Type' />
+//                 <SelectInput
+//                   name="type"
+//                   id="type"
+//                   className="mt-1 block w-full"
+//                   onChange={(e) => {
+//                     setSelectedCategory(e.target.value);
+//                     setData('id_produit', ''); // Reset produit when category changes
+//                   }}
+//                 >
+//                   <option value="">Select option</option>
+//                   {categories && categories.data && categories.data.map((categorie) => (
+//                     <option key={categorie.id} value={categorie.id}>{categorie.type}</option>
+//                   ))}
+//                 </SelectInput>
+//                 <InputError message={errors.type} className='mt-2' />
+//               </div>
+
+//               <div className='mt-4'>
+//                 <InputLabel htmlFor='produit' value='Produit' />
+//                 <SelectInput
+//                   name="id_produit"
+//                   id="produit"
+//                   value={data.id_produit}
+//                   className="mt-1 block w-full"
+//                   onChange={(e) => setData('id_produit', e.target.value)}
+//                 >
+//                   <option value="">Select Product</option>
+//                   {filteredProducts.map((product) => (
+//                     <option key={product.id} value={product.id}>{product.designation}</option>
+//                   ))}
+//                 </SelectInput>
+//                 <InputError message={errors.id_produit} className='mt-2' />
+//               </div>
+
+//               <div className='mt-4'>
+//                 <InputLabel htmlFor='quantite' value='Quantité' />
+//                 <TextInput
+//                   type="number"
+//                   name="quantite"
+//                   id="quantite"
+//                   value={data.quantite}
+//                   className="mt-1 block w-full"
+//                   onChange={(e) => setData('quantite', e.target.value)}
+//                 />
+//                 <InputError message={errors.quantite} className='mt-2' />
+//               </div>
+
+// =======
 
 //                   </tbody>
 //                 </table>
@@ -266,6 +421,7 @@
 //                 <InputError message={errors.quantite} className='mt-2' />
 //               </div>
 
+// >>>>>>> 72bbc3bd4b3e4759728f12327b59e4baed45b5d0
 //               <div className='mt-4 text-right'>
 //                 <button
 //                   type='button'

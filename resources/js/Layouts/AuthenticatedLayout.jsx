@@ -22,7 +22,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                             Dashboard
                         </NavLink>
                         <NavLink href={route('categorie.index')} active={route().current('categorie.index')}>
-                            Categories
+                            Catégories
                         </NavLink>
                         <NavLink href={route('magasin.index')} active={route().current('magasin.index')}>
                             Magasins
@@ -33,12 +33,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         <NavLink href={route('expressionbesoin.index')} active={route().current('expressionbesoin.index')}>
                             Expression Besoin
                         </NavLink>
-
                         <NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
-                            BonAchat
+                            Bon Achat
                         </NavLink>
                         <NavLink href={route('bonSortie.index')} active={route().current('bonSortie.index')}>
-                            BonSortie
+                            Bon Sortie
                         </NavLink>
                     </div>
                 </div>
@@ -49,11 +48,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
                             <span className="inline-flex rounded-md w-full">
                                 <button
                                     type="button"
-                                    className="inline-flex items-center w-full px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
+                                    className="inline-flex items-center justify-between w-full px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none transition ease-in-out duration-150"
                                 >
                                     {user.name}
                                     <svg
-                                        className="ml-2 -mr-0.5 h-4 w-4"
+                                        className="ml-2 h-5 w-5 text-gray-400"
                                         xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 20 20"
                                         fill="currentColor"
@@ -69,9 +68,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         </Dropdown.Trigger>
 
                         <Dropdown.Content>
-                            <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                            <Dropdown.Link href={route('profile.edit')}>Profil</Dropdown.Link>
                             <Dropdown.Link href={route('logout')} method="post" as="button">
-                                Log Out
+                                Déconnexion
                             </Dropdown.Link>
                         </Dropdown.Content>
                     </Dropdown>

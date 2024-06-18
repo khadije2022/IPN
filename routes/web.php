@@ -88,11 +88,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/magasin/{magasin}/edit', [MagasinController::class, 'edit'])->name('magasin.edit');
+    // Route::get('/magasin/{magasin}/edit', [MagasinController::class, 'edit'])->name('magasin.edit');
 
 
-    Route::get('/magasin', [MagasinController::class, 'index'])->name('magasin.index');
-    Route::get('/magasin/create', [MagasinController::class, 'create'])->name('magasin.create');
+    // Route::get('/magasin', [MagasinController::class, 'index'])->name('magasin.index');
+    // Route::get('/magasin/create', [MagasinController::class, 'create'])->name('magasin.create');
     // Route::post('/magasins', [MagasinController::class, 'store'])->name('magasin.store');
     // Route::get('/magasins/{magasin}/edit', [MagasinController::class, 'edit'])->name('magasin.edit');
     // Route::patch('/magasins/{magasin}', [MagasinController::class, 'update'])->name('magasin.update');

@@ -61,6 +61,7 @@ function Index({ auth, expressionbesoins, services, success }) {
     router.delete(route('expressionbesoin.destroy', expressionbesoin.id));
   };
 
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -91,9 +92,10 @@ function Index({ auth, expressionbesoins, services, success }) {
     >
       <Head title="Expression des Besoins" />
 
+
       <div className='py-12'>
         <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
-          {success && (
+        {success && (
             <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
               {success}
             </div>
