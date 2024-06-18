@@ -10,7 +10,7 @@ import SelectInput from '@/Components/SelectInput';
 function Index_par_expbesoin({
   auth,
   detailBonSorties = { data: [] },
-  expressionbesoin,
+  Status,
   bonSortie,
   success,
   categories,
@@ -78,7 +78,7 @@ function Index_par_expbesoin({
   };
 
   // Debugging: Log the expressionb to ensure it is defined
-  console.log('bonAchat:', bonSortie);
+  console.log('bonAchat:', Status);
 
   return (
     <AuthenticatedLayout
@@ -89,18 +89,27 @@ function Index_par_expbesoin({
             Detail Expression des Besoins
           </h2>
           <div>
-            <button
+            { Status === 'Non-Valider' && (<button
               onClick={() => openModal('add')}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
             >
               Ajouter nouveau
-            </button>
-             <a
-              href={route('detailBonSortie.valider', { bonSortie: bonSortie })}
+            </button>)}
+             {Status === 'Non-Valider' && (<a
+              href={route('bonSortie.valider', { bonSortie: bonSortie })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
             >
               Valider
-            </a>
+            </a>)}
+
+            {Status === 'valider' && (
+              <Link
+                href={route('bonSortie.modify', { bonSortie: bonSortie })}
+                className='bg-blue-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-blue-600 mr-2'
+              >
+                Modify
+              </Link>
+            )}
             {/* <a
               href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
@@ -129,7 +138,8 @@ function Index_par_expbesoin({
                     <th className='px-3 py-3'>Produits</th>
                     <th className='px-3 py-3'>Categorie</th>
                     <th className='px-3 py-3'>Qte</th>
-                    <th className='px-3 py-3 text-right'>Action</th>
+                    { Status === 'Non-Valider' &&
+                    (<th className='px-3 py-3 text-right'>Action</th>)}
                   </tr>
                 </thead>
                 <tbody>
@@ -139,7 +149,7 @@ function Index_par_expbesoin({
                       <td className='px-3 py-2'>{detailBonSortie.produit.designation}</td>
                       <td className='px-3 py-2'>{detailBonSortie.produit.type.type}</td>
                       <td className='px-3 py-2'>{detailBonSortie.quantite}</td>
-                      <td className='px-3 py-2 text-nowrap'>
+                     { Status === 'Non-Valider' && (<td className='px-3 py-2 text-nowrap'>
                         <button
                           onClick={() => openModal('edit', detailBonSortie)}
                           className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
@@ -152,7 +162,7 @@ function Index_par_expbesoin({
                         >
                           Delete
                         </button>
-                      </td>
+                      </td>)}
                     </tr>
                   ))}
                 </tbody>

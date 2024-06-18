@@ -20,7 +20,7 @@ class DetailBonSortieController extends Controller
     public function index()
     {
         $query = DetailBonSortie::query();
-
+        dd($query);
         // Execute the query with pagination
         $detailsexpresionbesoins = $query->paginate(10);
         // $d=DetailBonAchatResource::collection($detailsexpresionbesoins);
@@ -47,6 +47,7 @@ class DetailBonSortieController extends Controller
             'detailBonSorties' => DetailSortieResource::collection($detailsexpresionbesoins),
             'expressionbesoin' => $Bonsortie,
             'bonSortie' => $bonSortie,
+            'Status' => $Bonsortie->status,
             'categories' => CategorieResource::collection($categories),
             'produits' => CategorieResource::collection($catelogue_produits)
         ]);
@@ -136,7 +137,7 @@ class DetailBonSortieController extends Controller
 
 
     public function valider($bonSortie){
-        
+
     }
 }
 

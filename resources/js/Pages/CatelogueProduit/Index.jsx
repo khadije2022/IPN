@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import React, { useState } from 'react';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm  ,Link} from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
@@ -9,7 +9,7 @@ import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
 
-function Index({ auth, produits, categories, success }) {
+function Index({ auth, produits, categories, success ,stock}) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add'); // 'add' ou 'edit'
   const [currentProduit, setCurrentProduit] = useState(null);
@@ -40,6 +40,7 @@ function Index({ auth, produits, categories, success }) {
     setIsModalOpen(true);
   };
 
+  console.log(stock);
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentProduit(null);
@@ -95,6 +96,10 @@ function Index({ auth, produits, categories, success }) {
             <FontAwesomeIcon icon={faPlus} className="mr-2" />
             Ajouter
           </button>
+          {/* <a href={route('produit.updateStockFromMouvmentStocks')} className='bg-emerald-500 py-1 px-3 text-white rounded
+              shadow transition-all hover:bg-emerald-600'>
+                cree nouveau
+              </a> */}
         </div>
       }
     >

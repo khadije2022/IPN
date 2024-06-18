@@ -6,6 +6,9 @@ use App\Models\BonSortie;
 use App\Http\Requests\StoreBonSortieRequest;
 use App\Http\Requests\UpdateBonSortieRequest;
 use App\Http\Resources\BonSortieResource;
+use App\Http\Resources\MouvmentStockResource;
+use App\Models\DetailBonSortie;
+use App\Models\MouvmentStock;
 
 class BonSortieController extends Controller
 {
@@ -80,8 +83,68 @@ class BonSortieController extends Controller
         return to_route('bonSortie.index')->with('success','bonSortie was deleted');
     }
 
-    public function Valider(){
-        
+    public function valider($bonSortie){
+        $BonSortie = BonSortie::find($bonSortie);
+
+        if (!$BonSortie) {
+            return response()->json(['error' => 'BonSortie not found'], 404);
+        }
+
+        // Sum the quantities for the given idBonDeSortie
+        $totalQuantity = DetailBonSortie::where('idBonDeSortie', $bonSortie)->sum('quantite');
+
+        // Create a new MouvmentStock record
+        $mouvment = new MouvmentStock();
+        $mouvment->idBonDeSortie = $BonSortie->id;
+        $mouvment->idBonAchat = null; // Set to null or the appropriate value if available
+        $mouvment->typeMouvments = 'Sortie'; // or any type that you need to define
+        $mouvment->stock = $totalQuantity;
+        $mouvment->save();
+
+
+
+
+        $mv = MouvmentStock::query();
+        $BonSortie->status = 'valider';
+        $BonSortie->save();
+
+
+        // Execute the query with pagination
+        $mouvmentStock = $mv->paginate(10);
+
+        return inertia('DetailsMouvement/Index', [
+            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
+        ]);
+
+    }
+    public function modifier($bonSortie){
+        $BonSortie = BonSortie::find($bonSortie);
+
+        if (!$BonSortie) {
+            return response()->json(['error' => 'BonSortie not found'], 404);
+        }
+
+
+        // Create a new MouvmentStock record
+        MouvmentStock::where('idBonDeSortie', $BonSortie->id)->delete();
+
+        // Mettre à jour le statut du bon de sortie à non-validé
+        $BonSortie->status = 'Non-Valider';
+        $BonSortie->save();
+
+
+
+
+        $mv = MouvmentStock::query();
+
+
+        // Execute the query with pagination
+        $mouvmentStock = $mv->paginate(10);
+
+        return inertia('DetailsMouvement/Index', [
+            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
+        ]);
+
     }
 }
 

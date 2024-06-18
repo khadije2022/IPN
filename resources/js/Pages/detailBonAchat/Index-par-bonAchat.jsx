@@ -11,6 +11,7 @@ function Index_par_expbesoin({
   auth,
   detailBonAchats = { data: [] },
   expressionbesoin,
+  Status,
   bonAchat,
   success,
   categories ,
@@ -82,7 +83,7 @@ function Index_par_expbesoin({
   };
 
   // Debugging: Log the expressionb to ensure it is defined
-  console.log('bonAchat:', bonAchat);
+  // console.log('bonAchat:', bonAchat);
 
   return (
     <AuthenticatedLayout
@@ -90,21 +91,27 @@ function Index_par_expbesoin({
       header={
         <div className='flex justify-between items-center'>
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
-            deatil Expression des Besoins
+            deatil Bon d'achat
           </h2>
           <div>
-            <button
+            { Status==='Non-Valider' && (<button
               onClick={() => openModal('add')}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
             >
               Ajouter nouveau
-            </button>
-            {/* <a
-              href={route('valider', { id_expbesoin: id_expbesoin })}
+            </button>)}
+           { Status ==='Non-Valider' && (<a
+              href={route('bonAchat.valider', { bonAchat: bonAchat })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
             >
               Valider
-            </a> */}
+            </a>)}
+           { Status==='valider' && (<a
+              href={route('bonAchat.modify', { bonAchat: bonAchat })}
+              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+            >
+              Modifier
+            </a>)}
             {/* <a
               href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
@@ -134,7 +141,7 @@ function Index_par_expbesoin({
                     <th className='px-3 py-3'>Categorie</th>
                     <th className='px-3 py-3'>Qte</th>
                     {/* <th className='px-3 py-3'>Estimate Prix</th> */}
-                    <th className='px-3 py-3 text-right'>Action</th>
+                    {Status === 'Non-Valider' && (<th className='px-3 py-3 text-right'>Action</th>)}
                   </tr>
                 </thead>
                 <tbody>
@@ -145,7 +152,7 @@ function Index_par_expbesoin({
                       <td className='px-3 py-2'>{detailBonAchat.produit.type.type}</td>
                       <td className='px-3 py-2'>{detailBonAchat.quantite}</td>
                       {/* <td className='px-3 py-2'>{detailBonAchat.prix}</td> */}
-                      <td className='px-3 py-2 text-nowrap'>
+                     { Status === 'Non-Valider' &&( <td className='px-3 py-2 text-nowrap'>
                         <button
                           onClick={() => openModal('edit', detailBonAchat)}
                           className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
@@ -158,7 +165,7 @@ function Index_par_expbesoin({
                         >
                           Delete
                         </button>
-                      </td>
+                      </td>)}
                     </tr>
                   ))}
 
