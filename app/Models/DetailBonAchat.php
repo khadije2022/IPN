@@ -10,10 +10,10 @@ class DetailBonAchat extends Model
     use HasFactory;
     public $timestamps = false;
     protected $fillable = [
-        'idBonAchat',
-        'produit',
-        'quantite',
-        'prix'
+        'produit', 
+        'quantite', 
+        'prix', 
+        'idBonAchat'
     ];
 
     public function produits()

@@ -106,11 +106,12 @@ function Index_par_expbesoin({
               Valider
             </a> */}
             {/* <a
-              href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
+              href={route('pdf-DetailsBonAchat', { idBonAchat: bonAchat })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
             >
-              Export PDF
-            </a> */}
+              z */}
+              {/* <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF               */}
+            {/* </a> */}
           </div>
         </div>
       }

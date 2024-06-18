@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\BonSortie;
+use App\Models\DetailBonSortie;
+
 use App\Http\Requests\StoreBonSortieRequest;
 use App\Http\Requests\UpdateBonSortieRequest;
 use App\Http\Resources\BonSortieResource;
@@ -78,6 +80,26 @@ class BonSortieController extends Controller
     {
         $bonSortie->delete();
         return to_route('bonSortie.index')->with('success','bonSortie was deleted');
+    }
+
+
+    public function exportPdf($idBonSortie)
+    {
+        $BonSortie = BonSortie::findOrFail($idBonSortie);
+
+        $details_BonSorties = DetailBonSortie::with('catalogueProduit')
+            ->where('idBonSortie', $idBonSortie)
+            ->get();
+
+        $totalQuantite = $details_BonSorties->sum('quantite');
+
+        $pdf = Pdf::loadView('pdf.bonachat', [
+        'details_BonSorties' => $details_BonSorties,
+        'BonSortie' => $BonSortie,
+        'totalQuantite' => $totalQuantite
+    ])->setPaper('a4');
+
+        return $pdf->download('BonSortie.pdf');
     }
 }
 

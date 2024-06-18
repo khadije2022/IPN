@@ -102,12 +102,14 @@ function Index_par_expbesoin({
             Expression des Besoins
           </h2>
           <div>
-            <a
-              href={route('valider', { id_expbesoin: id_expbesoin })}
-              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-            >
-              Valider
-            </a>
+          {expressionbesoin.status !== 'validé' && (
+              <a
+                href={route('valider', { id_expbesoin: id_expbesoin })}
+                className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+              >
+                Valider
+              </a>
+            )}
             <a
               href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'

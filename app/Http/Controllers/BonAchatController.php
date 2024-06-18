@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\BonAchat;
+use App\Models\DetailBonAchat;
+
 use App\Http\Requests\StoreBonAchatRequest;
 use App\Http\Requests\UpdateBonAchatRequest;
 use App\Http\Resources\BonAchatResource;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class BonAchatController extends Controller
 {
@@ -82,5 +85,24 @@ class BonAchatController extends Controller
         $bonAchat->delete();
         return to_route('bonAchat.index')->with('success','expressionbesoin was deleted');
     }
+
+
+
+    // public function exportPdf($idBonAchat)
+    // {
+    //     $BonAchat = BonAchat::findOrFail($idBonAchat);
+
+    //     $details_BonAchats = DetailBonAchat::with('catelogueProduit')->where('idBonAchat', $idBonAchat)->get();
+
+    //     $totalQuantite = $details_BonAchats->sum('quantite');
+
+    //     $pdf = Pdf::loadView('pdf.bonachat', [
+    //     'details_BonAchats' => $details_BonAchats,
+    //     'BonAchat' => $BonAchat,
+    //     'totalQuantite' => $totalQuantite
+    // ])->setPaper('a4');
+
+    //     return $pdf->download('BonAchat.pdf');
+    // }
 }
 

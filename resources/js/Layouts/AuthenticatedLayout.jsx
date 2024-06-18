@@ -16,7 +16,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                             <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                         </Link>
                     </div>
-
+<br/><br/>
                     <div className="flex flex-col space-y-4 mt-6">
                         <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                             Dashboard
