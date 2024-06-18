@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('mouvementstock', function (Blueprint $table) {
             $table->id();
-            // $table->foreignId('idBonDeSortieAchats')->nullable()->constrained('bon_sortie_achats');
-            // $table->foreignId('idBonDeSortieAchats')->nullable()->constrained('bon_sortie_achats');
-            // $table->string('type');
-            // $table->integer('description');
-            // $table->integer('quantite');
-            // $table->timestamps();
+            $table->foreignId('idBonDeSortie')->nullable()->constrained('bon_sorties');
+            $table->foreignId('idBonAchat')->nullable()->constrained('bon_achats');
+            $table->string('typeMouvments');
+            $table->integer('stock');
+            $table->timestamps();
         });
     }
 

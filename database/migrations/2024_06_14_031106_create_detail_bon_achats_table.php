@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('quantite');
             $table->foreignId('produit')->constrained('catelogue_produits');
             $table->foreignId('idBonAchat')->constrained('bon_achats');
-            $table->float('prix');
+            $table->float('prix')->default(0);
         });
     }
 

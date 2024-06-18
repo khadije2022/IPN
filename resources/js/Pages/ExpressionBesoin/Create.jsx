@@ -67,11 +67,9 @@ function Index({ auth, expressionbesoins, services, success }) {
       header={
         <div className='flex justify-between items-center'>
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
-<<<<<<< HEAD
+
             Cree  expressionbesoin
-=======
-            Expression des Besoins
->>>>>>> a6f378fd87c829b1a559bd6d1aac271cd1c33ea3
+
           </h2>
           <div>
             <button

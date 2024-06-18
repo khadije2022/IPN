@@ -133,7 +133,7 @@ function Index_par_expbesoin({
                     <th className='px-3 py-3'>produits</th>
                     <th className='px-3 py-3'>Categorie</th>
                     <th className='px-3 py-3'>Qte</th>
-                    <th className='px-3 py-3'>Estimate Prix</th>
+                    {/* <th className='px-3 py-3'>Estimate Prix</th> */}
                     <th className='px-3 py-3 text-right'>Action</th>
                   </tr>
                 </thead>
@@ -144,7 +144,7 @@ function Index_par_expbesoin({
                       <td className='px-3 py-2'>{detailBonAchat.produit.designation}</td>
                       <td className='px-3 py-2'>{detailBonAchat.produit.type.type}</td>
                       <td className='px-3 py-2'>{detailBonAchat.quantite}</td>
-                      <td className='px-3 py-2'>{detailBonAchat.prix}</td>
+                      {/* <td className='px-3 py-2'>{detailBonAchat.prix}</td> */}
                       <td className='px-3 py-2 text-nowrap'>
                         <button
                           onClick={() => openModal('edit', detailBonAchat)}
