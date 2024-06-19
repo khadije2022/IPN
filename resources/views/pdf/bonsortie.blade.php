@@ -45,7 +45,7 @@
         <section class="info">
             <div>
                 <label for="number">N°:</label>
-                <input type="text" id="number" name="number" value="{{ $BonSortie->id }}">
+                <input type="text" id="number" name="number" value="">
             </div>
             <div>
                 <label for="date">Date:</label>

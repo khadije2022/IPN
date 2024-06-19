@@ -158,13 +158,13 @@ class BonSortieController extends Controller
         ]);
     }
 
-    public function exportPdf($idBonSortie)
+    public function exportPdf($bonSortie)
     {
-        $BonSortie = BonSortie::findOrFail($idBonSortie);
 
-        $details_BonSorties = DetailBonSortie::with('catalogueProduit')
-            ->where('idBonSortie', $idBonSortie)
-            ->get();
+        // dd($bonSortie);
+        $BonSortie = BonSortie::findOrFail($bonSortie);
+
+        $details_BonSorties = DetailBonSortie::with('produits') ->where('idBonDeSortie', $bonSortie)->get();
 
         $totalQuantite = $details_BonSorties->sum('quantite');
 
@@ -173,16 +173,10 @@ class BonSortieController extends Controller
         'BonSortie' => $BonSortie,
         'totalQuantite' => $totalQuantite
     ])->setPaper('a4');
-<<<<<<< HEAD
 
         return $pdf->download('BonSortie.pdf');
 
     }
 }
-=======
->>>>>>> e5afd192c8c7b2c86c0845f664d7dc6f020014fc
 
-        return $pdf->download('BonSortie.pdf');
-
-    }
-}
+       

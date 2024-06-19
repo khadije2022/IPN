@@ -17,17 +17,12 @@ function Index_par_expbesoin({
   Status,
   bonSortie,
   success,
-  error, // Ajoutez cette ligne
+  error,
   categories,
   produits,
 }) {
-<<<<<<< HEAD
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState("add"); // 'add' or 'edit'
-=======
-  const [isModalOpen, setIsModalOpen] = useState(false); // Déclaration de la variable isModalOpen
-  const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
->>>>>>> e5afd192c8c7b2c86c0845f664d7dc6f020014fc
   const [currentDetail, setCurrentDetail] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -104,16 +99,14 @@ function Index_par_expbesoin({
     router.delete(route("detailBonSortie.destroy", detailBonSortie.id));
   };
 
-<<<<<<< HEAD
   useEffect(() => {
     if (success) {
       toast.success(success);
     }
-  }, [success]);
-=======
-  // Debugging: Log the expressionb to ensure it is defined
-  console.log('bonAchat:', Status);
->>>>>>> e5afd192c8c7b2c86c0845f664d7dc6f020014fc
+    if (error) {
+      toast.error(error);
+    }
+  }, [success, error]);
 
   return (
     <AuthenticatedLayout
@@ -124,50 +117,30 @@ function Index_par_expbesoin({
             Detail Expression des Besoins
           </h2>
           <div>
-<<<<<<< HEAD
-
             {Status === "Non-Valider" && (
-              <button
-                onClick={() => openModal("add")}
-                className="bg-emerald-500 py-2 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
-              ><FontAwesomeIcon icon={faPlus} />Ajouter</button>
-            )}
-            {Status === "Non-Valider" && (
-              <a
-                href={route("bonSortie.valider", { bonSortie: bonSortie })}
-                className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
-              >
-                Valider
-              </a>
-            )}
-            {Status === "Non-Valider" && (
-              <a
-                href={route("pdf-DetailsBonSortie", { idBonSortie: bonSortie })}
-                className="bg-emerald-500 py-2 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
-              >
-                <FontAwesomeIcon icon={faFilePdf} className="mr-2" />
-                PDF
-              </a>
-            )}
-            {Status === "valider" && (
-=======
-            {Status === 'Non-Valider' && (
-              <a
-                href={route('pdf-DetailsBonSortie', { idBonSortie: bonSortie })}
-                className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
-              >PDF
-              </a>
-            )}
-            {Status === 'Non-Valider' && (
-              <a
-                href={route('bonSortie.valider', { bonSortie: bonSortie })}
-                className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-              >
-                Valider
-              </a>
+              <>
+                <button
+                  onClick={() => openModal("add")}
+                  className="bg-emerald-500 py-2 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
+                >
+                  <FontAwesomeIcon icon={faPlus} /> Ajouter
+                </button>
+                <a
+                  href={route("bonSortie.valider", { bonSortie: bonSortie })}
+                  className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
+                >
+                  Valider
+                </a>
+                <a
+                  href={route("pdf-DetailsBonSortie", { idBonSortie: bonSortie })}
+                  className="bg-emerald-500 py-2 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+                >
+                  <FontAwesomeIcon icon={faFilePdf} className="mr-2" />
+                  PDF
+                </a>
+              </>
             )}
             {Status === 'valider' && (
->>>>>>> e5afd192c8c7b2c86c0845f664d7dc6f020014fc
               <Link
                 href={route("bonSortie.modify", { bonSortie: bonSortie })}
                 className="bg-blue-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-blue-600 mr-2"
@@ -175,24 +148,12 @@ function Index_par_expbesoin({
                 Modify
               </Link>
             )}
-<<<<<<< HEAD
-=======
-            {Status === 'Non-Valider' && (
-              <button
-                onClick={() => openModal('add')}
-                className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-              >
-                Ajouter nouveau
-              </button>
-            )}
->>>>>>> e5afd192c8c7b2c86c0845f664d7dc6f020014fc
           </div>
         </div>
       }
     >
       <Head title="Bon Sortie" />
 
-<<<<<<< HEAD
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <ToastContainer />
@@ -207,37 +168,11 @@ function Index_par_expbesoin({
                     <th className="px-3 py-3">Qte</th>
                     {Status === "Non-Valider" && (
                       <th className="px-3 py-3 text-right">Action</th>
-=======
-      <div className='py-12'>
-        <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
-          {success && (
-            <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
-              {success}
-            </div>
-          )}
-          {error && ( // Afficher le message d'erreur
-            <div className='bg-red-400 py-2 px-4 rounded mb-4'>
-              {error}
-            </div>
-          )}
-          <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
-            <div className='p-6 text-gray-900 dark:text-gray-100'>
-              <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-                <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
-                  <tr className='text-nowrap'>
-                    <th className='px-3 py-3'>ID</th>
-                    <th className='px-3 py-3'>Produits</th>
-                    <th className='px-3 py-3'>Categorie</th>
-                    <th className='px-3 py-3'>Qte</th>
-                    {Status === 'Non-Valider' && (
-                      <th className='px-3 py-3 text-right'>Action</th>
->>>>>>> e5afd192c8c7b2c86c0845f664d7dc6f020014fc
                     )}
                   </tr>
                 </thead>
                 <tbody>
                   {detailBonSorties.data.map((detailBonSortie) => (
-<<<<<<< HEAD
                     <tr
                       key={detailBonSortie.id}
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
@@ -265,26 +200,6 @@ function Index_par_expbesoin({
                             className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
                           >
                             <FontAwesomeIcon icon={faTrashAlt} />
-=======
-                    <tr key={detailBonSortie.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                      <td className='px-3 py-2'>{detailBonSortie.id}</td>
-                      <td className='px-3 py-2'>{detailBonSortie.produit.designation}</td>
-                      <td className='px-3 py-2'>{detailBonSortie.produit.type.type}</td>
-                      <td className='px-3 py-2'>{detailBonSortie.quantite}</td>
-                      {Status === 'Non-Valider' && (
-                        <td className='px-3 py-2 text-nowrap'>
-                          <button
-                            onClick={() => openModal('edit', detailBonSortie)}
-                            className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
-                          >
-                            Edit
-                          </button>
-                          <button
-                            onClick={() => deleteDetailsexpresionbesoin(detailBonSortie)}
-                            className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
-                          >
-                            Delete
->>>>>>> e5afd192c8c7b2c86c0845f664d7dc6f020014fc
                           </button>
                         </td>
                       )}
@@ -336,11 +251,7 @@ function Index_par_expbesoin({
                   className="mt-1 block w-full"
                   onChange={(e) => setData("produit", e.target.value)}
                 >
-<<<<<<< HEAD
                   <option value="">Select Product</option>
-=======
-                  <option value=''>Select Product</option>
->>>>>>> e5afd192c8c7b2c86c0845f664d7dc6f020014fc
                   {filteredProducts.map((product) => (
                     <option key={product.id} value={product.id}>
                       {product.designation}
@@ -349,13 +260,8 @@ function Index_par_expbesoin({
                 </SelectInput>
                 <InputError message={errors.produit} className="mt-2" />
               </div>
-<<<<<<< HEAD
               <div className="mt-4">
                 <InputLabel htmlFor="quantite" value="Quantity" />
-=======
-              <div className='mt-4'>
-                <InputLabel htmlFor='quantite' value='Quantity' />
->>>>>>> e5afd192c8c7b2c86c0845f664d7dc6f020014fc
                 <TextInput
                   type="number"
                   name="quantite"
@@ -369,11 +275,7 @@ function Index_par_expbesoin({
                   <div className="text-red-600">{errors.quantite}</div>
                 )}
               </div>
-<<<<<<< HEAD
               <div className="mt-4 text-right">
-=======
-              <div className='mt-4 text-right'>
->>>>>>> e5afd192c8c7b2c86c0845f664d7dc6f020014fc
                 <button
                   type="button"
                   onClick={closeModal}

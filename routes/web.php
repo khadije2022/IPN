@@ -73,7 +73,7 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::get('/export-pdf', [CategorieController::class, 'exportPdf'])->name('export-pdf');
     Route::get('/pdf-details-expbesoin/{id_expbesoin}', [ExpressionBesoinController::class, 'exportPdf'])->name('pdf-DetailsExpbesoin');
     Route::get('/pdf-DetailsBonAchat/{bonAchat}', [BonAchatController::class, 'exportPdf'])->name('pdf-DetailsBonAchat');
-    Route::get('/pdf-DetailsBonSortie/{idBonSortie}', [BonSortieController::class, 'exportPdf'])->name('pdf-DetailsBonSortie');
+    Route::get('/pdf-DetailsBonSortie/{bonSortie}', [BonSortieController::class, 'exportPdf'])->name('pdf-DetailsBonSortie');
 
 
 
