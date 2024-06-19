@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BonSortie;
 use App\Models\DetailBonSortie;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use App\Http\Requests\StoreBonSortieRequest;
 use App\Http\Requests\UpdateBonSortieRequest;
@@ -83,17 +84,17 @@ class BonSortieController extends Controller
     }
 
 
-    public function exportPdf($idBonSortie)
+    public function exportPdf($idBonDeSortie)
     {
-        $BonSortie = BonSortie::findOrFail($idBonSortie);
+        $BonSortie = BonSortie::findOrFail($idBonDeSortie);
 
-        $details_BonSorties = DetailBonSortie::with('catalogueProduit')
-            ->where('idBonSortie', $idBonSortie)
+        $details_BonSorties = DetailBonSortie::with('produits')
+            ->where('idBonDeSortie', $idBonDeSortie)
             ->get();
 
         $totalQuantite = $details_BonSorties->sum('quantite');
 
-        $pdf = Pdf::loadView('pdf.bonachat', [
+        $pdf = Pdf::loadView('pdf.bonsortie', [
         'details_BonSorties' => $details_BonSorties,
         'BonSortie' => $BonSortie,
         'totalQuantite' => $totalQuantite

@@ -77,9 +77,6 @@ function Index_par_expbesoin({
     router.delete(route('detailBonSortie.destroy', detailBonSortie.id));
   };
 
-  // Debugging: Log the expressionb to ensure it is defined
-  console.log('bonAchat:', bonSortie);
-
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -95,18 +92,19 @@ function Index_par_expbesoin({
             >
               Ajouter nouveau
             </button>
+
+            <a
+              href={route('pdf-DetailsBonSortie', { idBonSortie: bonSortie })}
+              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
+            >PDF            
+              {/* <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF               */}
+            </a>
              <a
               href={route('detailBonSortie.valider', { bonSortie: bonSortie })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
             >
               Valider
             </a>
-            {/* <a
-              href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
-              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
-            >
-              Export PDF
-            </a> */}
           </div>
         </div>
       }
@@ -193,7 +191,7 @@ function Index_par_expbesoin({
                   className="mt-1 block w-full"
                   onChange={(e) => setData('produit', e.target.value)}
                 >
-                  <option value={data.produit}>Select Product</option>
+                  <option value=''>Select Product</option>
                   {filteredProducts.map((product) => (
                     <option key={product.id} value={product.id}>{product.designation}</option>
                   ))}
