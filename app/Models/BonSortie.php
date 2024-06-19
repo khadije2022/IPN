@@ -19,4 +19,9 @@ class BonSortie extends Model
         return $this->hasMany(DetailBonSortie::class,'idBonDeSortie');
     }
 
+    public function mouvments()
+    {
+        return $this->hasMany(MouvmentStock::class, 'idBonDeSortie');
+    }
+
 }

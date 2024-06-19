@@ -8,7 +8,13 @@ use App\Models\DetailBonAchat;
 use App\Http\Requests\StoreBonAchatRequest;
 use App\Http\Requests\UpdateBonAchatRequest;
 use App\Http\Resources\BonAchatResource;
+
+use App\Http\Resources\MouvmentStockResource;
+
+use App\Models\MouvmentStock;
+
 use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class BonAchatController extends Controller
 {
@@ -59,7 +65,7 @@ class BonAchatController extends Controller
      */
     public function edit(BonAchat $bonAchat)
     {
-        
+
 
         return inertia('BonAchat/Edit',[
             'bonAchat' => $bonAchat
@@ -87,6 +93,65 @@ class BonAchatController extends Controller
     }
 
 
+    public function valider($bonAchat){
+        $BonAchat = BonAchat::find($bonAchat);
+
+
+        // Sum the quantities for the given idBonDeSortie
+        $totalQuantity = DetailBonAchat::where('idBonAchat', $bonAchat)->sum('quantite');
+
+        // Create a new MouvmentStock record
+        $mouvment = new MouvmentStock();
+        $mouvment->idBonDeSortie = null;
+        $mouvment->idBonAchat = $BonAchat->id; // Set to null or the appropriate value if available
+        $mouvment->typeMouvments = 'Achat'; // or any type that you need to define
+        $mouvment->stock = $totalQuantity;
+        $mouvment->save();
+
+
+
+
+        $mv = MouvmentStock::query();
+
+        $BonAchat->status = 'valider';
+        $BonAchat->save();
+
+
+        // Execute the query with pagination
+        $mouvmentStock = $mv->paginate(10);
+
+        return inertia('DetailsMouvement/Index', [
+            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
+        ]);
+    }
+    public function modifier($bonAchat){
+        $BonAchat = BonAchat::find($bonAchat);
+
+        if (!$BonAchat) {
+            return response()->json(['error' => 'BonSortie not found'], 404);
+        }
+
+        MouvmentStock::where('idBonAchat', $BonAchat->id)->delete();
+
+        // Mettre à jour le statut du bon de sortie à non-validé
+        $BonAchat->status = 'Non-Valider';
+        $BonAchat->save();
+
+
+
+
+
+        $mv = MouvmentStock::query();
+        // Execute the query with pagination
+        $mouvmentStock = $mv->paginate(10);
+
+        return inertia('DetailsMouvement/Index', [
+            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
+        ]);
+    }
+
+
+
 
     public function exportPdf($idBonAchat)
     {
@@ -105,5 +170,23 @@ class BonAchatController extends Controller
         return $pdf->download('BonAchat.pdf');
     }
     
+
+    // public function exportPdf($idBonAchat)
+    // {
+    //     $BonAchat = BonAchat::findOrFail($idBonAchat);
+
+    //     $details_BonAchats = DetailBonAchat::with('catelogueProduit')->where('idBonAchat', $idBonAchat)->get();
+
+    //     $totalQuantite = $details_BonAchats->sum('quantite');
+
+    //     $pdf = Pdf::loadView('pdf.bonachat', [
+    //     'details_BonAchats' => $details_BonAchats,
+    //     'BonAchat' => $BonAchat,
+    //     'totalQuantite' => $totalQuantite
+    // ])->setPaper('a4');
+
+    //     return $pdf->download('BonAchat.pdf');
+    // }
+
 }
 

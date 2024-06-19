@@ -5,12 +5,12 @@ use App\Http\Resources\ExpressionBesoinResource;
 use App\Models\ExpressionBesoin;
 use App\Models\BonAchat;
 use App\Models\DetailBonAchat;
-
 use App\Models\Details_ExpBesoin;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Service;
 use App\Http\Requests\StoreExpressionBesoinRequest;
 use App\Http\Requests\UpdateExpressionBesoinRequest;
+
 class ExpressionBesoinController extends Controller
 {
     /**
@@ -20,25 +20,25 @@ class ExpressionBesoinController extends Controller
     {
         // Initialize the query builder for the expressionbesoin model
         $query = ExpressionBesoin::with('service'); // Assurez-vous de charger la relation avec Service
-    
+
         // Execute the query with pagination
         $expressionbesoins = $query->paginate(10);
         $services = Service::all();
-    
+
         // Return the Inertia.js response with the expressionbesoins data and any success message from the session
         return inertia('ExpressionBesoin/Index', [
             'expressionbesoins' => ExpressionBesoinResource::collection($expressionbesoins),
             'services' => $services,
         ]);
     }
-    
+
 
 
     public function create()
 {
     $services = Service::all();
     return inertia('ExpressionBesoin/Create', [
-        'services' => $services, 
+        'services' => $services,
     ]);
 }
 
@@ -118,6 +118,10 @@ public function store(StoreExpressionBesoinRequest $request)
         $expressionbesoin = ExpressionBesoin::with('service')->findOrFail($id_expbesoin);
         $details_expbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->with('categorie', 'catalogueProduit')->get();
 
+
+        $details_expbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->get();
+
+
         $expressionbesoin->status = 'validé';
         $expressionbesoin->save();
 
@@ -134,6 +138,7 @@ public function store(StoreExpressionBesoinRequest $request)
                 'produit' => $detail->id_catproduit,
                 'quantite' => $detail->quantite,
                 'prix' => 0 // Adjust this as needed
+
             ]);
         }
 

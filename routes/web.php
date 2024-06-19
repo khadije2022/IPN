@@ -17,6 +17,7 @@ use App\Http\Controllers\ExpressionBesoinController;
 use App\Http\Controllers\UserController;
 use App\Models\BonAchat;
 use App\Models\BonAchats;
+use App\Models\BonSortie;
 use App\Models\DetailBonAchat;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Application;
@@ -41,6 +42,7 @@ Route::middleware(['auth','verified'])->group(function() {
 
     Route::resource('magasin',MagasinController::class);
     Route::resource('catelogueProduit',CatelogueProduitController::class);
+    Route::get('/updateStockFromMouvmentStocks',[CatelogueProduitController::class, 'updateStockFromMouvmentStocks'])->name('produit.updateStockFromMouvmentStocks');
     Route::resource('categorie',CategorieController::class);
     // Route::resource('detailsMouvment',::class);
 
@@ -49,13 +51,15 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::resource('detailBonSortie',DetailBonSortieController::class);
     Route::get('detailBonSortie/create/{bonSortie}', [DetailBonSortieController::class, 'create'])->name('detailBonSortie.create');
     Route::get('detailBonSortie/index-par-bonSortie/{bonSortie}', [DetailBonSortieController::class, 'index_par_bonSortie'])->name('detailBonSortie.index_par_bonSortie');
-    Route::get('/valider/{bonSortie}', [DetailBonSortieController::class, 'valider'])->name('detailBonSortie.valider');
+    Route::get('/validerSortie/{bonSortie}', [BonSortieController::class, 'valider'])->name('bonSortie.valider');
+    Route::get('/ModifierSortie/{bonSortie}', [BonSortieController::class, 'modifier'])->name('bonSortie.modify');
 
     Route::resource('bonAchat',BonAchatController::class);
     Route::resource('detailBonAchat',DetailBonAchatController::class);
     Route::get('detailBonAchat/create/{bonAchat}', [DetailBonAchatController::class, 'create'])->name('detailBonAchat.create');
     Route::get('/detailBonAchat/index-par-bonAchat/{bonAchat}', [DetailBonAchatController::class, 'index_par_bonAchat'])->name('detailBonAchat.index-par-bonAchat');
-
+    Route::get('/validerAchat/{bonAchat}', [BonAchatController::class, 'valider'])->name('bonAchat.valider');
+    Route::get('/ModifierAchat/{bonAchat}', [BonAchatController::class, 'modifier'])->name('bonAchat.modify');
     Route::resource('stock',StockController::class);
 
 

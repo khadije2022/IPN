@@ -45,8 +45,8 @@ class DetailBonAchatController extends Controller
 
         return inertia('detailBonAchat/Index-par-bonAchat', [
             'detailBonAchats' => DetailBonAchatResource::collection($detailsexpresionbesoins),
-            'expressionbesoin' => $BonAchat,
             'bonAchat' => $bonAchat,
+            'Status' => $BonAchat->status,
             'categories' => CategorieResource::collection($categories),
             'produits' => CategorieResource::collection($catelogue_produits)
         ]);

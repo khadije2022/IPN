@@ -17,4 +17,9 @@ class BonAchat extends Model
     public function DetailStock(){
         return $this->hasMany(DetailBonAchat::class,'idBonAchat');
     }
+
+    public function mouvments()
+    {
+        return $this->hasMany(MouvmentStock::class, 'idBonAchat');
+    }
 }

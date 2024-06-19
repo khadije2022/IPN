@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bon_achats', function (Blueprint $table) {
+        Schema::create('mouvment_stocks', function (Blueprint $table) {
             $table->id();
-            $table->text('description');
-            $table->string('status')->default('Non-Valider');
+            $table->foreignId('idBonDeSortie')->nullable()->constrained('bon_sorties');
+            $table->foreignId('idBonAchat')->nullable()->constrained('bon_achats');
+            $table->string('typeMouvments');
+            $table->integer('stock');
             $table->timestamps();
         });
     }
@@ -24,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bon_achats');
+        Schema::dropIfExists('mouvment_stocks');
     }
 };
