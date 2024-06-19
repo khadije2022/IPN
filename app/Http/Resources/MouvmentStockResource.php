@@ -16,9 +16,7 @@ class MouvmentStockResource extends JsonResource
     {
 
 
-        return [
-
-        ];
+        return parent::toArray($request);
 
     }
 }

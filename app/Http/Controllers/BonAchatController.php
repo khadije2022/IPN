@@ -14,7 +14,7 @@ use App\Http\Resources\MouvmentStockResource;
 use App\Models\MouvmentStock;
 
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Illuminate\Support\Facades\DB;
 
 class BonAchatController extends Controller
 {
@@ -116,6 +116,11 @@ class BonAchatController extends Controller
         $BonAchat->status = 'valider';
         $BonAchat->save();
 
+        DB::table('catelogue_produits AS cp')
+        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+     ->where('cp.id', '=', DB::raw('ps.product_id'))
+        ->update(['cp.stock' => DB::raw('ps.stock')]);
+
 
         // Execute the query with pagination
         $mouvmentStock = $mv->paginate(10);
@@ -152,41 +157,21 @@ class BonAchatController extends Controller
 
 
 
-
     public function exportPdf($idBonAchat)
     {
         $BonAchat = BonAchat::findOrFail($idBonAchat);
-    
+
         $details_BonAchats = DetailBonAchat::with('produits')->where('idBonAchat', $idBonAchat)->get();
-    
+
         $totalQuantite = $details_BonAchats->sum('quantite');
-    
+
         $pdf = Pdf::loadView('pdf.bonachat', [
             'details_BonAchats' => $details_BonAchats,
             'BonAchat' => $BonAchat,
             'totalQuantite' => $totalQuantite
         ])->setPaper('a4');
-    
+
         return $pdf->download('BonAchat.pdf');
     }
-    
-
-    // public function exportPdf($idBonAchat)
-    // {
-    //     $BonAchat = BonAchat::findOrFail($idBonAchat);
-
-    //     $details_BonAchats = DetailBonAchat::with('catelogueProduit')->where('idBonAchat', $idBonAchat)->get();
-
-    //     $totalQuantite = $details_BonAchats->sum('quantite');
-
-    //     $pdf = Pdf::loadView('pdf.bonachat', [
-    //     'details_BonAchats' => $details_BonAchats,
-    //     'BonAchat' => $BonAchat,
-    //     'totalQuantite' => $totalQuantite
-    // ])->setPaper('a4');
-
-    //     return $pdf->download('BonAchat.pdf');
-    // }
-
 }
 

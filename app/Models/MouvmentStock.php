@@ -10,6 +10,7 @@ class MouvmentStock extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'idBonDeSortie',
         'idBonAchat',
         'typeMouvments',

@@ -66,70 +66,79 @@ class CatelogueProduitController extends Controller
     }
 
 
-    public function updateStockFromMouvmentStocks()
-    {
-        // Récupérer les IDs distincts de BonSortie et BonAchat depuis MouvmentStock
-        $mouvmentStocks = MouvmentStock::select('idBonDeSortie', 'idBonAchat')
-            ->distinct()
-            ->get();
+    // public function updateStockFromMouvmentStocks()
+    // {
+    //     // Récupérer les IDs distincts de BonSortie et BonAchat depuis MouvmentStock
+    //     $mouvmentStocks = MouvmentStock::select('idBonDeSortie', 'idBonAchat')
+    //         ->distinct()
+    //         ->get();
 
-        foreach ($mouvmentStocks as $mouvment) {
-            // Mettre à jour le stock pour BonSortie s'il existe
-            if ($mouvment->idBonDeSortie) {
-                $this->updateStockForBonSortie($mouvment->idBonDeSortie);
-            }
+    //     foreach ($mouvmentStocks as $mouvment) {
+    //         // Mettre à jour le stock pour BonSortie s'il existe
+    //         if ($mouvment->idBonDeSortie) {
+    //             $this->updateStockForBonSortie($mouvment->idBonDeSortie);
+    //         }
 
-            // Mettre à jour le stock pour BonAchat s'il existe
-            if ($mouvment->idBonAchat) {
-                $this->updateStockForBonAchat($mouvment->idBonAchat);
-            }
-        }
-    }
+    //         // Mettre à jour le stock pour BonAchat s'il existe
+    //         if ($mouvment->idBonAchat) {
+    //             $this->updateStockForBonAchat($mouvment->idBonAchat);
+    //         }
+    //     }
 
-    private function updateStockForBonSortie($idBonDeSortie)
-    {
-        try {
-            DB::beginTransaction();
+    //     return response()->json(['message' => 'Stock des produits mis à jour à partir de MouvmentStocks']);
+    // }
 
-            // Calculer le stock pour chaque produit associé à ce BonSortie
-            $details = DetailBonSortie::where('idBonDeSortie', $idBonDeSortie)->get();
+//     private function updateStockForBonSortie($idBonDeSortie)
+// {
+//     // Initialize an array to aggregate quantities for each product
+//     $quantities = [];
 
-            foreach ($details as $detail) {
-                $produit = CatelogueProduit::find($detail->produit_id);
-                if ($produit) {
-                    $produit->stock -= $detail->quantite; // Soustraire la quantité du stock actuel
-                    $produit->save();
-                }
-            }
+//     // Retrieve details of BonSortie for the given idBonDeSortie
+//     $details = DetailBonSortie::where('idBonDeSortie', $idBonDeSortie)->get();
 
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            throw $e;
-        }
-    }
+//     // Aggregate quantities for each product
+//     foreach ($details as $detail) {
+//         if (!isset($quantities[$detail->produit])) {
+//             $quantities[$detail->produit] = 0;
+//         }
+//         $quantities[$detail->produit] = $detail->quantite; // Subtract quantity for BonSortie
+//     }
 
-    private function updateStockForBonAchat($idBonAchat)
-    {
-        try {
-            DB::beginTransaction();
+//     // Update stock for each product based on aggregated quantities
+//     foreach ($quantities as $produitId => $quantite) {
+//         $produit = CatelogueProduit::find($produitId);
+//         if ($produit) {
+//             $produit->stock = $quantite; // Add the aggregated quantity to the stock
+//             $produit->save();
+//         }
+//     }
+// }
 
-            // Calculer le stock pour chaque produit associé à ce BonAchat
-            $details = DetailBonAchat::where('idBonAchat', $idBonAchat)->get();
 
-            foreach ($details as $detail) {
-                $produit = CatelogueProduit::find($detail->produit_id);
-                if ($produit) {
-                    $produit->stock += $detail->quantite; // Ajouter la quantité au stock actuel
-                    $produit->save();
-                }
-            }
+// private function updateStockForBonAchat($idBonAchat)
+// {
+//     // Initialize an array to aggregate quantities for each product
+//     $quantities = [];
 
-            DB::commit();
-        } catch (\Exception $e) {
-            DB::rollback();
-            throw $e;
-        }
-    }
+//     // Retrieve details of BonAchat for the given idBonAchat
+//     $details = DetailBonAchat::where('idBonAchat', $idBonAchat)->get();
+
+//     // Aggregate quantities for each product
+//     foreach ($details as $detail) {
+//         if (!isset($quantities[$detail->produit])) {
+//             $quantities[$detail->produit] = 0;
+//         }
+//         $quantities[$detail->produit] += $detail->quantite; // Add quantity for BonAchat
+//     }
+
+//     // Update stock for each product based on aggregated quantities
+//     foreach ($quantities as $produitId => $quantite) {
+//         $produit = CatelogueProduit::find($produitId);
+//         if ($produit) {
+//             $produit->stock += $quantite; // Add the aggregated quantity to the stock
+//             $produit->save();
+//         }
+//     }
+// }
 
 }

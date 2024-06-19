@@ -25,14 +25,14 @@ class DatabaseSeeder extends Seeder
             'email' => '21039@supnum.mr',
             'password' => bcrypt('Taher 41')
         ]);
-        Magasin::factory()->count(30)->create();
+        // Magasin::factory()->count(30)->create();
 
         // Categorie::factory()->count(30)->create();
 
-        // Categorie::factory()
-        // ->count(3)
-        // ->has(CatelogueProduit::factory()->count(30),'catalogueProduits')
-        // ->create();
+        Categorie::factory()
+        ->count(3)
+        ->has(CatelogueProduit::factory()->count(30),'catalogueProduits')
+        ->create();
 
 
         Service::factory()

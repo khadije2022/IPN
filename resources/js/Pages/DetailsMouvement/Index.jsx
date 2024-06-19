@@ -38,40 +38,23 @@ function Index({auth,mouvmentStocks,success}){
                         <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
                             <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                               <tr className='text-nowrap'>
-                              <th className='px-3 py-3'>idDetails</th>
-                               <th className='px-3 py-3'>idMouvement</th>
-                               <th className='px-3 py-3'>id_magasin</th>
-                               <th className='px-3 py-3'>qte</th>
-                               <th className='px-3 py-3'>qte</th>
-                                {/* <th className='px-3 py-3 text-right'>Action</th> */}
+                              <th className='px-3 py-3'>id</th>
+                               {/* <th className='px-3 py-3'>sortie</th>
+                               <th className='px-3 py-3'>idAchat</th> */}
+                               <th className='px-3 py-3'>stock</th>
+                               <th className='px-3 py-3'>type</th>
+
                               </tr>
                             </thead>
                             <tbody>
                               {mouvmentStocks.data.map((mouvmentStock)=>
                                 <tr key={mouvmentStock.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                                    <td className='px-3 py-2' >{mouvmentStock.id}</td>
-                                  <td className='px-3 py-2'>{mouvmentStock.idBonDeSortie}</td>
-                                  <td className='px-3 py-2'>{mouvmentStock.idBonAchat}</td>
-                                  <td className='px-3 py-2'>{mouvmentStock.Stock}</td>
+                                  {/* <td className='px-3 py-2'>{mouvmentStock.idBonDeSortie}</td>
+                                  <td className='px-3 py-2'>{mouvmentStock.idBonAchat}</td> */}
+                                  <td className='px-3 py-2'>{mouvmentStock.stock}</td>
                                   <td className='px-3 py-2'>{mouvmentStock.typeMouvments}</td>
-                                  <td className='px-3 py-2 text-nowrap'>
-                                    {/* <Link
-                                      href={route("detailsMouvment.edit", detailsMouvment.idDetails)}
-                                      className='font-medium text-blue-600
-                                      dark:text-blue-500  hover:underline mx-1'
-                                     >
-                                      Edit
-                                    </Link> */}
 
-
-                                    {/* <button
-                                    onClick={ (e) => deletedetailsMouvment(detailsMouvment)}
-                                      className='font-medium text-red-600
-                                      dark:text-red-500 hover:underline mx-1'
-                                    >
-                                      Delete
-                                    </button> */}
-                                  </td>
                                 </tr>
                               )}
 

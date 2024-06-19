@@ -66,6 +66,14 @@ function Index_par_expbesoin({
     setCurrentDetail(null);
   };
 
+  const handleQuantityChange = (e) => {
+    const value = e.target.value;
+    if (value >= 0) {
+      setData('quantite', value);
+    } else {
+      alert('La quantité doit être un nombre positif.');
+    }
+  };
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const routeName = modalMode === 'add' ? 'detailBonAchat.store' : `detailBonAchat.update`;
@@ -106,7 +114,7 @@ function Index_par_expbesoin({
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
             >
               Valider
-            </a> 
+            </a>
             )}
            { Status==='valider' && (<a
               href={route('bonAchat.modify', { bonAchat: bonAchat })}
@@ -115,11 +123,13 @@ function Index_par_expbesoin({
               Modifier
             </a>)}
             <a
-              href={route('pdf-DetailsBonAchat', { idBonAchat: bonAchat })}
+
+              href={route('pdf-DetailsBonAchat', { bonAchat: bonAchat })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
             >
-              z
-              {/* <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF               */}
+
+              <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
+
             </a>
           </div>
         </div>
@@ -227,7 +237,8 @@ function Index_par_expbesoin({
                   id="quantite"
                   value={data.quantite}
                   className="mt-1 block w-full"
-                  onChange={(e) => setData('quantite', e.target.value)}
+                  //
+                  onChange={handleQuantityChange}
                 />
                 <InputError message={errors.quantite} className='mt-2' />
               </div>

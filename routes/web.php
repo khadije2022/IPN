@@ -14,11 +14,13 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\Details_ExpBesoinController;
 use App\Http\Controllers\ExpressionBesoinController;
+use App\Http\Controllers\MouvmentStockController;
 use App\Http\Controllers\UserController;
 use App\Models\BonAchat;
 use App\Models\BonAchats;
 use App\Models\BonSortie;
 use App\Models\DetailBonAchat;
+use App\Models\MouvmentStock;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -42,7 +44,7 @@ Route::middleware(['auth','verified'])->group(function() {
 
     Route::resource('magasin',MagasinController::class);
     Route::resource('catelogueProduit',CatelogueProduitController::class);
-    Route::get('/updateStockFromMouvmentStocks',[CatelogueProduitController::class, 'updateStockFromMouvmentStocks'])->name('produit.updateStockFromMouvmentStocks');
+    Route::get('/update-stock', [CatelogueProduitController::class,'updateStockFromMouvmentStocks']);
     Route::resource('categorie',CategorieController::class);
     // Route::resource('detailsMouvment',::class);
 
@@ -61,6 +63,8 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::get('/validerAchat/{bonAchat}', [BonAchatController::class, 'valider'])->name('bonAchat.valider');
     Route::get('/ModifierAchat/{bonAchat}', [BonAchatController::class, 'modifier'])->name('bonAchat.modify');
     Route::resource('stock',StockController::class);
+
+    Route::get('/MouvmentStock', [MouvmentStockController::class, 'index'])->name('mouvmentStock.index');
 
 
     Route::resource('expressionbesoin',ExpressionBesoinController::class);
