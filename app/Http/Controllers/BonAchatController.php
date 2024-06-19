@@ -157,11 +157,11 @@ class BonAchatController extends Controller
 
 
 
-    public function exportPdf($idBonAchat)
+    public function exportPdf($bonAchat)
     {
-        $BonAchat = BonAchat::findOrFail($idBonAchat);
+        $BonAchat = BonAchat::findOrFail($bonAchat);
 
-        $details_BonAchats = DetailBonAchat::with('produits')->where('idBonAchat', $idBonAchat)->get();
+        $details_BonAchats = DetailBonAchat::with('produits')->where('idBonAchat', $bonAchat)->get();
 
         $totalQuantite = $details_BonAchats->sum('quantite');
 

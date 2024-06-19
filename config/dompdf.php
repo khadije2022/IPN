@@ -282,8 +282,18 @@ return array(
 
 
         ////ajoueter
-        'font_dir' => base_path('resources/fonts/'), // where your custom fonts are stored
-        'font_cache' => storage_path('fonts/'),
+        // 'font_dir' => base_path('resources/fonts/'), // where your custom fonts are stored
+        // 'font_cache' => storage_path('fonts/'),
+
+        // 'default_font' => 'NotoKufiArabic', // Setting the default font if needed
+
+        // Add custom fonts
+        'custom_font_dir' => base_path('resources/fonts/'), // Directory containing custom fonts
+        'custom_font_data' => [
+            'notokufiarabic' => [
+                'R'  => 'NotoKufiArabic-VariableFont_wght.ttf', // Regular font
+            ]
+        ],
     ),
 
 

@@ -173,6 +173,14 @@ class BonSortieController extends Controller
         'BonSortie' => $BonSortie,
         'totalQuantite' => $totalQuantite
     ])->setPaper('a4');
+<<<<<<< HEAD
+
+        return $pdf->download('BonSortie.pdf');
+
+    }
+}
+=======
+>>>>>>> e5afd192c8c7b2c86c0845f664d7dc6f020014fc
 
         return $pdf->download('BonSortie.pdf');
 

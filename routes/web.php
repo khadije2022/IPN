@@ -6,13 +6,12 @@ use App\Http\Controllers\BonSortieController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\CatelogueProduitController;
 use App\Http\Controllers\DetailBonAchatController;
-use App\Http\Controllers\DetailBonSortieController;
+use App\Http\Controllers\Details_ExpBesoinController;
 use App\Http\Controllers\DetailsMouvementController;
 use App\Http\Controllers\MagasinController;
 use App\Http\Controllers\MouvementStockController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StockController;
-use App\Http\Controllers\Details_ExpBesoinController;
 use App\Http\Controllers\ExpressionBesoinController;
 use App\Http\Controllers\MouvmentStockController;
 use App\Http\Controllers\UserController;
@@ -40,8 +39,6 @@ Route::middleware(['auth','verified'])->group(function() {
 
 
 
-
-
     Route::resource('magasin',MagasinController::class);
     Route::resource('catelogueProduit',CatelogueProduitController::class);
     Route::get('/update-stock', [CatelogueProduitController::class,'updateStockFromMouvmentStocks']);
@@ -50,9 +47,9 @@ Route::middleware(['auth','verified'])->group(function() {
 
 
     Route::resource('bonSortie',BonSortieController::class);
-    Route::resource('detailBonSortie',DetailBonSortieController::class);
-    Route::get('detailBonSortie/create/{bonSortie}', [DetailBonSortieController::class, 'create'])->name('detailBonSortie.create');
-    Route::get('detailBonSortie/index-par-bonSortie/{bonSortie}', [DetailBonSortieController::class, 'index_par_bonSortie'])->name('detailBonSortie.index_par_bonSortie');
+    Route::resource('detailBonSortie',Details_ExpBesoinController::class);
+    Route::get('detailBonSortie/create/{bonSortie}', [Details_ExpBesoinController::class, 'create'])->name('detailBonSortie.create');
+    Route::get('detailBonSortie/index-par-bonSortie/{bonSortie}', [Details_ExpBesoinController::class, 'index_par_bonSortie'])->name('detailBonSortie.index_par_bonSortie');
     Route::get('/validerSortie/{bonSortie}', [BonSortieController::class, 'valider'])->name('bonSortie.valider');
     Route::get('/ModifierSortie/{bonSortie}', [BonSortieController::class, 'modifier'])->name('bonSortie.modify');
 
@@ -75,7 +72,7 @@ Route::middleware(['auth','verified'])->group(function() {
 
     Route::get('/export-pdf', [CategorieController::class, 'exportPdf'])->name('export-pdf');
     Route::get('/pdf-details-expbesoin/{id_expbesoin}', [ExpressionBesoinController::class, 'exportPdf'])->name('pdf-DetailsExpbesoin');
-    Route::get('/pdf-DetailsBonAchat/{idBonAchat}', [BonAchatController::class, 'exportPdf'])->name('pdf-DetailsBonAchat');
+    Route::get('/pdf-DetailsBonAchat/{bonAchat}', [BonAchatController::class, 'exportPdf'])->name('pdf-DetailsBonAchat');
     Route::get('/pdf-DetailsBonSortie/{idBonSortie}', [BonSortieController::class, 'exportPdf'])->name('pdf-DetailsBonSortie');
 
 
@@ -88,7 +85,7 @@ Route::middleware(['auth','verified'])->group(function() {
 
 
     // Route::get('/export-excel', [CategorieController::class, 'exportExcel'])->name('export-excel');
-    Route::post('/mouvmentStock/finalize', [DetailBonSortieController::class, 'finalize'])->name('mouvmentStock.finalize');
+    Route::post('/mouvmentStock/finalize', [Details_ExpBesoinController::class, 'finalize'])->name('mouvmentStock.finalize');
 
 });
 
