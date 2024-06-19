@@ -40,8 +40,6 @@ Route::middleware(['auth','verified'])->group(function() {
 
 
 
-
-
     Route::resource('magasin',MagasinController::class);
     Route::resource('catelogueProduit',CatelogueProduitController::class);
     Route::get('/update-stock', [CatelogueProduitController::class,'updateStockFromMouvmentStocks']);
@@ -75,7 +73,7 @@ Route::middleware(['auth','verified'])->group(function() {
 
     Route::get('/export-pdf', [CategorieController::class, 'exportPdf'])->name('export-pdf');
     Route::get('/pdf-details-expbesoin/{id_expbesoin}', [ExpressionBesoinController::class, 'exportPdf'])->name('pdf-DetailsExpbesoin');
-    Route::get('/pdf-DetailsBonAchat/{idBonAchat}', [BonAchatController::class, 'exportPdf'])->name('pdf-DetailsBonAchat');
+    Route::get('/pdf-DetailsBonAchat/{bonAchat}', [BonAchatController::class, 'exportPdf'])->name('pdf-DetailsBonAchat');
     Route::get('/pdf-DetailsBonSortie/{idBonSortie}', [BonSortieController::class, 'exportPdf'])->name('pdf-DetailsBonSortie');
 
 

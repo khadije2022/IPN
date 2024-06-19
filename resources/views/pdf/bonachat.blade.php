@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bon de Sortie</title>
     <style>
+
         @font-face {
-            font-family: 'Noto Kufi Arabic';
-            
-            src: url('C:/Users/lapto/Downloads/Noto_Kufi_Arabic/static/NotoKufiArabic-Regular.ttf') format('truetype');
+            font-family: 'Arabic';
+
+            src: url('../../fonts/Arabic.ttf');
             font-weight: normal;
             font-style: normal;
         }
-        body { font-family: 'Noto Kufi Arabic', 'DejaVu Sans', Arial, sans-serif; }
+        body { font-family: 'NotoKufiArabic-VariableFont_wght', 'DejaVu Sans', Arial, sans-serif; }
         .container { max-width: 800px; margin: 0 auto; padding: 20px; border: 1px solid #000; }
         header, footer { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #000; margin-bottom: 10px; padding-bottom: 10px; }
         header p, footer p { margin: 0; }

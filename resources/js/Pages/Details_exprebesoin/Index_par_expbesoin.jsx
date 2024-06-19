@@ -21,6 +21,20 @@ function Index_par_expbesoin({
   const [modalMode, setModalMode] = useState('add');
   const [currentDetail, setCurrentDetail] = useState(null);
 
+
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [filteredProducts, setFilteredProducts] = useState([]);
+
+
+  useEffect(() => {
+    if (selectedCategory && produits?.data) {
+      const filtered = produits.data.filter(product => product.type === parseInt(selectedCategory));
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredProducts([]);
+    }
+  }, [selectedCategory, produits]);
+
   const { data, setData, post, put, errors } = useForm({
     id_expbesoin: id_expbesoin,
     id_categorie: "",
@@ -198,8 +212,11 @@ function Index_par_expbesoin({
                 <select
                   name="id_categorie"
                   id="id_categorie"
-                  value={data.id_categorie}
-                  onChange={(e) => setData('id_categorie', e.target.value)}
+                  value={selectedCategory}
+                  onChange={(e) => {
+                    setSelectedCategory(e.target.value);
+                    setData('produit', ''); // Reset produit when category changes
+                  }}
                   className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="" className="text-gray-500">Sélectionner une catégorie</option>
@@ -222,7 +239,7 @@ function Index_par_expbesoin({
                   className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="" className="text-gray-500">Sélectionner un produit</option>
-                  {catelogue_produits.map((productCategory) => (
+                  {filteredProducts.map((productCategory) => (
                     <option key={productCategory.id} value={productCategory.id} className="text-gray-800 dark:text-gray-200">
                       {productCategory.designation}
                     </option>

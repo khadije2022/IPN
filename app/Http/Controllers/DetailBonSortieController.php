@@ -74,17 +74,30 @@ class DetailBonSortieController extends Controller
      */
     public function store(StoreDetailBonSortieRequest $request)
     {
+        // Valider les données entrantes
         $data = $request->validate([
             'quantite' => 'required|integer',
             'idBonDeSortie' => 'required|integer|exists:bon_sorties,id',
-            'produit' => 'required|integer',
+            'produit' => 'required|integer|exists:catelogue_produits,id', // Assurez-vous que le produit existe
         ]);
-        // dd($data);
-        DetailBonSortie::create($data);
+    
+        // Récupérer le produit de la base de données
+        $produit = CatelogueProduit::findOrFail($data['produit']);
 
-        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $data['idBonDeSortie']])
-            ->with('success', 'Details created successfully!');
+        // Vérifier si la quantité demandée est disponible en stock
+        if ($produit->stock >= $data['quantite']) {
+            // Si le stock est suffisant, créer le détail
+            DetailBonSortie::create($data);
+
+            return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $data['idBonDeSortie']])
+                ->with('success', 'Details created successfully!');
+        } else {
+            // Si le stock n'est pas suffisant, renvoyer un message d'erreur
+            return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $data['idBonDeSortie']])
+            ->with('success', 'Stock insuffisant pour le produit sélectionné.');
+        }
     }
+
 
     /**
      * Display the specified resource.

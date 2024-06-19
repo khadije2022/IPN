@@ -19,7 +19,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
 <br/><br/>
                     <div className="flex flex-col space-y-4 mt-6">
                         <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                            Dashboard
+                        Introduction
                         </NavLink>
                         <NavLink href={route('categorie.index')} active={route().current('categorie.index')}>
                             Catégories

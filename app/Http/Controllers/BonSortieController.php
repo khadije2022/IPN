@@ -158,25 +158,25 @@ class BonSortieController extends Controller
         ]);
     }
 
-    // public function exportPdf($idBonSortie)
-    // {
-    //     $BonSortie = BonSortie::findOrFail($idBonSortie);
+    public function exportPdf($idBonSortie)
+    {
+        $BonSortie = BonSortie::findOrFail($idBonSortie);
 
-    //     $details_BonSorties = DetailBonSortie::with('catalogueProduit')
-    //         ->where('idBonSortie', $idBonSortie)
-    //         ->get();
+        $details_BonSorties = DetailBonSortie::with('catalogueProduit')
+            ->where('idBonSortie', $idBonSortie)
+            ->get();
 
-    //     $totalQuantite = $details_BonSorties->sum('quantite');
+        $totalQuantite = $details_BonSorties->sum('quantite');
 
-    //     $pdf = Pdf::loadView('pdf.bonachat', [
-    //     'details_BonSorties' => $details_BonSorties,
-    //     'BonSortie' => $BonSortie,
-    //     'totalQuantite' => $totalQuantite
-    // ])->setPaper('a4');
+        $pdf = Pdf::loadView('pdf.bonachat', [
+        'details_BonSorties' => $details_BonSorties,
+        'BonSortie' => $BonSortie,
+        'totalQuantite' => $totalQuantite
+    ])->setPaper('a4');
 
-    //     return $pdf->download('BonSortie.pdf');
+        return $pdf->download('BonSortie.pdf');
 
-    // }
+    }
 }
 
 

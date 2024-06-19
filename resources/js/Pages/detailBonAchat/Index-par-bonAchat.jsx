@@ -6,7 +6,8 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import SelectInput from '@/Components/SelectInput';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrashAlt, faPlus, faFilePdf } from '@fortawesome/free-solid-svg-icons';
 function Index_par_expbesoin({
   auth,
   detailBonAchats = { data: [] },
@@ -76,6 +77,10 @@ function Index_par_expbesoin({
   };
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    if (data.quantite <= 0) {
+      alert('La quantité doit être un nombre positif.');
+      return;
+    }
     const routeName = modalMode === 'add' ? 'detailBonAchat.store' : `detailBonAchat.update`;
     const action = modalMode === 'add' ? post : put;
 
@@ -106,7 +111,7 @@ function Index_par_expbesoin({
               onClick={() => openModal('add')}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
             >
-              Ajouter nouveau
+              <FontAwesomeIcon icon={faPlus} /> Ajouter
             </button>)}
            { Status ==='Non-Valider' && (
             <a
@@ -135,7 +140,7 @@ function Index_par_expbesoin({
         </div>
       }
     >
-      <Head title="Expression des Besoins" />
+      <Head title="BonAchat" />
 
       <div className='py-12'>
         <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
@@ -170,14 +175,14 @@ function Index_par_expbesoin({
                           onClick={() => openModal('edit', detailBonAchat)}
                           className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
                         >
-                          Edit
-                        </button>
+                          <FontAwesomeIcon icon={faEdit} />
+                          </button>
                         <button
                           onClick={() => deleteDetailsexpresionbesoin(detailBonAchat)}
                           className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
                         >
-                          Delete
-                        </button>
+                          <FontAwesomeIcon icon={faTrashAlt} />
+                          </button>
                       </td>)}
                     </tr>
                   ))}
@@ -220,7 +225,7 @@ function Index_par_expbesoin({
                         className="mt-1 block w-full"
                         onChange={(e) => setData('produit', e.target.value)}
                       >
-                        {console.log(filteredProducts)}
+                        {/* {console.log(filteredProducts)} */}
                         <option value=''>Select Product</option>
                         {filteredProducts.map((product) => (
                           <option key={product.id} value={product.id}>{product.designation}</option>
