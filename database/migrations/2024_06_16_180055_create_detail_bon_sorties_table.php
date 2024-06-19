@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('detail_bon_sorties', function (Blueprint $table) {
             $table->id();
             $table->integer('quantite');
-            $table->foreignId('produit')->constrained('catelogue_produits');
-             $table->foreignId('idBonDeSortie')->constrained('bon_sorties');
+            $table->foreignId('produit')->constrained('catelogue_produits')->onDelete('cascade');
+            $table->foreignId('idBonDeSortie')->constrained('bon_sorties')->onDelete('cascade');
+            $table->foreignId('magasin')->constrained('Magasin')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
