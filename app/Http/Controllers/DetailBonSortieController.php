@@ -69,6 +69,13 @@ class DetailBonSortieController extends Controller
             ]);
     }
 
+
+private function verifierStock($produitId, $quantiteDemandee)
+    {
+        $produit = CatelogueProduit::findOrFail($produitId);
+        return $quantiteDemandee <= $produit->stock;
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -77,14 +84,21 @@ class DetailBonSortieController extends Controller
         $data = $request->validate([
             'quantite' => 'required|integer',
             'idBonDeSortie' => 'required|integer|exists:bon_sorties,id',
-            'produit' => 'required|integer',
+            'produit' => 'required|integer|exists:catelogue_produits,id',
         ]);
-        // dd($data);
+
+        // Vérifier le stock
+        if (!$this->verifierStock($data['produit'], $data['quantite'])) {
+            return redirect()->back()->with('error', 'Quantité demandée supérieure à la quantité en stock.');
+        }
+
+        // Créer le DetailBonSortie si le stock est suffisant
         DetailBonSortie::create($data);
 
         return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $data['idBonDeSortie']])
             ->with('success', 'Details created successfully!');
     }
+
 
     /**
      * Display the specified resource.

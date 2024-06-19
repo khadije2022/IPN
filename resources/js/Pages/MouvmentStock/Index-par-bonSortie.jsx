@@ -13,10 +13,11 @@ function Index_par_expbesoin({
   Status,
   bonSortie,
   success,
+  error, // Ajoutez cette ligne
   categories,
   produits
 }) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false); // Déclaration de la variable isModalOpen
   const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
   const [currentDetail, setCurrentDetail] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -42,7 +43,7 @@ function Index_par_expbesoin({
     setCurrentDetail(detail);
     if (mode === 'edit' && detail) {
       setData({
-        type:detail.produit.type.id || "",
+        type: detail.produit.type.id || "",
         produit: detail.produit.id || "",
         idBonDeSortie: detail.idBonDeSortie.id || "",
         quantite: detail.quantite || "",
@@ -78,7 +79,6 @@ function Index_par_expbesoin({
     router.delete(route('detailBonSortie.destroy', detailBonSortie.id));
   };
 
-
   // Debugging: Log the expressionb to ensure it is defined
   console.log('bonAchat:', Status);
 
@@ -91,30 +91,21 @@ function Index_par_expbesoin({
             Detail Expression des Besoins
           </h2>
           <div>
-            { Status === 'Non-Valider' && (
-                      <a
-              href={route('pdf-DetailsBonSortie', { idBonSortie: bonSortie })}
-              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
-            >PDF            
-            </a>
-
-
-            //  <a
-            //   href={route('detailBonSortie.valider', { bonSortie: bonSortie })}
-            //   className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-            // >
-            //   Valider
-            // </a>
-            
-            
+            {Status === 'Non-Valider' && (
+              <a
+                href={route('pdf-DetailsBonSortie', { idBonSortie: bonSortie })}
+                className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
+              >PDF
+              </a>
             )}
-             {Status === 'Non-Valider' && (<a
-              href={route('bonSortie.valider', { bonSortie: bonSortie })}
-              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-            >
-              Valider
-            </a>)}
-
+            {Status === 'Non-Valider' && (
+              <a
+                href={route('bonSortie.valider', { bonSortie: bonSortie })}
+                className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+              >
+                Valider
+              </a>
+            )}
             {Status === 'valider' && (
               <Link
                 href={route('bonSortie.modify', { bonSortie: bonSortie })}
@@ -123,8 +114,14 @@ function Index_par_expbesoin({
                 Modify
               </Link>
             )}
-            
-
+            {Status === 'Non-Valider' && (
+              <button
+                onClick={() => openModal('add')}
+                className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+              >
+                Ajouter nouveau
+              </button>
+            )}
           </div>
         </div>
       }
@@ -138,6 +135,11 @@ function Index_par_expbesoin({
               {success}
             </div>
           )}
+          {error && ( // Afficher le message d'erreur
+            <div className='bg-red-400 py-2 px-4 rounded mb-4'>
+              {error}
+            </div>
+          )}
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
@@ -147,8 +149,9 @@ function Index_par_expbesoin({
                     <th className='px-3 py-3'>Produits</th>
                     <th className='px-3 py-3'>Categorie</th>
                     <th className='px-3 py-3'>Qte</th>
-                    { Status === 'Non-Valider' &&
-                    (<th className='px-3 py-3 text-right'>Action</th>)}
+                    {Status === 'Non-Valider' && (
+                      <th className='px-3 py-3 text-right'>Action</th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -158,20 +161,22 @@ function Index_par_expbesoin({
                       <td className='px-3 py-2'>{detailBonSortie.produit.designation}</td>
                       <td className='px-3 py-2'>{detailBonSortie.produit.type.type}</td>
                       <td className='px-3 py-2'>{detailBonSortie.quantite}</td>
-                     { Status === 'Non-Valider' && (<td className='px-3 py-2 text-nowrap'>
-                        <button
-                          onClick={() => openModal('edit', detailBonSortie)}
-                          className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => deleteDetailsexpresionbesoin(detailBonSortie)}
-                          className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
-                        >
-                          Delete
-                        </button>
-                      </td>)}
+                      {Status === 'Non-Valider' && (
+                        <td className='px-3 py-2 text-nowrap'>
+                          <button
+                            onClick={() => openModal('edit', detailBonSortie)}
+                            className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => deleteDetailsexpresionbesoin(detailBonSortie)}
+                            className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   ))}
                 </tbody>
@@ -191,7 +196,7 @@ function Index_par_expbesoin({
                   name="type"
                   id="type"
                   className="mt-1 block w-full"
-                value={selectedCategory}
+                  value={selectedCategory}
                   onChange={(e) => {
                     setSelectedCategory(e.target.value);
                     setData('produit', ''); // Reset produit when category changes
@@ -213,17 +218,13 @@ function Index_par_expbesoin({
                   className="mt-1 block w-full"
                   onChange={(e) => setData('produit', e.target.value)}
                 >
-
                   <option value=''>Select Product</option>
-
-                  <option value="">Select Product</option>
                   {filteredProducts.map((product) => (
                     <option key={product.id} value={product.id}>{product.designation}</option>
                   ))}
                 </SelectInput>
                 <InputError message={errors.produit} className='mt-2' />
               </div>
-
               <div className='mt-4'>
                 <InputLabel htmlFor='quantite' value='Quantity' />
                 <TextInput
@@ -236,7 +237,6 @@ function Index_par_expbesoin({
                 />
                 <InputError message={errors.quantite} className='mt-2' />
               </div>
-
               <div className='mt-4 text-right'>
                 <button
                   type='button'

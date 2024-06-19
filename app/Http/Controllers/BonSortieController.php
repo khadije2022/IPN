@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\BonSortie;
 use App\Models\DetailBonSortie;
+use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
-
 use App\Http\Requests\StoreBonSortieRequest;
 use App\Http\Requests\UpdateBonSortieRequest;
 use App\Http\Resources\BonSortieResource;
@@ -87,14 +87,6 @@ class BonSortieController extends Controller
     }
 
 
-    public function exportPdf($idBonDeSortie)
-    {
-        $BonSortie = BonSortie::findOrFail($idBonDeSortie);
-
-        $details_BonSorties = DetailBonSortie::with('produits')
-            ->where('idBonDeSortie', $idBonDeSortie)
-            ->get();
-
     public function valider($bonSortie){
         $BonSortie = BonSortie::find($bonSortie);
 
@@ -104,13 +96,6 @@ class BonSortieController extends Controller
 
         // Sum the quantities for the given idBonDeSortie
         $totalQuantity = DetailBonSortie::where('idBonDeSortie', $bonSortie)->sum('quantite');
-
-
-        $pdf = Pdf::loadView('pdf.bonsortie', [
-        'details_BonSorties' => $details_BonSorties,
-        'BonSortie' => $BonSortie,
-        'totalQuantite' => $totalQuantite
-    ])->setPaper('a4');
 
         // Create a new MouvmentStock record
         $mouvment = new MouvmentStock();
@@ -127,9 +112,15 @@ class BonSortieController extends Controller
         $BonSortie->status = 'valider';
         $BonSortie->save();
 
+        DB::table('catelogue_produits AS cp')
+        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+     ->where('cp.id', '=', DB::raw('ps.product_id'))
+        ->update(['cp.stock' => DB::raw('ps.stock')]);
 
         // Execute the query with pagination
         $mouvmentStock = $mv->paginate(10);
+
+
 
         return inertia('DetailsMouvement/Index', [
             'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
@@ -151,8 +142,10 @@ class BonSortieController extends Controller
         $BonSortie->status = 'Non-Valider';
         $BonSortie->save();
 
-
-
+        DB::table('catelogue_produits AS cp')
+        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+     ->where('cp.id', '=', DB::raw('ps.product_id'))
+        ->update(['cp.stock' => DB::raw('ps.stock')]);
 
         $mv = MouvmentStock::query();
 
@@ -165,25 +158,23 @@ class BonSortieController extends Controller
         ]);
     }
 
-    // public function exportPdf($idBonSortie)
-    // {
-    //     $BonSortie = BonSortie::findOrFail($idBonSortie);
+    public function exportPdf($idBonSortie)
+    {
+        $BonSortie = BonSortie::findOrFail($idBonSortie);
 
-    //     $details_BonSorties = DetailBonSortie::with('catalogueProduit')
-    //         ->where('idBonSortie', $idBonSortie)
-    //         ->get();
+        $details_BonSorties = DetailBonSortie::with('catalogueProduit')
+            ->where('idBonSortie', $idBonSortie)
+            ->get();
 
-    //     $totalQuantite = $details_BonSorties->sum('quantite');
+        $totalQuantite = $details_BonSorties->sum('quantite');
 
-    //     $pdf = Pdf::loadView('pdf.bonachat', [
-    //     'details_BonSorties' => $details_BonSorties,
-    //     'BonSortie' => $BonSortie,
-    //     'totalQuantite' => $totalQuantite
-    // ])->setPaper('a4');
+        $pdf = Pdf::loadView('pdf.bonachat', [
+        'details_BonSorties' => $details_BonSorties,
+        'BonSortie' => $BonSortie,
+        'totalQuantite' => $totalQuantite
+    ])->setPaper('a4');
 
-    //     return $pdf->download('BonSortie.pdf');
+        return $pdf->download('BonSortie.pdf');
 
-    // }
+    }
 }
-
-
