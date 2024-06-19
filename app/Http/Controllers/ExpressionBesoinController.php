@@ -96,9 +96,8 @@ public function store(StoreExpressionBesoinRequest $request)
     {
         $expressionbesoin = ExpressionBesoin::with('service')->findOrFail($id_expbesoin);
 
-        $details_expbesoins = Details_ExpBesoin::with('categorie', 'catalogueProduit')
-            ->where('id_expbesoin', $id_expbesoin)
-            ->get();
+        $details_expbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->with('categorie', 'catalogueProduit')->get();
+
 
         $totalQuantite = $details_expbesoins->sum('quantite');
 
@@ -117,6 +116,7 @@ public function store(StoreExpressionBesoinRequest $request)
     public function valider($id_expbesoin)
     {
         $expressionbesoin = ExpressionBesoin::with('service')->findOrFail($id_expbesoin);
+        $details_expbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->with('categorie', 'catalogueProduit')->get();
 
 
         $details_expbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->get();
@@ -124,19 +124,20 @@ public function store(StoreExpressionBesoinRequest $request)
 
         $expressionbesoin->status = 'validé';
         $expressionbesoin->save();
-        // Créer un bon d'achat avec la même description
+
+        // Create a purchase order with the same description
         $bonAchat = BonAchat::create([
             'description' => $expressionbesoin->description,
             'status' => 'Non-valider'
         ]);
 
-        // Créer des détails du bon d'achat pour chaque détail d'expression de besoin
+        // Create purchase order details for each need expression detail
         foreach ($details_expbesoins as $detail) {
             DetailBonAchat::create([
                 'idBonAchat' => $bonAchat->id,
                 'produit' => $detail->id_catproduit,
                 'quantite' => $detail->quantite,
-                'prix' => 0 // Vous pouvez ajuster cela selon vos besoins
+                'prix' => 0 // Adjust this as needed
 
             ]);
         }

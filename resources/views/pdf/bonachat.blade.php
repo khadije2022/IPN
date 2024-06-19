@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -6,12 +6,13 @@
     <title>Bon de Sortie</title>
     <style>
         @font-face {
-            font-family: 'Noto Sans Arabic';
-            src: url('/path-to-your-fonts/NotoSansArabic-Regular.ttf') format('truetype');
+            font-family: 'Noto Kufi Arabic';
+            
+            src: url('C:/Users/lapto/Downloads/Noto_Kufi_Arabic/static/NotoKufiArabic-Regular.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
-        body { font-family: 'Noto Sans Arabic', 'DejaVu Sans', Arial, sans-serif; }
+        body { font-family: 'Noto Kufi Arabic', 'DejaVu Sans', Arial, sans-serif; }
         .container { max-width: 800px; margin: 0 auto; padding: 20px; border: 1px solid #000; }
         header, footer { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #000; margin-bottom: 10px; padding-bottom: 10px; }
         header p, footer p { margin: 0; }
@@ -64,9 +65,9 @@
             <tbody>
                 @foreach($details_BonAchats as $detail)
                 <tr>
-                    <td>{{ $detail->catalogueProduit->nom }}</td>
+                    <td>{{ $detail->produits->designation }}</td>
                     <td>{{ $detail->quantite }}</td>
-                    <td>{{ $detail->motif }}</td>
+                    <td>{{ $detail->date }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -88,4 +89,4 @@
         </footer>
     </div>
 </body>
-</html> -->
+</html>

@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -45,11 +45,11 @@
         <section class="info">
             <div>
                 <label for="number">N°:</label>
-                <input type="text" id="number" name="number" value="{{ $BonAchat->id }}">
+                <input type="text" id="number" name="number" value="{{ $BonSortie->id }}">
             </div>
             <div>
                 <label for="date">Date:</label>
-                <input type="date" id="date" name="date" value="{{ $BonAchat->created_at->format('Y-m-d') }}">
+                <input type="date" id="date" name="date" value="{{ $BonSortie->created_at->format('Y-m-d') }}">
             </div>
         </section>
 
@@ -62,9 +62,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($details_BonAchats as $detail)
+                @foreach($details_BonSorties as $detail)
                 <tr>
-                    <td>{{ $detail->catalogueProduit->nom }}</td>
+                    <td>{{ $detail->produits->designation }}</td>
                     <td>{{ $detail->quantite }}</td>
                     <td>{{ $detail->motif }}</td>
                 </tr>
@@ -88,4 +88,4 @@
         </footer>
     </div>
 </body>
-</html> -->
+</html>

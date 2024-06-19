@@ -108,12 +108,14 @@ function Index_par_expbesoin({
             >
               Ajouter nouveau
             </button>)}
-           { Status ==='Non-Valider' && (<a
+           { Status ==='Non-Valider' && (
+            <a
               href={route('bonAchat.valider', { bonAchat: bonAchat })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
             >
               Valider
-            </a>)}
+            </a>
+            )}
            { Status==='valider' && (<a
               href={route('bonAchat.modify', { bonAchat: bonAchat })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
@@ -121,11 +123,13 @@ function Index_par_expbesoin({
               Modifier
             </a>)}
             <a
+
               href={route('pdf-DetailsBonAchat', { bonAchat: bonAchat })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
             >
-               
+
               <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
+
             </a>
           </div>
         </div>

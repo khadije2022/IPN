@@ -157,22 +157,21 @@ class BonAchatController extends Controller
 
 
 
-    // public function exportPdf($idBonAchat)
-    // {
-    //     $BonAchat = BonAchat::findOrFail($idBonAchat);
+    public function exportPdf($idBonAchat)
+    {
+        $BonAchat = BonAchat::findOrFail($idBonAchat);
 
-    //     $details_BonAchats = DetailBonAchat::with('catelogueProduit')->where('idBonAchat', $idBonAchat)->get();
+        $details_BonAchats = DetailBonAchat::with('produits')->where('idBonAchat', $idBonAchat)->get();
 
-    //     $totalQuantite = $details_BonAchats->sum('quantite');
+        $totalQuantite = $details_BonAchats->sum('quantite');
 
-    //     $pdf = Pdf::loadView('pdf.bonachat', [
-    //     'details_BonAchats' => $details_BonAchats,
-    //     'BonAchat' => $BonAchat,
-    //     'totalQuantite' => $totalQuantite
-    // ])->setPaper('a4');
+        $pdf = Pdf::loadView('pdf.bonachat', [
+            'details_BonAchats' => $details_BonAchats,
+            'BonAchat' => $BonAchat,
+            'totalQuantite' => $totalQuantite
+        ])->setPaper('a4');
 
-    //     return $pdf->download('BonAchat.pdf');
-    // }
-
+        return $pdf->download('BonAchat.pdf');
+    }
 }
 
