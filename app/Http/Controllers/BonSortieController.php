@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BonSortie;
 use App\Models\DetailBonSortie;
+use Illuminate\Support\Facades\DB;
 
 use App\Http\Requests\StoreBonSortieRequest;
 use App\Http\Requests\UpdateBonSortieRequest;
@@ -111,9 +112,15 @@ class BonSortieController extends Controller
         $BonSortie->status = 'valider';
         $BonSortie->save();
 
+        DB::table('catelogue_produits AS cp')
+        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+     ->where('cp.id', '=', DB::raw('ps.product_id'))
+        ->update(['cp.stock' => DB::raw('ps.stock')]);
 
         // Execute the query with pagination
         $mouvmentStock = $mv->paginate(10);
+
+
 
         return inertia('DetailsMouvement/Index', [
             'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),

@@ -9,10 +9,7 @@ class DetailBonSortie extends Model
 {
     use HasFactory;
 
-    protected $table = 'detail_bon_sorties'; // Replace with your actual table name
-    protected $primaryKey = 'id'; // Ensure this matches your primary key column
-    public $incrementing = true;
-    protected $keyType = 'int';
+   
     public $timestamps = false;
     protected $fillable = [
         'idBonDeSortie',

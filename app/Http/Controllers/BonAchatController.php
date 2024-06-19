@@ -14,7 +14,7 @@ use App\Http\Resources\MouvmentStockResource;
 use App\Models\MouvmentStock;
 
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Illuminate\Support\Facades\DB;
 
 class BonAchatController extends Controller
 {
@@ -115,6 +115,11 @@ class BonAchatController extends Controller
 
         $BonAchat->status = 'valider';
         $BonAchat->save();
+
+        DB::table('catelogue_produits AS cp')
+        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+     ->where('cp.id', '=', DB::raw('ps.product_id'))
+        ->update(['cp.stock' => DB::raw('ps.stock')]);
 
 
         // Execute the query with pagination

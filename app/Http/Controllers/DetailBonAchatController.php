@@ -133,7 +133,7 @@ class DetailBonAchatController extends Controller
      */
     public function destroy(DetailBonAchat $detailBonAchat)
     {
-        dd($detailBonAchat);
+        
         $detailBonAchat->delete();
         return redirect()->route('detailBonAchat.index-par-bonAchat', ['bonAchat' => $detailBonAchat->idBonAchat]);
     }

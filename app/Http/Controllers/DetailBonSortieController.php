@@ -129,10 +129,10 @@ class DetailBonSortieController extends Controller
      */
     public function destroy(DetailBonSortie $detailBonSortie)
     {
-        $idBonDeSortie = $detailBonSortie;
+
 
         $detailBonSortie->delete();
-        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $idBonDeSortie]);
+        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $detailBonSortie->idBonDeSortie]);
     }
 
 
