@@ -21,8 +21,11 @@ class StoreDetailBonSortieRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
+        
+            return [
+            'idBonDeSortie' => 'required|exists:bon_sorties,id',
+            'produit' => 'required|exists:catelogue_produits,id',  // Assurez-vous que la table et la clé sont correctes
+            'quantite' => 'required|integer|min:1',
         ];
     }
 }

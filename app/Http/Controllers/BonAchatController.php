@@ -1,20 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\BonAchat;
 use App\Models\DetailBonAchat;
-
 use App\Http\Requests\StoreBonAchatRequest;
 use App\Http\Requests\UpdateBonAchatRequest;
 use App\Http\Resources\BonAchatResource;
-
 use App\Http\Resources\MouvmentStockResource;
-
 use App\Models\MouvmentStock;
-
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
+
+
+
+
 
 class BonAchatController extends Controller
 {
@@ -31,6 +30,7 @@ class BonAchatController extends Controller
         // Return the Inertia.js response with the expressionbesoins data and any success message from the session
         return inertia('BonAchat/Index', [
             'bonAchats' => BonAchatResource::collection($expressionbesoins),
+            'success' => session('success'),
         ]);
     }
 

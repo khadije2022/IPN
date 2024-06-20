@@ -1,21 +1,21 @@
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import React, { useState, useEffect } from "react";
 import { Head, Link, router, useForm } from "@inertiajs/react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TextInput from "@/Components/TextInput";
 import InputLabel from "@/Components/InputLabel";
 import InputError from "@/Components/InputError";
-import Pagination from "@/Components/Pagination";
 import SelectInput from "@/Components/SelectInput";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { faEdit, faTrashAlt, faPlus, faFilePdf } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-function Index_par_expbesoin({
+function index_par_bonSortie({
   auth,
   detailBonSorties = { data: [] },
   Status,
-  bonSortie,
+  BonSortie,
+  bonSortie, // ID de bon sortie 
   success,
   error,
   categories,
@@ -26,6 +26,31 @@ function Index_par_expbesoin({
   const [currentDetail, setCurrentDetail] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [successMessage, setSuccessMessage] = useState(success);
+  const [errorMessage, seterrorMessage] = useState(error);
+
+
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(success);
+      const timer = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 10000); // 30000 milliseconds = 30 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (error) {
+      seterrorMessage(error);
+      const timer = setTimeout(() => {
+        seterrorMessage(null);
+      }, 10000); // 30000 milliseconds = 30 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
+
 
   useEffect(() => {
     if (selectedCategory && produits?.data) {
@@ -41,7 +66,7 @@ function Index_par_expbesoin({
   const { data, setData, post, put, errors } = useForm({
     quantite: "",
     produit: "",
-    idBonDeSortie: bonSortie,
+    idBonDeSortie: bonSortie || "",  // Assurez-vous que bonSortie est présent
   });
 
   const openModal = (mode, detail = null) => {
@@ -51,14 +76,14 @@ function Index_par_expbesoin({
       setData({
         type: detail.produit.type.id || "",
         produit: detail.produit.id || "",
-        idBonDeSortie: detail.idBonDeSortie.id || "",
+        idBonDeSortie: detail.idBonDeSortie || "",
         quantite: detail.quantite || "",
       });
     } else {
       setData({
         quantite: "",
         produit: "",
-        idBonDeSortie: bonSortie,
+        idBonDeSortie: bonSortie || "",  // Assurez-vous que bonSortie est présent
       });
     }
     setIsModalOpen(true);
@@ -75,8 +100,7 @@ function Index_par_expbesoin({
       alert('La quantité doit être un nombre positif.');
       return;
     }
-    const routeName =
-      modalMode === "add" ? "detailBonSortie.store" : `detailBonSortie.update`;
+    const routeName = modalMode === "add" ? "detailBonSortie.store" : `detailBonSortie.update`;
     const action = modalMode === "add" ? post : put;
 
     try {
@@ -84,10 +108,10 @@ function Index_par_expbesoin({
         route(routeName, currentDetail ? currentDetail.id : null),
         data
       );
-      toast.success("Details created successfully!");
+      // toast.success("Détails créés avec succès!");
       closeModal();
     } catch (error) {
-      console.error("Error during form submission:", error);
+      console.error("Erreur lors de la soumission du formulaire:", error);
       // Handle errors appropriately
     }
   };
@@ -102,11 +126,39 @@ function Index_par_expbesoin({
   useEffect(() => {
     if (success) {
       toast.success(success);
+
+      // toast.success(success);
     }
     if (error) {
       toast.error(error);
     }
   }, [success, error]);
+
+  if (!bonSortie) {
+    console.error("L'ID du bon de sortie est manquant.");
+    return (
+      <AuthenticatedLayout
+        user={auth.user}
+        header={
+          <div className="flex justify-between items-center">
+            <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+              Erreur
+            </h2>
+          </div>
+        }
+      >
+        <div className="py-12">
+          <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+              <div className="p-6 text-gray-900 dark:text-gray-100">
+                <h1 className="text-red-600">L'ID du bon de sortie est manquant. Veuillez vérifier les données passées au composant.</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </AuthenticatedLayout>
+    );
+  }
 
   return (
     <AuthenticatedLayout
@@ -114,41 +166,8 @@ function Index_par_expbesoin({
       header={
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Detail Expression des Besoins
+            Détail Expression des Besoins
           </h2>
-          <div>
-            {Status === "Non-Valider" && (
-              <>
-                <button
-                  onClick={() => openModal("add")}
-                  className="bg-emerald-500 py-2 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
-                >
-                  <FontAwesomeIcon icon={faPlus} /> Ajouter
-                </button>
-                <a
-                  href={route("bonSortie.valider", { bonSortie: bonSortie })}
-                  className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
-                >
-                  Valider
-                </a>
-                <a
-                  href={route("pdf-DetailsBonSortie", { idBonSortie: bonSortie })}
-                  className="bg-emerald-500 py-2 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
-                >
-                  <FontAwesomeIcon icon={faFilePdf} className="mr-2" />
-                  PDF
-                </a>
-              </>
-            )}
-            {Status === 'valider' && (
-              <Link
-                href={route("bonSortie.modify", { bonSortie: bonSortie })}
-                className="bg-blue-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-blue-600 mr-2"
-              >
-                Modify
-              </Link>
-            )}
-          </div>
         </div>
       }
     >
@@ -156,16 +175,68 @@ function Index_par_expbesoin({
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <ToastContainer />
+
+          {successMessage && (
+            <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
+              {successMessage}
+            </div>
+          )}
+
+          {errorMessage && (
+            <div className='bg-red-400 py-2 px-4 rounded mb-4'>
+              {errorMessage}
+            </div>
+          )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
+              <div className='flex justify-between'>
+                <div className='font-semibold'>
+                  <h1>Bon Sortie N° {BonSortie.id}</h1>
+                  <h1>Description: {BonSortie.description}</h1>
+                  <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs</h1>
+                </div>
+
+                <div>
+                  {Status === "Non-Valider" && (
+                    <>
+                      <button
+                        onClick={() => openModal("add")}
+                        className="bg-emerald-500 py-2 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
+                      >
+                        <FontAwesomeIcon icon={faPlus} /> Ajouter
+                      </button>
+                      <a
+                        href={route("bonSortie.valider", { bonSortie: bonSortie })}
+                        className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
+                      >
+                        Valider
+                      </a>
+                      <a
+                        href={route("pdf-DetailsBonSortie", { bonSortie: bonSortie })}
+                        className="bg-emerald-500 py-2 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+                      >
+                        <FontAwesomeIcon icon={faFilePdf} className="mr-2" />
+                        PDF
+                      </a>
+                    </>
+                  )}
+                  {Status === 'valider' && (
+                    <Link
+                      href={route("bonSortie.modify", { bonSortie: bonSortie })}
+                      className="bg-blue-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-blue-600 mr-2"
+                    >
+                      Modifier
+                    </Link>
+                  )}
+                </div>
+              </div>
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                   <tr className="text-nowrap">
                     <th className="px-3 py-3">ID</th>
                     <th className="px-3 py-3">Produits</th>
-                    <th className="px-3 py-3">Categorie</th>
-                    <th className="px-3 py-3">Qte</th>
+                    <th className="px-3 py-3">Catégorie</th>
+                    <th className="px-3 py-3">Qté</th>
                     {Status === "Non-Valider" && (
                       <th className="px-3 py-3 text-right">Action</th>
                     )}
@@ -220,7 +291,7 @@ function Index_par_expbesoin({
               className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
             >
               <div className="mt-4">
-                <InputLabel htmlFor="type" value="Categorie Type" />
+                <InputLabel htmlFor="type" value="Catégorie Type" />
                 <SelectInput
                   name="type"
                   id="type"
@@ -231,7 +302,7 @@ function Index_par_expbesoin({
                     setData("produit", ""); // Reset produit when category changes
                   }}
                 >
-                  <option value="">Select option</option>
+                  <option value="">Sélectionner une option</option>
                   {categories &&
                     categories.data &&
                     categories.data.map((categorie) => (
@@ -251,7 +322,7 @@ function Index_par_expbesoin({
                   className="mt-1 block w-full"
                   onChange={(e) => setData("produit", e.target.value)}
                 >
-                  <option value="">Select Product</option>
+                  <option value="">Sélectionner un produit</option>
                   {filteredProducts.map((product) => (
                     <option key={product.id} value={product.id}>
                       {product.designation}
@@ -261,7 +332,7 @@ function Index_par_expbesoin({
                 <InputError message={errors.produit} className="mt-2" />
               </div>
               <div className="mt-4">
-                <InputLabel htmlFor="quantite" value="Quantity" />
+                <InputLabel htmlFor="quantite" value="Quantité" />
                 <TextInput
                   type="number"
                   name="quantite"
@@ -281,13 +352,13 @@ function Index_par_expbesoin({
                   onClick={closeModal}
                   className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
                 >
-                  Cancel
+                  Annuler
                 </button>
                 <button
                   type="submit"
                   className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
                 >
-                  {modalMode === "add" ? "Add" : "Save"}
+                  {modalMode === "add" ? "Ajouter" : "Enregistrer"}
                 </button>
               </div>
             </form>
@@ -298,4 +369,4 @@ function Index_par_expbesoin({
   );
 }
 
-export default Index_par_expbesoin;
+export default index_par_bonSortie;

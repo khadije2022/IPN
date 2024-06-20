@@ -31,6 +31,7 @@ class CatelogueProduitController extends Controller
         return inertia('CatelogueProduit/Index', [
             'produits' => CatelogueResource::collection($Produits),
             'categories' => CategorieResource::collection($categories),
+            'success' => session('success'),
         ]);
     }
 

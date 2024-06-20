@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\DetailBonSortieController;
 
 use App\Http\Controllers\BonAchatController;
 use App\Http\Controllers\BonSortieAchatController;
@@ -46,12 +47,13 @@ Route::middleware(['auth','verified'])->group(function() {
     // Route::resource('detailsMouvment',::class);
 
 
-    Route::resource('bonSortie',BonSortieController::class);
-    Route::resource('detailBonSortie',Details_ExpBesoinController::class);
-    Route::get('detailBonSortie/create/{bonSortie}', [Details_ExpBesoinController::class, 'create'])->name('detailBonSortie.create');
-    Route::get('detailBonSortie/index-par-bonSortie/{bonSortie}', [Details_ExpBesoinController::class, 'index_par_bonSortie'])->name('detailBonSortie.index_par_bonSortie');
+    Route::resource('bonSortie', BonSortieController::class);
+    Route::resource('detailBonSortie', DetailBonSortieController::class);
+    Route::get('detailBonSortie/create/{bonSortie}', [DetailBonSortieController::class, 'create'])->name('detailBonSortie.create');
+    Route::get('detailBonSortie/index-par-bonSortie/{bonSortie}', [DetailBonSortieController::class, 'index_par_bonSortie'])->name('detailBonSortie.index_par_bonSortie');
     Route::get('/validerSortie/{bonSortie}', [BonSortieController::class, 'valider'])->name('bonSortie.valider');
     Route::get('/ModifierSortie/{bonSortie}', [BonSortieController::class, 'modifier'])->name('bonSortie.modify');
+
 
     Route::resource('bonAchat',BonAchatController::class);
     Route::resource('detailBonAchat',DetailBonAchatController::class);
@@ -67,7 +69,7 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::resource('expressionbesoin',ExpressionBesoinController::class);
     Route::resource('detailsexpresionbesoin', Details_ExpBesoinController::class);
     Route::get('detailsexpresionbesoin/create/{id_expbesoin}', [Details_ExpBesoinController::class, 'create'])->name('detailsexpresionbesoin.create');
-    Route::get('/detailsexpresionbesoin/index-par-expbesoin/{id_expbesoin}', [Details_ExpBesoinController::class, 'index_par_expbesoin'])->name('detailsexpresionbesoin.index_par_expbesoin');
+    Route::get('/detailsexpresionbesoin/index_par_bonAchat/{id_expbesoin}', [Details_ExpBesoinController::class, 'index_par_expbesoin'])->name('detailsexpresionbesoin.index_par_expbesoin');
     Route::get('/expressionbesoin/valider/{id_expbesoin}', [ExpressionBesoinController::class, 'valider'])->name('valider');
 
     Route::get('/export-pdf', [CategorieController::class, 'exportPdf'])->name('export-pdf');

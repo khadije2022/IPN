@@ -6,153 +6,115 @@ use App\Models\BonSortie;
 use App\Models\DetailBonSortie;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Http\Requests\StoreBonSortieRequest;
-use App\Http\Requests\UpdateBonSortieRequest;
-use App\Http\Resources\BonSortieResource;
+use App\Http\Requests\StoreDetailBonSortieRequest;
+use App\Http\Requests\UpdateDetailBonSortieRequest;
+use App\Http\Resources\DetailSortieResource;
 use App\Http\Resources\MouvmentStockResource;
-
 use App\Models\MouvmentStock;
+use App\Models\Categorie;
+use App\Models\CatelogueProduit;
+use App\Http\Resources\CategorieResource;
 
-class BonSortieController extends Controller
+
+
+class DetailBonSortieController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $query = BonSortie::query();
-
-        // Execute the query with pagination
+        $query = DetailBonSortie::query();
         $expressionbesoins = $query->paginate(10);
-
-        // Return the Inertia.js response with the expressionbesoins data and any success message from the session
         return inertia('BonSortieAchat/Index', [
-            'bonSorties' => BonSortieResource::collection($expressionbesoins),
+            'bonSorties' => DetailSortieResource::collection($expressionbesoins),
+            'success' => session('success'),
+            'error' => session('error'),
+
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function index_par_bonSortie($bonSortie)
     {
-        return inertia('BonSortieAchat/Create');
-    }
+        $BonSortie = BonSortie::findOrFail($bonSortie);
+        $detailsexpresionbesoins = DetailBonSortie::where('idBonDeSortie', $bonSortie)->get();
+        $categories = Categorie::all();
+        $catelogue_produits = CatelogueProduit::all();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreBonSortieRequest $request)
-    {
-        $data = $request->all();
-        $bonSortie = BonSortie::create($data);
-        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie->id]);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(BonSortie $bonSortie)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(BonSortie $bonSortie)
-    {
-        return inertia('BonSortieAchat/Edit',[
-            'bonSortie' => $bonSortie
+        return inertia('MouvmentStock/Index-par-bonSortie', [
+            'detailSorties' => DetailSortieResource::collection($detailsexpresionbesoins),
+            'bonSortie' => $bonSortie,
+            'BonSortie' => $BonSortie,
+            'Status' => $BonSortie->status,
+            'success' => session('success'),
+            'error' => session('error'),
+            'categories' => CategorieResource::collection($categories),
+            'produits' => CategorieResource::collection($catelogue_produits),
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateBonSortieRequest $request, BonSortie $bonSortie)
+    public function store(StoreDetailBonSortieRequest $request)
     {
-        $data= $request->all();
-        $bonSortie->update($data);
-        return to_route('bonSortie.index')->with('success','bonsortie was update');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(BonSortie $bonSortie)
-    {
-        $bonSortie->delete();
-        return to_route('bonSortie.index')->with('success','bonSortie was deleted');
-    }
-
-
-    public function valider($bonSortie){
-        $BonSortie = BonSortie::find($bonSortie);
-
-        if (!$BonSortie) {
-            return response()->json(['error' => 'BonSortie not found'], 404);
+        $data = $request->validated();
+        $produit = CatelogueProduit::find($data['produit']);
+        if ($produit->quantite < $data['quantite']) {
+            return redirect()->back()->with('error', 'Quantité demandée supérieure à la quantité disponible.');
         }
+        $bonSortie = DetailBonSortie::create($data);
+        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie->bonSortie->id])->with('success', 'Bon de sortie créé avec succès.');
+    }
 
-        // Sum the quantities for the given idBonDeSortie
+    public function update(UpdateDetailBonSortieRequest $request, DetailBonSortie $detailBonSortie)
+    {
+        $data = $request->validated();
+        $detailBonSortie->update($data);
+        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $detailBonSortie->idBonDeSortie])->with('success', 'Le bon de sortie a été mis à jour');
+    }
+
+    public function destroy(DetailBonSortie $detailBonSortie)
+    {
+        $detailBonSortie->delete();
+        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $detailBonSortie->idBonDeSortie])->with('success', 'Le bon de sortie a été supprimé');
+    }
+
+    public function valider($bonSortie)
+    {
+        $BonSortie = BonSortie::find($bonSortie);
+        if (!$BonSortie) {
+            return response()->json(['error' => 'BonSortie non trouvé'], 404);
+        }
         $totalQuantity = DetailBonSortie::where('idBonDeSortie', $bonSortie)->sum('quantite');
-
-        // Create a new MouvmentStock record
         $mouvment = new MouvmentStock();
         $mouvment->idBonDeSortie = $BonSortie->id;
-        $mouvment->idBonAchat = null; // Set to null or the appropriate value if available
-        $mouvment->typeMouvments = 'Sortie'; // or any type that you need to define
+        $mouvment->idBonAchat = null;
+        $mouvment->typeMouvments = 'Sortie';
         $mouvment->stock = $totalQuantity;
         $mouvment->save();
-
-
-
-
-        $mv = MouvmentStock::query();
         $BonSortie->status = 'valider';
         $BonSortie->save();
-
-        DB::table('catelogue_produits AS cp')
-        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
-     ->where('cp.id', '=', DB::raw('ps.product_id'))
-        ->update(['cp.stock' => DB::raw('ps.stock')]);
-
-        // Execute the query with pagination
+        DB::table('catalogue_produits AS cp')
+            ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+            ->where('cp.id', '=', DB::raw('ps.product_id'))
+            ->update(['cp.stock' => DB::raw('ps.stock')]);
+        $mv = MouvmentStock::query();
         $mouvmentStock = $mv->paginate(10);
-
-
-
         return inertia('DetailsMouvement/Index', [
             'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
         ]);
-
     }
-    public function modifier($bonSortie){
+
+    public function modifier($bonSortie)
+    {
         $BonSortie = BonSortie::find($bonSortie);
-
         if (!$BonSortie) {
-            return response()->json(['error' => 'BonSortie not found'], 404);
+            return response()->json(['error' => 'BonSortie non trouvé'], 404);
         }
-
-
-        // Create a new MouvmentStock record
         MouvmentStock::where('idBonDeSortie', $BonSortie->id)->delete();
-
-        // Mettre à jour le statut du bon de sortie à non-validé
         $BonSortie->status = 'Non-Valider';
         $BonSortie->save();
-
-        DB::table('catelogue_produits AS cp')
-        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
-     ->where('cp.id', '=', DB::raw('ps.product_id'))
-        ->update(['cp.stock' => DB::raw('ps.stock')]);
-
+        DB::table('catalogue_produits AS cp')
+            ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+            ->where('cp.id', '=', DB::raw('ps.product_id'))
+            ->update(['cp.stock' => DB::raw('ps.stock')]);
         $mv = MouvmentStock::query();
-
-
-        // Execute the query with pagination
         $mouvmentStock = $mv->paginate(10);
-
         return inertia('DetailsMouvement/Index', [
             'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
         ]);
@@ -161,20 +123,16 @@ class BonSortieController extends Controller
     public function exportPdf($idBonSortie)
     {
         $BonSortie = BonSortie::findOrFail($idBonSortie);
-
         $details_BonSorties = DetailBonSortie::with('catalogueProduit')
             ->where('idBonSortie', $idBonSortie)
             ->get();
-
         $totalQuantite = $details_BonSorties->sum('quantite');
-
         $pdf = Pdf::loadView('pdf.bonachat', [
-        'details_BonSorties' => $details_BonSorties,
-        'BonSortie' => $BonSortie,
-        'totalQuantite' => $totalQuantite
-    ])->setPaper('a4');
-
+            'details_BonSorties' => $details_BonSorties,
+            'BonSortie' => $BonSortie,
+            'totalQuantite' => $totalQuantite
+        ])->setPaper('a4');
         return $pdf->download('BonSortie.pdf');
-
     }
 }
+

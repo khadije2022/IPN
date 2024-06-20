@@ -28,6 +28,7 @@ class BonSortieController extends Controller
         // Return the Inertia.js response with the expressionbesoins data and any success message from the session
         return inertia('BonSortieAchat/Index', [
             'bonSorties' => BonSortieResource::collection($expressionbesoins),
+            'success' => session('success'),
         ]);
     }
 

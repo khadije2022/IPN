@@ -30,6 +30,7 @@ class DetailBonAchatController extends Controller
          // Return the Inertia.js response with the detailsexpresionbesoins data and any success message from the session
          return inertia('detailBonAchat/Index', [
              'detailBonAchats' => DetailBonAchatResource::collection($detailsexpresionbesoins),
+             'success' => session('success'),
          ]);
     }
 
@@ -46,7 +47,9 @@ class DetailBonAchatController extends Controller
         return inertia('detailBonAchat/Index-par-bonAchat', [
             'detailBonAchats' => DetailBonAchatResource::collection($detailsexpresionbesoins),
             'bonAchat' => $bonAchat,
+            'BonAchat' => $BonAchat,
             'Status' => $BonAchat->status,
+            'success' => session('success'),
             'categories' => CategorieResource::collection($categories),
             'produits' => CategorieResource::collection($catelogue_produits)
         ]);

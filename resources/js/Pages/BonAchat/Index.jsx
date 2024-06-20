@@ -124,7 +124,7 @@ function Index({ auth, bonAchats, success }) {
   };
 
   const handleRowClick = (id) => {
-    router.visit(route('detailBonAchat.index-par-bonAchat', {bonAchat: id}));
+    router.visit(route('detailBonAchat.index-par-bonAchat', { bonAchat: id }));
   };
 
   const filteredBonAchats = bonAchats.data.filter((bonAchat) =>
@@ -143,14 +143,14 @@ function Index({ auth, bonAchats, success }) {
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
             Bon Achat
           </h2>
-          <div>
+          {/* <div>
             <button
               onClick={() => openModal('add')}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
             >
               <FontAwesomeIcon icon={faPlus} /> Ajouter
             </button>
-          </div>
+          </div> */}
         </div>
       }
     >
@@ -165,6 +165,24 @@ function Index({ auth, bonAchats, success }) {
           )}
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
+
+              <div className='flex justify-between'>
+                <div className='font-semibold'>
+                  <h1>Liste des bon Achats</h1>
+                  <h1 className='text-red-600'>vous pouvez recherchez par des services des satstus et entre des date donne </h1>
+
+                </div>
+
+                <div>
+                  <button
+                    onClick={() => openModal('add')}
+                    className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                  >
+                    <FontAwesomeIcon icon={faPlus} /> Ajouter
+                  </button>
+                </div>
+              </div>
+
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                   <tr>
@@ -226,12 +244,12 @@ function Index({ auth, bonAchats, success }) {
                 <tbody>
                   {filteredBonAchats.map((bonAchat) => (
                     <tr
-                    key={bonAchat.id}
-                    className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer'
-                    style={styles.tableRow}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = styles.tableRowHover.backgroundColor}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
-                    onClick={() => handleRowClick(bonAchat.id)}
+                      key={bonAchat.id}
+                      className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer'
+                      style={styles.tableRow}
+                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = styles.tableRowHover.backgroundColor}
+                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
+                      onClick={() => handleRowClick(bonAchat.id)}
                     >
                       <td className='px-2 py-1'>{bonAchat.description}</td>
                       <td className='px-2 py-1'>
