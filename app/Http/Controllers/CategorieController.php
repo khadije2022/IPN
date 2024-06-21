@@ -27,6 +27,7 @@ class CategorieController extends Controller
         // Return the Inertia.js response with the categories data and any success message from the session
         return inertia('Categorie/Index', [
             'categories' => CategorieResource::collection($categories),
+            'success' => session('success'),
         ]);
     }
 
@@ -48,7 +49,7 @@ class CategorieController extends Controller
         $data=$request->all();
         Categorie::create($data);
 
-        return to_route('categorie.index')->with('success','Categorie was create');
+        return to_route('categorie.index')->with('success', 'La catégorie a été créée avec succès.');
     }
 
     /**
@@ -79,7 +80,7 @@ class CategorieController extends Controller
         $data= $request->all();
 
         $categorie->update($data);
-        return to_route('categorie.index')->with('success','Categorie was update');
+        return to_route('categorie.index')->with('success','La catégorie a été mise à jour avec succès.');
     }
 
     /**
@@ -88,7 +89,7 @@ class CategorieController extends Controller
     public function destroy(Categorie $categorie)
     {
         $categorie->delete();
-        return to_route('categorie.index')->with('success', 'Categorie was deleted');
+        return to_route('categorie.index')->with('success', 'La catégorie a été supprimée avec succès');
     }
 
 

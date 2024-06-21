@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
@@ -13,6 +13,7 @@ function Index({ auth, categories, success }) {
     const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
     const [currentCategorie, setCurrentCategorie] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [successMessage, setSuccessMessage] = useState(success);
 
     const { data, setData, post, put, errors } = useForm({
         type: '',
@@ -32,6 +33,17 @@ function Index({ auth, categories, success }) {
         }
         setIsModalOpen(true);
     };
+
+
+    useEffect(() => {
+        if (success) {
+          setSuccessMessage(success);
+          const timer = setTimeout(() => {
+            setSuccessMessage(null);
+          }, 10000); // 30000 milliseconds = 30 seconds
+          return () => clearTimeout(timer);
+        }
+      }, [success]);
 
     const closeModal = () => {
         setIsModalOpen(false);
@@ -71,30 +83,6 @@ function Index({ auth, categories, success }) {
                     <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
                         Catégories
                     </h2>
-                    <div className="flex space-x-2">
-                        <button
-                            onClick={() => openModal('add')}
-                            className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
-                        >
-                            <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                            Ajouter
-                        </button>
-                        <a
-                            href={route('export-pdf')}
-                            download
-                            className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
-                        >
-                            <FontAwesomeIcon icon={faFilePdf} className="mr-2" />
-                            Export PDF
-                        </a>
-                        <a
-                            href={route('export-excel')}
-                            className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
-                        >
-                            <FontAwesomeIcon icon={faFileExcel} className="mr-2" />
-                            Export Excel
-                        </a>
-                    </div>
                 </div>
             }
         >
@@ -102,24 +90,58 @@ function Index({ auth, categories, success }) {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    {success && (
-                        <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
-                            {success}
-                        </div>
-                    )}
+                {successMessage && (
+            <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
+              {successMessage}
+            </div>
+          )}
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
-                            <div className="mb-4">
-                                <TextInput
-                                    type="text"
-                                    name="search"
-                                    id="search"
-                                    value={searchQuery}
-                                    className="mt-1 block w-full"
-                                    onChange={handleSearchChange}
-                                    placeholder="Rechercher ..."
-                                />
+                            <div className="flex justify-between mb-4">
+                                <div>
+                                <h1 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
+                                    
+                                C'est la Liste des Categories,
+                                <div>vous pouve ajouter modifier ou suprimer </div>
+                                </h1>
+                                </div>
+                                <div className="flex space-x-2">
+                                    <button
+                                        onClick={() => openModal('add')}
+                                        className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
+                                    >
+                                        <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                                        Ajouter
+                                    </button>
+                                    <a
+                                        href={route('export-pdf')}
+                                        download
+                                        className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
+                                    >
+                                        <FontAwesomeIcon icon={faFilePdf} className="mr-2" />
+                                        PDF
+                                    </a>
+                                    <a
+                                        href={route('export-excel')}
+                                        className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
+                                    >
+                                        <FontAwesomeIcon icon={faFileExcel} className="mr-2" />
+                                         Excel
+                                    </a>
+                                </div>
                             </div>
+
+                           <div>
+                                    <TextInput
+                                        type="text"
+                                        name="search"
+                                        id="search"
+                                        value={searchQuery}
+                                        className="mt-1 block w-full"
+                                        onChange={handleSearchChange}
+                                        placeholder="Rechercher ..."
+                                    />
+                                </div>
 
                             <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">

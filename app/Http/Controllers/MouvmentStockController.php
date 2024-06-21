@@ -21,6 +21,7 @@ class MouvmentStockController extends Controller
 
         return inertia('DetailsMouvement/Index', [
             'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
+            'success' => session('success'),
         ]);
     }
 

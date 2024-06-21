@@ -3,31 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bon de Sortie</title>
+    <title>Bon de Achat</title>
     <style>
-
-        @font-face {
-            font-family: 'Arabic';
-
-            src: url('../../fonts/Arabic.ttf');
-            font-weight: normal;
-            font-style: normal;
+        body {
+            font-family: Arial, sans-serif;
         }
-        body { font-family: 'NotoKufiArabic-VariableFont_wght', 'DejaVu Sans', Arial, sans-serif; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; border: 1px solid #000; }
-        header, footer { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #000; margin-bottom: 10px; padding-bottom: 10px; }
-        header p, footer p { margin: 0; }
-        h1, h2 { text-align: center; margin: 10px 0; }
-        .info { display: flex; justify-content: space-between; margin-bottom: 20px; }
-        .info div { display: flex; align-items: center; }
-        .info label { margin-right: 5px; }
-        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
-        table, th, td { border: 1px solid #000; }
-        th, td { padding: 10px; text-align: left; }
-        th { background-color: #f2f2f2; }
-        .left, .right, .center { text-align: center; }
-        footer .center { flex: 1; margin-top: 20px; }
-        .rtl { direction: rtl; text-align: right; }
+        .container {
+            width: 80%;
+            margin: auto;
+            border: 1px solid #000;
+            padding: 20px;
+        }
+        header, footer {
+            display: flex;
+            justify-content: space-between;
+        }
+        .left {
+            text-align: left;
+        }
+        .right {
+            text-align: right;
+            direction: rtl;
+        }
+        .rtl {
+            direction: rtl;
+        }
+        .info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th span {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -36,12 +56,12 @@
             <div class="left">
                 <p>Institut pédagogique National<br>IPN</p>
             </div>
-            <div class="right rtl">
+            <div class="right">
                 <p>المعهد التربوي الوطني</p>
             </div>
         </header>
 
-        <h1>BON DE SORTIE</h1>
+        <h1>BON DE ACHAT</h1>
         <h2 class="rtl">وثيقة استخراج</h2>
 
         <section class="info">
@@ -83,11 +103,5 @@
                 <p>Chef de Service<br><span class="rtl">رئيس المصلحة</span></p>
                 <p>Chef DEIS<br><span class="rtl">رئيس القطاع DEIS</span></p>
             </div>
-            <div class="center">
-                <p class="rtl">استلم مطابقا للمواصفات من طرف</p>
-                <p>Reçu conforme par</p>
-            </div>
-        </footer>
-    </div>
-</body>
-</html>
+            <div class="center rtl">
+                <p>استلم مطابقا للمواصفات من طرف</

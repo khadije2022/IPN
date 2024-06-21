@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, router, useForm } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
@@ -15,16 +15,13 @@ function Index_par_expbesoin({
   id_expbesoin,
   success,
   categories = [],
-  catelogue_produits = [],
+  produits = [],
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
   const [currentDetail, setCurrentDetail] = useState(null);
-
-
   const [selectedCategory, setSelectedCategory] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
-
 
   useEffect(() => {
     if (selectedCategory && produits?.data) {
@@ -91,15 +88,15 @@ function Index_par_expbesoin({
   };
 
   const deleteDetailsexpresionbesoin = (detailsexpresionbesoin) => {
-    if (!confirm('Are you sure you want to delete this project?')) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce détail?')) {
       return;
     }
     router.delete(route('detailsexpresionbesoin.destroy', detailsexpresionbesoin.id));
   };
 
   const getProduitname = (id) => {
-    const Produit = catelogue_produits.find((Produit) => Produit.id === id);
-    return Produit ? Produit.designation : 'N/A';
+    const produit = produits.find((produit) => produit.id === id);
+    return produit ? produit.designation : 'N/A';
   };
 
   const getcategoriename = (id) => {
@@ -115,9 +112,8 @@ function Index_par_expbesoin({
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
             Expression des Besoins
           </h2>
-          <div>
-
-          {expressionbesoin.status !== 'validé' && (
+          {/* <div>
+            {expressionbesoin.status !== 'validé' && (
               <a
                 href={route('valider', { id_expbesoin: id_expbesoin })}
                 className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
@@ -125,19 +121,17 @@ function Index_par_expbesoin({
                 Valider
               </a>
             )}
-
             <a
               href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
             >
               <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
             </a>
-          </div>
+          </div> */}
         </div>
       }
     >
       <Head title="Expression des Besoins" />
-
       <div className='py-12'>
         <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
           {success && (
@@ -152,7 +146,7 @@ function Index_par_expbesoin({
                   <h1>Expression du Besoin N° {expressionbesoin.id}</h1>
                   <h1>Nom de Responsabilité: {expressionbesoin.service.nom_responsabiliter}</h1>
                   <h1>Description: {expressionbesoin.description}</h1>
-                  <h1 className='text-red-600'>pour Ajouter il faut cliquer sur le button en face et remplie les champs</h1>
+                  <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs</h1>
                 </div>
                 <div>
                   <button
@@ -161,6 +155,22 @@ function Index_par_expbesoin({
                   >
                     <FontAwesomeIcon icon={faPlus} /> Ajouter
                   </button>
+                  
+            {expressionbesoin.status !== 'validé' && (
+              <a
+                href={route('valider', { id_expbesoin: id_expbesoin })}
+                className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+              >
+                Valider
+              </a>
+            )}
+            <a
+              href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
+              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
+            >
+              <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
+            </a>
+          
                 </div>
               </div>
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
@@ -215,7 +225,7 @@ function Index_par_expbesoin({
                   value={selectedCategory}
                   onChange={(e) => {
                     setSelectedCategory(e.target.value);
-                    setData('produit', ''); // Reset produit when category changes
+                    setData('id_categorie', e.target.value); // Update the category in form data
                   }}
                   className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
@@ -239,11 +249,9 @@ function Index_par_expbesoin({
                   className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="" className="text-gray-500">Sélectionner un produit</option>
-                  {filteredProducts.map((productCategory) => (
-                    <option key={productCategory.id} value={productCategory.id} className="text-gray-800 dark:text-gray-200">
-                      {productCategory.designation}
-                    </option>
-                  ))}
+                  {filteredProducts.map((product) => (
+                          <option key={product.id} value={product.id}>{product.designation}</option>
+                        ))}
                 </select>
                 <InputError message={errors.id_catproduit} className='mt-2' />
               </div>

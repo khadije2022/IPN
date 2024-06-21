@@ -28,6 +28,7 @@ class BonSortieController extends Controller
         // Return the Inertia.js response with the expressionbesoins data and any success message from the session
         return inertia('BonSortieAchat/Index', [
             'bonSorties' => BonSortieResource::collection($expressionbesoins),
+            'success' => session('success'),
         ]);
     }
 
@@ -158,13 +159,13 @@ class BonSortieController extends Controller
         ]);
     }
 
-    public function exportPdf($idBonSortie)
+    public function exportPdf($bonSortie)
     {
-        $BonSortie = BonSortie::findOrFail($idBonSortie);
 
-        $details_BonSorties = DetailBonSortie::with('catalogueProduit')
-            ->where('idBonSortie', $idBonSortie)
-            ->get();
+        // dd($bonSortie);
+        $BonSortie = BonSortie::findOrFail($bonSortie);
+
+        $details_BonSorties = DetailBonSortie::with('produits') ->where('idBonDeSortie', $bonSortie)->get();
 
         $totalQuantite = $details_BonSorties->sum('quantite');
 

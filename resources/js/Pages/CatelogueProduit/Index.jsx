@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Head, router, useForm  ,Link} from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
@@ -14,6 +14,7 @@ function Index({ auth, produits, categories, success ,stock}) {
   const [modalMode, setModalMode] = useState('add'); // 'add' ou 'edit'
   const [currentProduit, setCurrentProduit] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [successMessage, setSuccessMessage] = useState(success);
 
   const { data, setData, post, put, errors, reset } = useForm({
     designation: '',
@@ -21,6 +22,16 @@ function Index({ auth, produits, categories, success ,stock}) {
     created_at: '',
   });
 
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(success);
+      const timer = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 10000); // 30000 milliseconds = 30 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
   const openModal = (mode, produit = null) => {
     setModalMode(mode);
     setCurrentProduit(produit);
@@ -89,13 +100,13 @@ function Index({ auth, produits, categories, success ,stock}) {
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
             Catalogue Produit
           </h2>
-          <button
+          {/* <button
             onClick={() => openModal('add')}
             className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
           >
             <FontAwesomeIcon icon={faPlus} className="mr-2" />
             Ajouter
-          </button>
+          </button> */}
           
         </div>
       }
@@ -103,13 +114,29 @@ function Index({ auth, produits, categories, success ,stock}) {
       <Head title="Catalogue Produit" />
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          {success && (
+        {successMessage && (
             <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
-              {success}
+              {successMessage}
             </div>
           )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
+              <div className='flex justify-between mb-4 '>
+
+             <div className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight space-x-2'> <h1>C'est la liste des Produits disponible et Sa Stock</h1></div>
+
+              <div className='flex space-x-2'>
+              <button
+            onClick={() => openModal('add')}
+            className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
+          >
+            <FontAwesomeIcon icon={faPlus} className="mr-2" />
+            Ajouter
+          </button>
+              </div>
+
+
+              </div>
               <div className="mb-4">
                 <TextInput
                   type="text"

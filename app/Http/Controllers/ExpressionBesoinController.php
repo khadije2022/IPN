@@ -29,6 +29,7 @@ class ExpressionBesoinController extends Controller
         return inertia('ExpressionBesoin/Index', [
             'expressionbesoins' => ExpressionBesoinResource::collection($expressionbesoins),
             'services' => $services,
+            'success' => session('success'),
         ]);
     }
 

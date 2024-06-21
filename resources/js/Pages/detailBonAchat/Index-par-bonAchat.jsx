@@ -14,6 +14,7 @@ function Index_par_expbesoin({
   expressionbesoin,
   Status,
   bonAchat,
+  BonAchat,
   success,
   categories ,
   produits
@@ -24,6 +25,19 @@ function Index_par_expbesoin({
 
   const [selectedCategory, setSelectedCategory] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [successMessage, setSuccessMessage] = useState(success);
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(success);
+      const timer = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 10000); // 30000 milliseconds = 30 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
+  
 
   useEffect(() => {
     if (selectedCategory && produits?.data) {
@@ -95,8 +109,7 @@ function Index_par_expbesoin({
     router.delete(route('detailBonAchat.destroy', detailBonAchat.id));
   };
 
-  // Debugging: Log the expressionb to ensure it is defined
-  // console.log('bonAchat:', bonAchat);
+
 
   return (
     <AuthenticatedLayout
@@ -106,7 +119,28 @@ function Index_par_expbesoin({
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
             deatil Bon d'achat
           </h2>
-          <div>
+
+        </div>
+      }
+    >
+      <Head title="BonAchat" />
+
+      <div className='py-12'>
+        <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
+        {successMessage && (
+            <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
+              {successMessage}
+            </div>
+          )}
+          <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
+            <div className='p-6 text-gray-900 dark:text-gray-100'>
+            <div className='flex justify-between'>
+            <div className='font-semibold'>
+                  <h1>Bon Sortie N° {BonAchat.id}</h1>
+                  <h1>Description: {BonAchat.description}</h1>
+                  <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs </h1>
+                </div>
+              <div>
             { Status==='Non-Valider' && (<button
               onClick={() => openModal('add')}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
@@ -136,21 +170,8 @@ function Index_par_expbesoin({
               <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
 
             </a>
-          </div>
-        </div>
-      }
-    >
-      <Head title="BonAchat" />
-
-      <div className='py-12'>
-        <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
-          {success && (
-            <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
-              {success}
             </div>
-          )}
-          <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
-            <div className='p-6 text-gray-900 dark:text-gray-100'>
+              </div>
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                   <tr className='text-nowrap'>

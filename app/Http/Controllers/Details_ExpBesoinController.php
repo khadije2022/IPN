@@ -33,6 +33,7 @@ class Details_ExpBesoinController extends Controller
              'detailsexpresionbesoins' => Details_ExpBesoinResource::collection($detailsexpresionbesoins),
              'categories' => $categories,
              'catelogue_produits' => $catelogue_produits,
+             'success' => session('success'),
          ]);
      }
 

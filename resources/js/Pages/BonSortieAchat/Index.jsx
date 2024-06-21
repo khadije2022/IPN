@@ -140,14 +140,14 @@ function Index({ auth, bonSorties, success }) {
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
             Bon Sortie
           </h2>
-          <div>
+          {/* <div>
             <button
               onClick={() => openModal('add')}
               className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
             >
               <FontAwesomeIcon icon={faPlus} /> Ajouter
             </button>
-          </div>
+          </div> */}
         </div>
       }
     >
@@ -162,6 +162,24 @@ function Index({ auth, bonSorties, success }) {
           )}
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
+
+            <div className='flex justify-between mb-4 '>
+
+<div className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight space-x-2'>
+  <div>C'est la liste des Expression Besoin</div>
+  <div>vous pouvez recherchez par des services des satstus et entre des date donne</div>
+</div>
+<div>
+            <button
+              onClick={() => openModal('add')}
+              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+            >
+              <FontAwesomeIcon icon={faPlus} /> Ajouter
+            </button>
+          </div>
+
+
+</div>
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                   <tr>

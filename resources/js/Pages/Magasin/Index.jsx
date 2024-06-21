@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
@@ -13,10 +13,21 @@ function Index({ auth, magasins, success }) {
   const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
   const [currentMagasin, setCurrentMagasin] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [successMessage, setSuccessMessage] = useState(success);
 
   const { data, setData, post, put, errors } = useForm({
     nomMagasin: '',
   });
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(success);
+      const timer = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 10000); // 30000 milliseconds = 30 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
 
   const openModal = (mode, magasin = null) => {
     setModalMode(mode);
@@ -58,11 +69,10 @@ function Index({ auth, magasins, success }) {
     setSearchQuery(e.target.value);
   };
 
-  const filteredMagasins = magasins?.data?.filter((magasin) => 
-    magasin && (magasin.id.toString().includes(searchQuery) || 
-    magasin.nomMagasin.toLowerCase().includes(searchQuery.toLowerCase()))
+  const filteredMagasins = magasins?.data?.filter((magasin) =>
+    magasin && (magasin.id.toString().includes(searchQuery) ||
+      magasin.nomMagasin.toLowerCase().includes(searchQuery.toLowerCase()))
   ) || [];
-
 
   return (
     <AuthenticatedLayout
@@ -70,31 +80,41 @@ function Index({ auth, magasins, success }) {
       header={
         <div className='flex justify-between items-center'>
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
-            Catégories
+            Magasin
           </h2>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => openModal('add')}
-              className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
-            >
-              <FontAwesomeIcon icon={faPlus} className="mr-2" />
-              Ajouter
-            </button>
-          </div>
         </div>
       }
     >
-      <Head title="Catégories" />
+      <Head title="Magasin" />
 
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          {success && (
+          {successMessage && (
             <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
-              {success}
+              {successMessage}
             </div>
           )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
+
+              <div className='flex justify-between'>
+                <div className='font-semibold'>
+                  <h1>Liste de Magasins</h1>
+
+                  <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs</h1>
+                </div>
+
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => openModal('add')}
+                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
+                  >
+                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                    Ajouter
+                  </button>
+                </div>
+              </div>
+
               <div className="mb-4">
                 <TextInput
                   type="text"

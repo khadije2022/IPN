@@ -26,6 +26,7 @@ class MagasinController extends Controller
         // Return the Inertia.js response with the Magasins data and any success message from the session
         return inertia('Magasin/Index', [
             'magasins' => MagasinResource::collection($magasins),
+            'success' => session('success'),
         ]);
     }
 
