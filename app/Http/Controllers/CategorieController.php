@@ -126,7 +126,7 @@ class CategorieController extends Controller
     public function exportExcel()
     {
         $categories = Categorie::get();
-        return Excel::download(new CategoriesExport, 'bulkData.xlsx');
+        return Excel::download(new CategoriesExport, 'categories.xlsx');
     }
 
 }

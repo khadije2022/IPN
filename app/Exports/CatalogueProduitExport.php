@@ -1,38 +1,39 @@
 <?php
 
+
 namespace App\Exports;
 
-use App\Models\Categorie;
+use App\Models\CatelogueProduit;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class CategoriesExport implements FromCollection
+class CatalogueProduitExport implements FromCollection
 {
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return Categorie::all([
-            'parent_id','type' 
+        return CatelogueProduit::all([
+            'type',
+            'designation',   
         ]);
     }
     public function headings(): array
     {
         return [
-            'PARENT_ID',
-            'TYPE'
-            
+            'DESIGNQTION',
+            'TYPE',
         ];
     }
     public function query()
     {
-        return Categorie::query();
+        return CatalogueProduitExport::query();
     }
     public function map($bulk): array
     {
         return [
+            $bulk->designation,
             $bulk->type,
-            $bulk->parent_id,
         ];
     }
 }

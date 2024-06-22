@@ -6,7 +6,7 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 
 const styles = {
   statusValide: {
@@ -37,15 +37,15 @@ const styles = {
     margin: 'auto',
     padding: '20px',
     border: '1px solid #ddd',
-    width: '400px',
+    width: '90%',
+    maxWidth: '400px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
     borderRadius: '8px',
     backgroundColor: 'white',
   },
   searchInput: {
-    width: '120px', // Adjust the width as needed
+    width: '100%',
   },
-
   tableRow: {
     transition: 'background-color 0.3s',
   },
@@ -63,8 +63,10 @@ function Index({ auth, expressionbesoins, services, success }) {
   const [searchService, setSearchService] = useState('');
   const [searchDateStart, setSearchDateStart] = useState('');
   const [searchDateEnd, setSearchDateEnd] = useState('');
+  const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });
+  const [validationErrors, setValidationErrors] = useState({});
 
-  const { data, setData, post, put, errors } = useForm({
+  const { data, setData, post, put, errors, reset } = useForm({
     id_service: '',
     description: '',
     status: 'non validé',
@@ -87,16 +89,33 @@ function Index({ auth, expressionbesoins, services, success }) {
         status: 'non validé',
       });
     }
+    setValidationErrors({});
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentExpressionBesoin(null);
+    reset();
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!data.id_service) {
+      errors.id_service = 'Le champ "Service" est obligatoire.';
+    }
+    if (!data.description) {
+      errors.description = 'Le champ "Description" est obligatoire.';
+    }
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     const routeName = modalMode === 'add' ? 'expressionbesoin.store' : 'expressionbesoin.update';
     const action = modalMode === 'add' ? post : put;
 
@@ -118,7 +137,7 @@ function Index({ auth, expressionbesoins, services, success }) {
   };
 
   const deleteExpressionBesoin = (expressionbesoin) => {
-    if (!confirm('Are you sure you want to delete this project?')) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce projet?')) {
       return;
     }
     router.delete(route('expressionbesoin.destroy', expressionbesoin.id));
@@ -137,16 +156,32 @@ function Index({ auth, expressionbesoins, services, success }) {
     router.visit(route('detailsexpresionbesoin.index_par_expbesoin', { id_expbesoin: id }));
   };
 
-  const filteredExpressionBesoins = expressionbesoins.data.filter((expressionbesoin) =>
-    (expressionbesoin.id.toString().includes(searchQuery) ||
-      getServiceName(expressionbesoin.id_service).toLowerCase().includes(searchQuery.toLowerCase()) ||
-      expressionbesoin.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      expressionbesoin.status.toLowerCase().includes(searchQuery.toLowerCase())) &&
-    (searchStatus === '' || expressionbesoin.status === searchStatus) &&
-    (searchService === '' || expressionbesoin.id_service.toString() === searchService) &&
-    (searchDateStart === '' || new Date(expressionbesoin.created_at) >= new Date(searchDateStart)) &&
-    (searchDateEnd === '' || new Date(expressionbesoin.created_at) <= new Date(searchDateEnd))
-  );
+  const filteredExpressionBesoins = expressionbesoins.data
+    .filter((expressionbesoin) =>
+      (expressionbesoin.id.toString().includes(searchQuery) ||
+        getServiceName(expressionbesoin.id_service).toLowerCase().includes(searchQuery.toLowerCase()) ||
+        expressionbesoin.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        expressionbesoin.status.toLowerCase().includes(searchQuery.toLowerCase())) &&
+      (searchStatus === '' || expressionbesoin.status === searchStatus) &&
+      (searchService === '' || expressionbesoin.id_service.toString() === searchService) &&
+      (searchDateStart === '' || new Date(expressionbesoin.created_at) >= new Date(searchDateStart)) &&
+      (searchDateEnd === '' || new Date(expressionbesoin.created_at) <= new Date(searchDateEnd))
+    )
+    .sort((a, b) => {
+      if (sortConfig.key) {
+        const order = sortConfig.direction === 'ascending' ? 1 : -1;
+        return a[sortConfig.key] > b[sortConfig.key] ? order : -order;
+      }
+      return 0;
+    });
+
+  const handleSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
 
   return (
     <AuthenticatedLayout
@@ -156,164 +191,119 @@ function Index({ auth, expressionbesoins, services, success }) {
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
             Expression des Besoins
           </h2>
-         
         </div>
       }
     >
       <Head title="Expression des Besoins" />
 
       <div className='py-12'>
-        <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
-        {success != null && (
-          
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          {success != null && (
             <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
               {success}
-              {/* ghjkhgfghj */}
             </div>
-        )}
+          )}
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
-              <div className='flex justify-between mb-4 '>
-
-                <div className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight space-x-2'>
-                  <div>C'est la liste des Expression Besoin</div>
-                  <div>vous pouvez recherchez par des services des satstus et entre des date donne</div>
+              <div className='flex flex-col sm:flex-row justify-between mb-4'>
+                <div className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
+                  <div>C'est la liste des Expressions de Besoins</div>
+                  <div>Vous pouvez rechercher par services, statuts et entre des dates données</div>
                 </div>
-                <div>
-                  <button
-                    onClick={() => openModal('add')}
-                    className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-                  >
-                    <FontAwesomeIcon icon={faPlus} /> Ajouter
-                  </button>
+                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
+                  <div>
+                    <button
+                      onClick={() => openModal('add')}
+                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
+                    >
+                      <FontAwesomeIcon icon={faPlus} className="mr-2" />Ajouter
+                    </button>
+                  </div>
+                  <div>
+                    <a href={route('export-bonachat')} className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center">
+                      <FontAwesomeIcon icon={faFileExcel} className="mr-2" />Excel</a>
+                  </div>
                 </div>
-
-
               </div>
 
+              <div className="mb-4">
+                <TextInput
+                  type="text"
+                  name="search"
+                  id="search"
+                  value={searchQuery}
+                  className="mt-1 block w-full"
+                  onChange={handleSearchChange}
+                  placeholder="Rechercher ID"
+                  style={styles.searchInput}
+                />
+              </div>
 
-
-              <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-                <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
-                  <tr>
-                    <th className='px-6 py-6'>
-                      <TextInput
-                        type="text"
-                        name="search"
-                        id="search"
-                        value={searchQuery}
-                        className="mt-1 block w-full"
-                        onChange={handleSearchChange}
-                        placeholder="Rechercher ID"
-                        style={styles.searchInput}
-                      />
-                    </th>
-                    <th className='px-2 py-1'>
-                      <select
-                        name="searchService"
-                        id="searchService"
-                        value={searchService}
-                        className="mt-1 block w-full"
-                        onChange={(e) => setSearchService(e.target.value)}
-                        style={styles.searchInput}
-                      >
-                        <option value=''>Services</option>
-                        {services.map((service) => (
-                          <option key={service.id} value={service.id}>
-                            {service.nom_responsabiliter}
-                          </option>
-                        ))}
-                      </select>
-                    </th>
-                    <th className='px-2 py-1'></th>
-                    <th className='px-2 py-1'>
-                      <select
-                        name="searchStatus"
-                        id="searchStatus"
-                        value={searchStatus}
-                        className="mt-1 block w-full"
-                        onChange={(e) => setSearchStatus(e.target.value)}
-                        style={styles.searchInput}
-                      >
-                        <option value=''>Statut</option>
-                        <option value='validé'>Validé</option>
-                        <option value='non validé'>Non Validé</option>
-                      </select>
-                    </th>
-                    <th className='px-2 py-1'>
-                      <TextInput
-                        type="date"
-                        name="searchDateStart"
-                        id="searchDateStart"
-                        value={searchDateStart}
-                        className="mt-1 block w-full"
-                        onChange={(e) => setSearchDateStart(e.target.value)}
-                        style={styles.searchInput}
-                      />
-                      <TextInput
-                        type="date"
-                        name="searchDateEnd"
-                        id="searchDateEnd"
-                        value={searchDateEnd}
-                        className="mt-1 block w-full"
-                        onChange={(e) => setSearchDateEnd(e.target.value)}
-                        style={styles.searchInput}
-                      />
-                    </th>
-                    <th className='px-2 py-1'></th>
-                  </tr>
-                  <tr>
-                    <th className='px-2 py-2'>ID</th>
-                    <th className='px-2 py-2'>Service</th>
-                    <th className='px-2 py-2'>Description</th>
-                    <th className='px-2 py-2'>Status</th>
-                    <th className='px-2 py-2'>Date</th>
-                    <th className='px-2 py-2 text-right'>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredExpressionBesoins.map((expressionbesoin) => (
-                    <tr
-                      key={expressionbesoin.id}
-                      className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer'
-                      style={styles.tableRow}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = styles.tableRowHover.backgroundColor}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
-                      onClick={() => handleRowClick(expressionbesoin.id)}
-                    >
-                      <td className='px-2 py-1'>{expressionbesoin.id}</td>
-                      <td className='px-2 py-1'>{getServiceName(expressionbesoin.id_service)}</td>
-                      <td className='px-2 py-1'>{expressionbesoin.description}</td>
-                      <td className='px-2 py-1'>
-                        <span style={expressionbesoin.status === 'validé' ? styles.statusValide : styles.statusNonValide}>
-                          {expressionbesoin.status}
-                        </span>
-                      </td>
-                      <td className='px-2 py-1'>{formatDate(expressionbesoin.created_at)}</td>
-                      <td className='px-2 py-1 text-nowrap'>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openModal('edit', expressionbesoin);
-                          }}
-                          className='text-blue-600 dark:text-blue-500 mx-1'
-                        >
-                          <FontAwesomeIcon icon={faEdit} />
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deleteExpressionBesoin(expressionbesoin);
-                          }}
-                          className='text-red-600 dark:text-red-500 mx-1'
-                        >
-                          <FontAwesomeIcon icon={faTrashAlt} />
-                        </button>
-                      </td>
+              <div className="overflow-x-auto">
+                <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
+                  <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
+                    <tr>
+                      <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('id')}>
+                        ID <FontAwesomeIcon icon={sortConfig.key === 'id' ? (sortConfig.direction === 'ascending' ? faSortUp : faSortDown) : ''} />
+                      </th>
+                      <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('id_service')}>
+                        Service <FontAwesomeIcon icon={sortConfig.key === 'id_service' ? (sortConfig.direction === 'ascending' ? faSortUp : faSortDown) : ''} />
+                      </th>
+                      <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('description')}>
+                        Description <FontAwesomeIcon icon={sortConfig.key === 'description' ? (sortConfig.direction === 'ascending' ? faSortUp : faSortDown) : ''} />
+                      </th>
+                      <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('status')}>
+                        Statut <FontAwesomeIcon icon={sortConfig.key === 'status' ? (sortConfig.direction === 'ascending' ? faSortUp : faSortDown) : ''} />
+                      </th>
+                      <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('created_at')}>
+                        Date <FontAwesomeIcon icon={sortConfig.key === 'created_at' ? (sortConfig.direction === 'ascending' ? faSortUp : faSortDown) : ''} />
+                      </th>
+                      <th className='px-2 py-2 text-right'>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {filteredExpressionBesoins.map((expressionbesoin) => (
+                      <tr
+                        key={expressionbesoin.id}
+                        className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer'
+                        style={styles.tableRow}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = styles.tableRowHover.backgroundColor}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
+                      >
+                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}>{expressionbesoin.id}</td>
+                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}>{getServiceName(expressionbesoin.id_service)}</td>
+                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}>{expressionbesoin.description}</td>
+                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}>
+                          <span style={expressionbesoin.status === 'validé' ? styles.statusValide : styles.statusNonValide}>
+                            {expressionbesoin.status}
+                          </span>
+                        </td>
+                        <td className='px-2 py-1'>{formatDate(expressionbesoin.created_at)}</td>
+                        <td className='px-2 py-1 text-nowrap'>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openModal('edit', expressionbesoin);
+                            }}
+                            className='text-blue-600 dark:text-blue-500 mx-1'
+                          >
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteExpressionBesoin(expressionbesoin);
+                            }}
+                            className='text-red-600 dark:text-red-500 mx-1'
+                          >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               <Pagination links={expressionbesoins.meta.links} />
             </div>
           </div>
@@ -333,13 +323,16 @@ function Index({ auth, expressionbesoins, services, success }) {
                   className='mt-1 block w-full'
                   onChange={(e) => setData('id_service', e.target.value)}
                 >
-                  <option value=''>Select a Service</option>
+                  <option value=''>Sélectionner un Service</option>
                   {services.map((service) => (
                     <option key={service.id} value={service.id}>
                       {service.nom_responsabiliter}
                     </option>
                   ))}
                 </select>
+                {validationErrors.id_service && (
+                  <div className='text-red-500 mt-2'>{validationErrors.id_service}</div>
+                )}
                 <InputError message={errors.id_service} className='mt-2' />
               </div>
 
@@ -353,12 +346,15 @@ function Index({ auth, expressionbesoins, services, success }) {
                   className='mt-1 block w-full'
                   onChange={(e) => setData('description', e.target.value)}
                 />
+                {validationErrors.description && (
+                  <div className='text-red-500 mt-2'>{validationErrors.description}</div>
+                )}
                 <InputError message={errors.description} className='mt-2' />
               </div>
 
               {modalMode === 'edit' && (
                 <div className='mt-4'>
-                  <InputLabel htmlFor='status' value='Status' />
+                  <InputLabel htmlFor='status' value='Statut' />
                   <select
                     name='status'
                     id='status'
@@ -385,7 +381,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                   type='submit'
                   className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
                 >
-                  {modalMode === 'add' ? 'Add' : 'Save'}
+                  {modalMode === 'add' ? 'Ajouter' : 'Enregistrer'}
                 </button>
               </div>
             </form>

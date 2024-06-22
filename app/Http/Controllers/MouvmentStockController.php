@@ -6,6 +6,7 @@ use App\Models\MouvmentStock;
 use App\Http\Requests\StoreMouvmentStockRequest;
 use App\Http\Requests\UpdateMouvmentStockRequest;
 use App\Http\Resources\MouvmentStockResource;
+use App\Models\CatelogueProduit;
 
 class MouvmentStockController extends Controller
 {
@@ -14,16 +15,27 @@ class MouvmentStockController extends Controller
      */
     public function index()
     {
-        $mv = MouvmentStock::query();
-
-        // Execute the query with pagination
-        $mouvmentStock = $mv->paginate(10);
-
+        $mouvmentStocks = MouvmentStock::paginate(10);
+    
+        $produits = CatelogueProduit::with(['detailsBonSorties', 'detailsBonAchats'])
+            ->get()
+            ->map(function($produit) {
+                $currentMonth = now()->startOfMonth();
+                $produit->quantity_out = $produit->detailsBonSorties->where('created_at', '>=', $currentMonth)->sum('quantite');
+                $produit->quantity_in = $produit->detailsBonAchats->where('created_at', '>=', $currentMonth)->sum('quantite');
+                $produit->stock = $produit->stock ?? 0; // Ensure stock is set
+                return $produit;
+            });
+    
         return inertia('DetailsMouvement/Index', [
-            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
+            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStocks),
+            'produits' => $produits,
             'success' => session('success'),
         ]);
     }
+    
+
+    
 
     /**
      * Show the form for creating a new resource.

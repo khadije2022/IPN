@@ -12,6 +12,7 @@ class CatelogueProduit extends Model
     protected $fillable =[
         'designation',
         'type',
+        'stock',
         'created_at'
     ];
 
@@ -20,6 +21,16 @@ class CatelogueProduit extends Model
     }
     public function mouvments(){
         return $this->belongsTo(Mouvement_stock::class,'produit');
+    }
+
+    public function detailsBonSorties()
+    {
+        return $this->hasMany(DetailBonSortie::class, 'produit');
+    }
+
+    public function detailsBonAchats()
+    {
+        return $this->hasMany(DetailBonAchat::class, 'produit');
     }
 
 }

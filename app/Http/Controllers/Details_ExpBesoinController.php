@@ -47,13 +47,14 @@ class Details_ExpBesoinController extends Controller
      
          $categories = Categorie::all();
          $catelogue_produits = CatelogueProduit::all();
-     
+    //  dd($catelogue_produits );
          return inertia('Details_exprebesoin/Index_par_expbesoin', [
              'detailsexpresionbesoins' => Details_ExpBesoinResource::collection($detailsexpresionbesoins),
              'expressionbesoin' => $expressionbesoin,
              'id_expbesoin' => $id_expbesoin,
              'categories' => $categories,
-             'catelogue_produits' => $catelogue_produits
+             'produits' => $catelogue_produits,
+             'success' => session('success'),
          ]);
      }
 
@@ -65,7 +66,7 @@ class Details_ExpBesoinController extends Controller
          return inertia('Details_exprebesoin/Create', [
              'categories' => $categories,
              'catelogue_produits' => $catelogue_produits,
-             'id_expbesoin' => $id_expbesoin // Pass the id_expbesoin to the view
+             'id_expbesoin' => $id_expbesoin 
          ]);
      }
 
@@ -74,7 +75,7 @@ class Details_ExpBesoinController extends Controller
          $data = $request->all();
          $detailsexpresionbesoin = Details_ExpBesoin::create($data);
      
-         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $detailsexpresionbesoin->id_expbesoin])->with('success', 'Detailsexpresionbesoin was created');
+         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $detailsexpresionbesoin->id_expbesoin])->with('success', 'Detailsexpresionbesoin Bien créer');
      }
 
      public function show(Details_ExpBesoin $detailsexpresionbesoin)
@@ -96,12 +97,12 @@ class Details_ExpBesoinController extends Controller
          // dd($data); // Correction : Retirez les guillemets autour de $data
      
          $detailsexpresionbesoin->update($data);
-         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $detailsexpresionbesoin->id_expbesoin])->with('success', 'Detailsexpresionbesoin was created');
+         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $detailsexpresionbesoin->id_expbesoin])->with('success', 'Detailsexpresionbesoin Bien modifier');
      }
 
      public function destroy(Details_ExpBesoin $detailsexpresionbesoin)
      {
          $detailsexpresionbesoin->delete();
-         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $detailsexpresionbesoin->id_expbesoin])->with('success', 'Detailsexpresionbesoin was created');
+         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $detailsexpresionbesoin->id_expbesoin])->with('success', 'Detailsexpresionbesoin Bien supprimer');
      }
 }
