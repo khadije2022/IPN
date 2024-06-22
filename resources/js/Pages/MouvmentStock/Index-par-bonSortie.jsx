@@ -15,7 +15,7 @@ function index_par_bonSortie({
   detailBonSorties = { data: [] },
   Status,
   BonSortie,
-  bonSortie, // ID de bon sortie 
+  bonSortie, // ID de bon sortie
   success,
   error,
   categories,
@@ -221,10 +221,10 @@ function index_par_bonSortie({
                     PDF
                   </a>
                   </div>
-                  
-                  
-                  
-                  {Status === "Non-Valider" && (
+
+
+
+                  {Status === "non-validé" && (
                     <div>
                     <a
                       href={route("bonSortie.valider", { bonSortie: bonSortie })}
@@ -235,7 +235,7 @@ function index_par_bonSortie({
                     </div>
                   )}
 
-{Status === "Non-Valider" && (
+{Status === "non-validé" && (
                     <div>
                     <button
                       onClick={() => openModal("add")}
@@ -245,8 +245,8 @@ function index_par_bonSortie({
                     </button>
                     </div>
                   )}
-                  
-                  {Status === 'valider' && (
+
+                  {Status === 'validé' && (
                     <div>
                     <Link
                       href={route("bonSortie.modify", { bonSortie: bonSortie })}
@@ -265,7 +265,7 @@ function index_par_bonSortie({
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('produit.designation')}>Produits <FontAwesomeIcon icon={faSort} /></th>
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('produit.type.type')}>Catégorie <FontAwesomeIcon icon={faSort} /></th>
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('quantite')}>Qté <FontAwesomeIcon icon={faSort} /></th>
-                    {Status === "Non-Valider" && (
+                    {Status === "non-validé" && (
                       <th className="px-3 py-3 text-right">Action</th>
                     )}
                   </tr>

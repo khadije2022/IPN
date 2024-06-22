@@ -171,7 +171,7 @@ function Index_par_expbesoin({
                   <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs</h1>
                 </div>
                 <div>
-                  {Status === 'Non-Valider' && (
+                  {Status === 'non-validé' && (
                     <button
                       onClick={() => openModal('add')}
                       className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
@@ -179,7 +179,7 @@ function Index_par_expbesoin({
                       <FontAwesomeIcon icon={faPlus} /> Ajouter
                     </button>
                   )}
-                  {Status === 'Non-Valider' && (
+                  {Status === 'non-validé' && (
                     <a
                       href={route('bonAchat.valider', { bonAchat: bonAchat })}
                       className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
@@ -187,7 +187,7 @@ function Index_par_expbesoin({
                       Valider
                     </a>
                   )}
-                  {Status === 'valider' && (
+                  {Status === 'validé' && (
                     <a
                       href={route('bonAchat.modify', { bonAchat: bonAchat })}
                       className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
@@ -230,7 +230,7 @@ function Index_par_expbesoin({
                         <FontAwesomeIcon icon={faSort} className="ml-1" />
                       </button>
                     </th>
-                    {Status === 'Non-Valider' && (<th className='px-3 py-3 text-right'>Action</th>)}
+                    {Status === 'non-validé' && (<th className='px-3 py-3 text-right'>Action</th>)}
                   </tr>
                 </thead>
                 <tbody>
@@ -240,7 +240,7 @@ function Index_par_expbesoin({
                       <td className='px-3 py-2'>{detailBonAchat.produit.designation}</td>
                       <td className='px-3 py-2'>{detailBonAchat.produit.type.type}</td>
                       <td className='px-3 py-2'>{detailBonAchat.quantite}</td>
-                      {Status === 'Non-Valider' && (
+                      {Status === 'non-validé' && (
                         <td className='px-3 py-2 text-nowrap'>
                           <button
                             onClick={() => openModal('edit', detailBonAchat)}

@@ -18,4 +18,5 @@ yarn-error.log
 /.idea
 /.vscode
 
-./.github/workflows/hostinger-deploy.yml
+# ./.github/workflows/hostinger-deploy.yml
+C:\wamp64\www\IPN\IPN\.github\workflows\hostinger-deploy.yml

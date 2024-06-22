@@ -62,7 +62,7 @@ class BonAchatController extends Controller
 
     public function show(BonAchat $bonAchat)
     {
-       
+
     }
 
     /**
@@ -73,10 +73,8 @@ class BonAchatController extends Controller
 
         return inertia('BonAchat/Edit',[
             'bonAchat' => $bonAchat,
-            
-        ]);
 
-        
+        ]);
     }
 
     /**
@@ -136,7 +134,7 @@ class BonAchatController extends Controller
         MouvmentStock::where('idBonAchat', $BonAchat->id)->delete();
 
         // Mettre à jour le statut du bon de sortie à non-validé
-        $BonAchat->status = 'non validé';
+        $BonAchat->status = 'non-validé';
         $BonAchat->save();
 
 
