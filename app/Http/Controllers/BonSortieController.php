@@ -189,5 +189,3 @@ class BonSortieController extends Controller
   }
     
 }
-
-       
