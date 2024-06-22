@@ -1,38 +1,39 @@
 <?php
 
+
 namespace App\Exports;
 
-use App\Models\Categorie;
+use App\Models\BonSortie;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class CategoriesExport implements FromCollection
+class BonSortieExport implements FromCollection
 {
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return Categorie::all([
-            'parent_id','type' 
+        return BonSortie::all([
+            'description',
+            'status',   
         ]);
     }
     public function headings(): array
     {
         return [
-            'PARENT_ID',
-            'TYPE'
-            
+            'DDESCRIPTION',
+            'STATUS',
         ];
     }
     public function query()
     {
-        return Categorie::query();
+        return BonSortie::query();
     }
     public function map($bulk): array
     {
         return [
-            $bulk->type,
-            $bulk->parent_id,
+            $bulk->description,
+            $bulk->status,
         ];
     }
 }

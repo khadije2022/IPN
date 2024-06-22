@@ -6,7 +6,7 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus, faFilePdf } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faFilePdf, faSort } from '@fortawesome/free-solid-svg-icons';
 
 function Index_par_expbesoin({
   auth,
@@ -22,17 +22,19 @@ function Index_par_expbesoin({
   const [currentDetail, setCurrentDetail] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     if (selectedCategory && produits?.data) {
-      const filtered = produits.data.filter(product => product.type === parseInt(selectedCategory));
+      const filtered = produits.data.filter(product => product.id_categorie === parseInt(selectedCategory));
       setFilteredProducts(filtered);
     } else {
       setFilteredProducts([]);
     }
   }, [selectedCategory, produits]);
 
-  const { data, setData, post, put, errors } = useForm({
+  const { data, setData, post, put, errors, reset } = useForm({
     id_expbesoin: id_expbesoin,
     id_categorie: "",
     id_catproduit: "",
@@ -49,6 +51,7 @@ function Index_par_expbesoin({
         id_catproduit: detail.id_catproduit,
         quantite: detail.quantite,
       });
+      setSelectedCategory(detail.id_categorie);
     } else {
       setData({
         id_expbesoin: id_expbesoin,
@@ -56,35 +59,49 @@ function Index_par_expbesoin({
         id_catproduit: "",
         quantite: "",
       });
+      setSelectedCategory('');
     }
+    setValidationErrors({});
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentDetail(null);
+    reset();
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!data.id_categorie) {
+      errors.id_categorie = 'Le champ "Catégorie" est obligatoire.';
+    }
+    if (!data.id_catproduit) {
+      errors.id_catproduit = 'Le champ "Produit" est obligatoire.';
+    }
+    if (!data.quantite || data.quantite <= 0) {
+      errors.quantite = 'Le champ "Quantité" est obligatoire et doit être un nombre positif.';
+    }
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    if (data.quantite <= 0) {
-      alert('La quantité doit être un nombre positif.');
+    if (!validateForm()) {
       return;
     }
-    const routeName = modalMode === 'add' ? 'detailsexpresionbesoin.store' : `detailsexpresionbesoin.update`;
+    const routeName = modalMode === 'add' ? 'detailsexpresionbesoin.store' : 'detailsexpresionbesoin.update';
     const action = modalMode === 'add' ? post : put;
 
-    action(route(routeName, currentDetail ? currentDetail.id : null));
-    closeModal();
+    action(route(routeName, currentDetail ? currentDetail.id : null), {
+      onSuccess: () => closeModal(),
+    });
   };
 
   const handleQuantityChange = (e) => {
     const value = e.target.value;
-    if (value >= 0) {
-      setData('quantite', value);
-    } else {
-      alert('La quantité doit être un nombre positif.');
-    }
+    setData('quantite', value >= 0 ? value : '');
   };
 
   const deleteDetailsexpresionbesoin = (detailsexpresionbesoin) => {
@@ -95,7 +112,7 @@ function Index_par_expbesoin({
   };
 
   const getProduitname = (id) => {
-    const produit = produits.find((produit) => produit.id === id);
+    const produit = produits.data.find((produit) => produit.id === id);
     return produit ? produit.designation : 'N/A';
   };
 
@@ -103,6 +120,24 @@ function Index_par_expbesoin({
     const categorie = categories.find((categorie) => categorie.id === id);
     return categorie ? categorie.type : 'N/A';
   };
+
+  const requestSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedDetails = [...detailsexpresionbesoins.data].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? 1 : -1;
+    }
+    return 0;
+  });
 
   return (
     <AuthenticatedLayout
@@ -112,22 +147,6 @@ function Index_par_expbesoin({
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
             Expression des Besoins
           </h2>
-          {/* <div>
-            {expressionbesoin.status !== 'validé' && (
-              <a
-                href={route('valider', { id_expbesoin: id_expbesoin })}
-                className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-              >
-                Valider
-              </a>
-            )}
-            <a
-              href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
-              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
-            >
-              <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
-            </a>
-          </div> */}
         </div>
       }
     >
@@ -141,14 +160,13 @@ function Index_par_expbesoin({
           )}
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
-              <div className='flex justify-between'>
+              <div className='flex flex-col lg:flex-row justify-between'>
                 <div className='font-semibold'>
                   <h1>Expression du Besoin N° {expressionbesoin.id}</h1>
                   <h1>Nom de Responsabilité: {expressionbesoin.service.nom_responsabiliter}</h1>
                   <h1>Description: {expressionbesoin.description}</h1>
-                  <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs</h1>
                 </div>
-                <div>
+                <div className='mt-4 lg:mt-0'>
                   <button
                     onClick={() => openModal('add')}
                     className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
@@ -156,58 +174,67 @@ function Index_par_expbesoin({
                     <FontAwesomeIcon icon={faPlus} /> Ajouter
                   </button>
                   
-            {expressionbesoin.status !== 'validé' && (
-              <a
-                href={route('valider', { id_expbesoin: id_expbesoin })}
-                className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-              >
-                Valider
-              </a>
-            )}
-            <a
-              href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
-              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
-            >
-              <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
-            </a>
-          
+                  {expressionbesoin.status !== 'validé' && (
+                    <a
+                      href={route('valider', { id_expbesoin: id_expbesoin })}
+                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                    >
+                      Valider
+                    </a>
+                  )}
+                  <a
+                    href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
+                    className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
+                  >
+                    <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
+                  </a>
                 </div>
               </div>
-              <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-                <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
-                  <tr className='text-nowrap'>
-                    <th className='px-3 py-3'>ID</th>
-                    <th className='px-3 py-3'>Catégorie</th>
-                    <th className='px-3 py-3'>Produit</th>
-                    <th className='px-3 py-3'>Quantité</th>
-                    <th className='px-3 py-3 text-right'>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {detailsexpresionbesoins.data.map((detailsexpresionbesoin) => (
-                    <tr key={detailsexpresionbesoin.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                      <td className='px-3 py-2'>{detailsexpresionbesoin.id}</td>
-                      <td className='px-3 py-2'>{getcategoriename(detailsexpresionbesoin.id_categorie)}</td>
-                      <td className='px-3 py-2'>{getProduitname(detailsexpresionbesoin.id_catproduit)}</td>
-                      <td className='px-3 py-2'>{detailsexpresionbesoin.quantite}</td>
-                      <td className='px-3 py-2 text-nowrap'>
-                        <button
-                          onClick={() => openModal('edit', detailsexpresionbesoin)}
-                          className='text-blue-600 dark:text-blue-500 mx-1'
-                        >
-                          <FontAwesomeIcon icon={faEdit} />
-                        </button>
-                        <button
-                          onClick={() => deleteDetailsexpresionbesoin(detailsexpresionbesoin)}
-                          className='text-red-600 dark:text-red-500 mx-1'
-                        >
-                          <FontAwesomeIcon icon={faTrashAlt} />
-                        </button>
-                      </td>
+              <div className='overflow-x-auto'>
+                <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
+                  <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
+                    <tr className='text-nowrap'>
+                      <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('id')}>
+                        ID <FontAwesomeIcon icon={faSort} />
+                      </th>
+                      <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('id_categorie')}>
+                        Catégorie <FontAwesomeIcon icon={faSort} />
+                      </th>
+                      <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('id_catproduit')}>
+                        Produit <FontAwesomeIcon icon={faSort} />
+                      </th>
+                      <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('quantite')}>
+                        Quantité <FontAwesomeIcon icon={faSort} />
+                      </th>
+                      <th className='px-3 py-3 text-right'>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {sortedDetails.map((detailsexpresionbesoin) => (
+                      <tr key={detailsexpresionbesoin.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
+                        <td className='px-3 py-2'>{detailsexpresionbesoin.id}</td>
+                        <td className='px-3 py-2'>{getcategoriename(detailsexpresionbesoin.id_categorie)}</td>
+                        <td className='px-3 py-2'>{getProduitname(detailsexpresionbesoin.id_catproduit)}</td>
+                        <td className='px-3 py-2'>{detailsexpresionbesoin.quantite}</td>
+                        <td className='px-3 py-2 text-nowrap'>
+                          <button
+                            onClick={() => openModal('edit', detailsexpresionbesoin)}
+                            className='text-blue-600 dark:text-blue-500 mx-1'
+                          >
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button
+                            onClick={() => deleteDetailsexpresionbesoin(detailsexpresionbesoin)}
+                            className='text-red-600 dark:text-red-500 mx-1'
+                          >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -222,10 +249,11 @@ function Index_par_expbesoin({
                 <select
                   name="id_categorie"
                   id="id_categorie"
-                  value={selectedCategory}
+                  value={data.id_categorie}
                   onChange={(e) => {
-                    setSelectedCategory(e.target.value);
-                    setData('id_categorie', e.target.value); // Update the category in form data
+                    const value = e.target.value;
+                    setSelectedCategory(value);
+                    setData('id_categorie', value); //the category in form data
                   }}
                   className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
@@ -236,6 +264,9 @@ function Index_par_expbesoin({
                     </option>
                   ))}
                 </select>
+                {validationErrors.id_categorie && (
+                  <div className='text-red-500 mt-2'>{validationErrors.id_categorie}</div>
+                )}
                 <InputError message={errors.id_categorie} className='mt-2' />
               </div>
 
@@ -245,14 +276,21 @@ function Index_par_expbesoin({
                   name="id_catproduit"
                   id="id_catproduit"
                   value={data.id_catproduit}
-                  onChange={(e) => setData('id_catproduit', e.target.value)}
+                  onChange={(e) => 
+                    setData('id_catproduit', e.target.value)
+                  }
                   className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="" className="text-gray-500">Sélectionner un produit</option>
                   {filteredProducts.map((product) => (
-                          <option key={product.id} value={product.id}>{product.designation}</option>
-                        ))}
+                    <option key={product.id} value={product.id} className="text-gray-800 dark:text-gray-200">
+                      {product.designation}
+                    </option>
+                  ))}
                 </select>
+                {validationErrors.id_catproduit && (
+                  <div className='text-red-500 mt-2'>{validationErrors.id_catproduit}</div>
+                )}
                 <InputError message={errors.id_catproduit} className='mt-2' />
               </div>
 
@@ -266,6 +304,9 @@ function Index_par_expbesoin({
                   className="mt-1 block w-full"
                   onChange={handleQuantityChange}
                 />
+                {validationErrors.quantite && (
+                  <div className='text-red-500 mt-2'>{validationErrors.quantite}</div>
+                )}
                 <InputError message={errors.quantite} className='mt-2' />
               </div>
 

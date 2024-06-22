@@ -26,4 +26,5 @@ class MouvmentStock extends Model
     {
         return $this->belongsTo(BonAchat::class, 'idBonAchat');
     }
+    
 }

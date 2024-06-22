@@ -6,7 +6,7 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 
 function Index({ auth, magasins, success }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,8 +14,10 @@ function Index({ auth, magasins, success }) {
   const [currentMagasin, setCurrentMagasin] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [successMessage, setSuccessMessage] = useState(success);
+  const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'asc' });
+  const [validationErrors, setValidationErrors] = useState({});
 
-  const { data, setData, post, put, errors } = useForm({
+  const { data, setData, post, put, errors, reset } = useForm({
     nomMagasin: '',
   });
 
@@ -24,7 +26,7 @@ function Index({ auth, magasins, success }) {
       setSuccessMessage(success);
       const timer = setTimeout(() => {
         setSuccessMessage(null);
-      }, 10000); // 30000 milliseconds = 30 seconds
+      }, 10000);
       return () => clearTimeout(timer);
     }
   }, [success]);
@@ -41,25 +43,41 @@ function Index({ auth, magasins, success }) {
         nomMagasin: '',
       });
     }
+    setValidationErrors({});
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentMagasin(null);
+    reset();
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!data.nomMagasin) {
+      errors.nomMagasin = 'Le champ "Nom du Magasin" est obligatoire.';
+    }
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     const routeName = modalMode === 'add' ? 'magasin.store' : 'magasin.update';
     const action = modalMode === 'add' ? post : put;
 
-    action(route(routeName, currentMagasin ? currentMagasin.id : null));
-    closeModal();
+    action(route(routeName, currentMagasin ? currentMagasin.id : null), {
+      onSuccess: () => closeModal(),
+      onError: (error) => console.error("Error submitting form:", error),
+    });
   };
 
   const deleteMagasin = (magasin) => {
-    if (!confirm('Are you sure you want to delete this category?')) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce magasin ?')) {
       return;
     }
     router.delete(route('magasin.destroy', magasin.id));
@@ -69,10 +87,28 @@ function Index({ auth, magasins, success }) {
     setSearchQuery(e.target.value);
   };
 
-  const filteredMagasins = magasins?.data?.filter((magasin) =>
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedMagasins = magasins?.data?.sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'asc' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'asc' ? 1 : -1;
+    }
+    return 0;
+  }) || [];
+
+  const filteredMagasins = sortedMagasins.filter((magasin) =>
     magasin && (magasin.id.toString().includes(searchQuery) ||
       magasin.nomMagasin.toLowerCase().includes(searchQuery.toLowerCase()))
-  ) || [];
+  );
 
   return (
     <AuthenticatedLayout
@@ -97,24 +133,30 @@ function Index({ auth, magasins, success }) {
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
 
-              <div className='flex justify-between'>
+              <div className='flex flex-col sm:flex-row justify-between mb-4'>
                 <div className='font-semibold'>
                   <h1>Liste de Magasins</h1>
-
-                  <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs</h1>
                 </div>
 
-                <div className="flex space-x-2">
+                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
                   <button
                     onClick={() => openModal('add')}
-                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
+                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
                   >
                     <FontAwesomeIcon icon={faPlus} className="mr-2" />
                     Ajouter
                   </button>
+                
+                  <a
+                    href={route('export-magasin')}
+                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
+                  >
+                    <FontAwesomeIcon icon={faFileExcel} className="mr-2" />
+                    Export Excel
+                  </a>
                 </div>
               </div>
-
+            
               <div className="mb-4">
                 <TextInput
                   type="text"
@@ -123,14 +165,20 @@ function Index({ auth, magasins, success }) {
                   value={searchQuery}
                   className="mt-1 block w-full"
                   onChange={handleSearchChange}
-                  placeholder="Search ....."
+                  placeholder="Rechercher..."
                 />
               </div>
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                   <tr className='text-nowrap'>
-                    <th className='px-4 py-3'>ID</th>
-                    <th className='px-4 py-3'>nomMagasin</th>
+                    <th className='px-4 py-3 cursor-pointer' onClick={() => handleSort('id')}>
+                      ID
+                      {sortConfig.key === 'id' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                    </th>
+                    <th className='px-4 py-3 cursor-pointer' onClick={() => handleSort('nomMagasin')}>
+                      Nom Magasin
+                      {sortConfig.key === 'nomMagasin' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                    </th>
                     <th className='px-4 py-3 text-right'>Action</th>
                   </tr>
                 </thead>
@@ -174,9 +222,12 @@ function Index({ auth, magasins, success }) {
                   name="nomMagasin"
                   id="nomMagasin"
                   value={data.nomMagasin}
-                  className="mt-1 block w-full"
+                  className='mt-1 block w-full'
                   onChange={(e) => setData('nomMagasin', e.target.value)}
                 />
+                {validationErrors.nomMagasin && (
+                  <div className='text-red-500 mt-2'>{validationErrors.nomMagasin}</div>
+                )}
                 <InputError message={errors.nomMagasin} className='mt-2' />
               </div>
               <div className='mt-4 text-right'>
@@ -189,7 +240,7 @@ function Index({ auth, magasins, success }) {
                 </button>
                 <button
                   type="submit"
-                  className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600"
+                  className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
                 >
                   {modalMode === 'add' ? 'Ajouter' : 'Sauvegarder'}
                 </button>

@@ -10,8 +10,12 @@ use App\Http\Requests\StoreBonSortieRequest;
 use App\Http\Requests\UpdateBonSortieRequest;
 use App\Http\Resources\BonSortieResource;
 use App\Http\Resources\MouvmentStockResource;
-
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\MouvmentStock;
+use Illuminate\Support\Facades\View; // Correctly import the View facade
+use App\Exports\BonSortieExport;
+use Mpdf\Mpdf;
+
 
 class BonSortieController extends Controller
 {
@@ -64,7 +68,8 @@ class BonSortieController extends Controller
     public function edit(BonSortie $bonSortie)
     {
         return inertia('BonSortieAchat/Edit',[
-            'bonSortie' => $bonSortie
+            'bonSortie' => $bonSortie,
+
         ]);
     }
 
@@ -75,7 +80,7 @@ class BonSortieController extends Controller
     {
         $data= $request->all();
         $bonSortie->update($data);
-        return to_route('bonSortie.index')->with('success','bonsortie was update');
+        return to_route('bonSortie.index')->with('success','Bien modifier');
     }
 
     /**
@@ -84,7 +89,7 @@ class BonSortieController extends Controller
     public function destroy(BonSortie $bonSortie)
     {
         $bonSortie->delete();
-        return to_route('bonSortie.index')->with('success','bonSortie was deleted');
+        return to_route('bonSortie.index')->with('success','Bien supprimer');
     }
 
 
@@ -92,7 +97,7 @@ class BonSortieController extends Controller
         $BonSortie = BonSortie::find($bonSortie);
 
         if (!$BonSortie) {
-            return response()->json(['error' => 'BonSortie not found'], 404);
+            return response()->json(['error' => 'Bon Sortie non trouvé'], 404);
         }
 
         // Sum the quantities for the given idBonDeSortie
@@ -105,9 +110,6 @@ class BonSortieController extends Controller
         $mouvment->typeMouvments = 'Sortie'; // or any type that you need to define
         $mouvment->stock = $totalQuantity;
         $mouvment->save();
-
-
-
 
         $mv = MouvmentStock::query();
         $BonSortie->status = 'valider';
@@ -123,16 +125,14 @@ class BonSortieController extends Controller
 
 
 
-        return inertia('DetailsMouvement/Index', [
-            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
-        ]);
+        return to_route('bonSortie.index')->with('success','Bien validé');
 
     }
     public function modifier($bonSortie){
         $BonSortie = BonSortie::find($bonSortie);
 
         if (!$BonSortie) {
-            return response()->json(['error' => 'BonSortie not found'], 404);
+            return response()->json(['error' => 'BonSortie non trouvé'], 404);
         }
 
 
@@ -154,30 +154,40 @@ class BonSortieController extends Controller
         // Execute the query with pagination
         $mouvmentStock = $mv->paginate(10);
 
-        return inertia('DetailsMouvement/Index', [
-            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
-        ]);
+        return to_route('bonSortie.index')->with('success','Bien Modifier le status');
     }
 
     public function exportPdf($bonSortie)
     {
 
-        // dd($bonSortie);
+        
         $BonSortie = BonSortie::findOrFail($bonSortie);
-
-        $details_BonSorties = DetailBonSortie::with('produits') ->where('idBonDeSortie', $bonSortie)->get();
-
+        $details_BonSorties = DetailBonSortie::with('produits')->where('idBonDeSortie', $bonSortie)->get();
         $totalQuantite = $details_BonSorties->sum('quantite');
+    
 
-        $pdf = Pdf::loadView('pdf.bonachat', [
-        'details_BonSorties' => $details_BonSorties,
-        'BonSortie' => $BonSortie,
-        'totalQuantite' => $totalQuantite
-    ])->setPaper('a4');
-
-        return $pdf->download('BonSortie.pdf');
-
+        $html = View::make('pdf.bonsortie', [
+            'details_BonSorties' => $details_BonSorties,
+            'BonSortie' => $BonSortie,
+            'totalQuantite' => $totalQuantite
+        ])->render();
+    
+        try {
+            $mpdf = new \Mpdf\Mpdf();
+            $mpdf->autoScriptToLang = true;
+            $mpdf->autoLangToFont = true;
+            $mpdf->WriteHTML($html);
+            return $mpdf->Output('BonSortie.pdf', 'D');
+        } catch (\Mpdf\MpdfException $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
+    public function exportExcel()
+    {
+        $categories = BonSortie::get();
+        return Excel::download(new BonSortieExport, 'BonSortie.xlsx');
+  }
+    
 }
 
        

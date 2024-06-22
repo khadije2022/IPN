@@ -1,95 +1,186 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expression de Besoin</title>
+    <title>Bon de Sortie</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
         }
+
         .container {
-            width: 80%;
-            margin: 0 auto;
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+            /* border: 1px solid #eee; */
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); */
         }
-        .header {
-            text-align: left;
+
+        header, footer {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 20px;
         }
-        .header p {
-            margin: 2px 0;
+
+        header div, footer div {
+            width: 30%;
         }
-        .to {
+
+        h1, h2 ,.cen{
+            text-align: center;
+            margin: 0;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 20px;
         }
-        .to p {
-            margin: 2px 0;
+
+        .info div {
+            width: 45%;
         }
-        .subject {
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-        table {
+
+        .invoice-box table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
+
+        .invoice-box table th, .invoice-box table td {
+            border: 1px solid #ddd;
+            padding: 8px;
             text-align: left;
         }
-        .footer {
+
+        .invoice-box table th {
+            background: #eee;
+            font-weight: bold;
+        }
+
+        .rtl {
+            text-align: right;
+            direction: rtl;
+        }
+        .left {
             text-align: left;
         }
-        .footer p {
-            margin: 2px 0;
+
+        .center {
+            text-align: center;
+        }
+
+        .right {
+            text-align: right;
+        }
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            header, footer {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            header div, footer div {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .info {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            div {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+                margin:10px
+            }
+            .info {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <p>IPN</p>
+<div class="left">
+    <p>IPN</p>
             <p>DEIS</p>
             <p>Division du consommable</p>
             <p>Imprimerie scolaire</p>
-        </div>
-        <div class="to">
-            <p>A</p>
-            <p>Monsieur le Directeur Général</p>
-            <p>De l'IPN</p>
-            <p>S/C Voie hiérarchique</p>
-        </div>
-        <div class="subject">
-            <p>Objet : {{ $expressionbesoin->description }}</p>
-        </div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Désignation</th>
-                    <th>Quantité</th>
-                    <th>Motif</th>
-                </tr>
-            </thead>
-            <tbody>
-            @foreach($details_expbesoins as $detail)
+
+
+            <div>
+
+        <h1 class="center">A<br>Monsieur le Directeur Général
+            <br>De l'IPN
+            <br>S/C Voie hiérarchique</h1>
+
+        
+
+        <section class="info">
+            <div>
+
+            <h3>Expression bessoin N°: {{ $expressionbesoin->id }}</h3>
+
+            </div>
+            <div>
+
+            <h3>Objet : {{ $expressionbesoin->description }}</h3>
+
+            </div>
+
+        </section>
+
+        <div class="invoice-box"> 
+            <table>
+                <thead>
+                    <tr>
+                        <th>Désignation</th>
+                        <th>Quantité</th>
+                        <th>Motif</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach($details_expbesoins as $detail)
                 <tr>
                     <td>{{ $detail->catalogueProduit->designation }}</td>
 
                     <td>{{ $detail->quantite }}</td>
-                    <td>{{ $detail->categorie->type }}</td>
+                    <td>{{ $expressionbesoin->description }}</td>
                     
                 </tr>
             @endforeach
-            </tbody>
-        </table>
-        <div class="footer">
-            <p>Nouakchott le 05/07/2023</p>
-            <p>Chef de Division</p>
+                </tbody>
+            </table>
         </div>
+
+        
+<div class="left">
+<p>Nouakchott le {{ $expressionbesoin->created_at->format('Y-m-d') }}</p>
+
+<div class="center">
+
+<p>Chef de Division</p>
+
     </div>
 </body>
 </html>

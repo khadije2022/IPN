@@ -10,6 +10,11 @@ use App\Http\Resources\MouvmentStockResource;
 use App\Models\MouvmentStock;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View; // Correctly import the View facade
+use Maatwebsite\Excel\Facades\Excel;
+use Mpdf\Mpdf;
+use App\Exports\BonAchatExport;
+
 
 
 
@@ -49,15 +54,15 @@ class BonAchatController extends Controller
     {
         $data = $request->all();
         $bonAchat = BonAchat::create($data);
-        return redirect()->route('detailBonAchat.index-par-bonAchat', ['bonAchat' => $bonAchat->id]);
+        return redirect()->route('detailBonAchat.index-par-bonAchat',
+         ['bonAchat' => $bonAchat->id],
+        );
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(BonAchat $bonAchat)
     {
-        //
+       
     }
 
     /**
@@ -66,10 +71,12 @@ class BonAchatController extends Controller
     public function edit(BonAchat $bonAchat)
     {
 
-
         return inertia('BonAchat/Edit',[
-            'bonAchat' => $bonAchat
+            'bonAchat' => $bonAchat,
+            
         ]);
+
+        
     }
 
     /**
@@ -79,7 +86,7 @@ class BonAchatController extends Controller
     {
         $data= $request->all();
         $bonAchat->update($data);
-        return to_route('bonAchat.index')->with('success','expressionbesoin was update');
+        return to_route('bonAchat.index')->with('success','Bien modifier');
     }
 
     /**
@@ -87,19 +94,15 @@ class BonAchatController extends Controller
      */
     public function destroy(BonAchat $bonAchat)
     {
-
         $bonAchat->delete();
-        return to_route('bonAchat.index')->with('success','expressionbesoin was deleted');
+        return to_route('bonAchat.index')->with('success','Bien supprimer');
     }
 
 
     public function valider($bonAchat){
+
         $BonAchat = BonAchat::find($bonAchat);
-
-
-        // Sum the quantities for the given idBonDeSortie
         $totalQuantity = DetailBonAchat::where('idBonAchat', $bonAchat)->sum('quantite');
-
         // Create a new MouvmentStock record
         $mouvment = new MouvmentStock();
         $mouvment->idBonDeSortie = null;
@@ -107,15 +110,9 @@ class BonAchatController extends Controller
         $mouvment->typeMouvments = 'Achat'; // or any type that you need to define
         $mouvment->stock = $totalQuantity;
         $mouvment->save();
-
-
-
-
         $mv = MouvmentStock::query();
-
-        $BonAchat->status = 'valider';
+        $BonAchat->status = 'validé';
         $BonAchat->save();
-
         DB::table('catelogue_produits AS cp')
         ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
      ->where('cp.id', '=', DB::raw('ps.product_id'))
@@ -125,34 +122,28 @@ class BonAchatController extends Controller
         // Execute the query with pagination
         $mouvmentStock = $mv->paginate(10);
 
-        return inertia('DetailsMouvement/Index', [
-            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
-        ]);
+        return to_route('bonAchat.index')->with('success',"Bien validé");
     }
+
+
     public function modifier($bonAchat){
         $BonAchat = BonAchat::find($bonAchat);
 
         if (!$BonAchat) {
-            return response()->json(['error' => 'BonSortie not found'], 404);
+            return response()->json(['error' => 'Bon Achat non trouvé '], 404);
         }
 
         MouvmentStock::where('idBonAchat', $BonAchat->id)->delete();
 
         // Mettre à jour le statut du bon de sortie à non-validé
-        $BonAchat->status = 'Non-Valider';
+        $BonAchat->status = 'non validé';
         $BonAchat->save();
-
-
-
 
 
         $mv = MouvmentStock::query();
         // Execute the query with pagination
         $mouvmentStock = $mv->paginate(10);
-
-        return inertia('DetailsMouvement/Index', [
-            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
-        ]);
+        return to_route('bonAchat.index')->with('success',"Bien Modifier le status");
     }
 
 
@@ -165,13 +156,29 @@ class BonAchatController extends Controller
 
         $totalQuantite = $details_BonAchats->sum('quantite');
 
-        $pdf = Pdf::loadView('pdf.bonachat', [
+        $html = View::make('pdf.bonachat', [
             'details_BonAchats' => $details_BonAchats,
             'BonAchat' => $BonAchat,
             'totalQuantite' => $totalQuantite
-        ])->setPaper('a4');
+        ])->render();
 
-        return $pdf->download('BonAchat.pdf');
+        try {
+            $mpdf = new Mpdf();
+            $mpdf->autoScriptToLang = true;
+            $mpdf->autoLangToFont = true;
+            $mpdf->WriteHTML($html);
+            return $mpdf->Output('BonAchat.pdf', 'D');
+        } catch (\Mpdf\MpdfException $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+
+
+
+    public function exportExcel()
+    {
+        $categories = BonAchat::get();
+        return Excel::download(new BonAchatExport, 'BonAchat.xlsx');
     }
 }
 

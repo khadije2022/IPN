@@ -1,12 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import React, { useState } from 'react';
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 
 const styles = {
   statusValide: {
@@ -37,15 +37,15 @@ const styles = {
     margin: 'auto',
     padding: '20px',
     border: '1px solid #ddd',
-    width: '400px',
+    width: '90%',
+    maxWidth: '400px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
     borderRadius: '8px',
     backgroundColor: 'white',
   },
   searchInput: {
-    width: '120px', // Adjust the width as needed
+    width: '100%',
   },
-
   tableRow: {
     transition: 'background-color 0.3s',
   },
@@ -62,10 +62,11 @@ function Index({ auth, bonAchats, success }) {
   const [searchStatus, setSearchStatus] = useState('');
   const [searchDateStart, setSearchDateStart] = useState('');
   const [searchDateEnd, setSearchDateEnd] = useState('');
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [validationErrors, setValidationErrors] = useState({});
 
-  const { data, setData, post, put, errors } = useForm({
+  const { data, setData, post, put, errors, reset } = useForm({
     description: '',
-    // status: 'non validé',
   });
 
   const openModal = async (mode, bonAchat = null) => {
@@ -75,24 +76,36 @@ function Index({ auth, bonAchats, success }) {
     if (mode === 'edit' && bonAchat) {
       setData({
         description: bonAchat.description,
-        // status: bonAchat.status,
       });
     } else {
       setData({
         description: '',
-        // status: 'non validé',
       });
     }
+    setValidationErrors({});
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setCurrentBonAchat(null);
+    reset();
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!data.description) {
+      errors.description = 'Le champ "Description" est obligatoire.';
+    }
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     const routeName = modalMode === 'add' ? 'bonAchat.store' : 'bonAchat.update';
     const action = modalMode === 'add' ? post : put;
 
@@ -101,7 +114,6 @@ function Index({ auth, bonAchats, success }) {
         closeModal();
         setData({
           description: '',
-          // status: 'non validé',
         });
       },
     });
@@ -113,7 +125,7 @@ function Index({ auth, bonAchats, success }) {
   };
 
   const deleteBonAchat = (bonAchat) => {
-    if (!confirm('Are you sure you want to delete this project?')) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce bon achat?')) {
       return;
     }
     router.delete(route('bonAchat.destroy', bonAchat.id));
@@ -127,7 +139,31 @@ function Index({ auth, bonAchats, success }) {
     router.visit(route('detailBonAchat.index-par-bonAchat', { bonAchat: id }));
   };
 
-  const filteredBonAchats = bonAchats.data.filter((bonAchat) =>
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedBonAchats = React.useMemo(() => {
+    let sortableBonAchats = [...bonAchats.data];
+    if (sortConfig.key !== null) {
+      sortableBonAchats.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortableBonAchats;
+  }, [bonAchats.data, sortConfig]);
+
+  const filteredBonAchats = sortedBonAchats.filter((bonAchat) =>
     (bonAchat.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       bonAchat.status.toLowerCase().includes(searchQuery.toLowerCase())) &&
     (searchStatus === '' || bonAchat.status === searchStatus) &&
@@ -139,146 +175,149 @@ function Index({ auth, bonAchats, success }) {
     <AuthenticatedLayout
       user={auth.user}
       header={
-        <div className='flex justify-between items-center'>
-          <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
-            Bon Achat
+        <div className="flex justify-between items-center flex-wrap">
+          <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            Bons d'Achat
           </h2>
-          {/* <div>
-            <button
-              onClick={() => openModal('add')}
-              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-            >
-              <FontAwesomeIcon icon={faPlus} /> Ajouter
-            </button>
-          </div> */}
         </div>
       }
     >
-      <Head title="Bon Achat" />
+      <Head title="Bons d'Achat" />
 
-      <div className='py-12'>
-        <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
+      <div className="py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {success && (
-            <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
+            <div className="bg-emerald-400 py-2 px-4 rounded mb-4">
               {success}
             </div>
           )}
-          <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
-            <div className='p-6 text-gray-900 dark:text-gray-100'>
-
-              <div className='flex justify-between'>
-                <div className='font-semibold'>
-                  <h1>Liste des bon Achats</h1>
-                  <h1 className='text-red-600'>vous pouvez recherchez par des services des satstus et entre des date donne </h1>
-
+          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <div className="p-6 text-gray-900 dark:text-gray-100">
+              <div className="flex flex-col sm:flex-row justify-between mb-4">
+                <div className="font-semibold">
+                  <h1>Liste des Bons d'Achat</h1>
+                  <h1 className="text-red-600">Vous pouvez rechercher par description, statut, et entre des dates données</h1>
                 </div>
-
-                <div>
+                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                   <button
                     onClick={() => openModal('add')}
-                    className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                    className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
                   >
-                    <FontAwesomeIcon icon={faPlus} /> Ajouter
+                    <FontAwesomeIcon icon={faPlus} className="mr-2" />Ajouter
                   </button>
+                  <a href={route('export-bonachat')} className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center">
+                    <FontAwesomeIcon icon={faFileExcel} className="mr-2" />Excel
+                  </a>
                 </div>
               </div>
 
-              <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-                <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
-                  <tr>
-                    <th className='px-6 py-6'>
-                      <TextInput
-                        type="text"
-                        name="search"
-                        id="search"
-                        value={searchQuery}
-                        className="mt-1 block w-full"
-                        onChange={handleSearchChange}
-                        placeholder="Rechercher"
-                        style={styles.searchInput}
-                      />
-                    </th>
-                    <th className='px-2 py-1'>
-                      <select
-                        name="searchStatus"
-                        id="searchStatus"
-                        value={searchStatus}
-                        className="mt-1 block w-full"
-                        onChange={(e) => setSearchStatus(e.target.value)}
-                        style={styles.searchInput}
-                      >
-                        <option value=''>Statut</option>
-                        <option value='validé'>Validé</option>
-                        <option value='non validé'>Non Validé</option>
-                      </select>
-                    </th>
-                    <th className='px-2 py-1'>
-                      <TextInput
-                        type="date"
-                        name="searchDateStart"
-                        id="searchDateStart"
-                        value={searchDateStart}
-                        className="mt-1 block w-full"
-                        onChange={(e) => setSearchDateStart(e.target.value)}
-                        style={styles.searchInput}
-                      />
-                      <TextInput
-                        type="date"
-                        name="searchDateEnd"
-                        id="searchDateEnd"
-                        value={searchDateEnd}
-                        className="mt-1 block w-full"
-                        onChange={(e) => setSearchDateEnd(e.target.value)}
-                        style={styles.searchInput}
-                      />
-                    </th>
-                    <th className='px-2 py-1'></th>
-                  </tr>
-                  <tr>
-                    <th className='px-2 py-2'>Description</th>
-                    <th className='px-2 py-2'>Status</th>
-                    <th className='px-2 py-2'>Date</th>
-                    <th className='px-2 py-2 text-right'>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredBonAchats.map((bonAchat) => (
-                    <tr
-                      key={bonAchat.id}
-                      className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer'
-                      style={styles.tableRow}
-                      onMouseEnter={(e) => e.currentTarget.style.backgroundColor = styles.tableRowHover.backgroundColor}
-                      onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
-                      onClick={() => handleRowClick(bonAchat.id)}
-                    >
-                      <td className='px-2 py-1'>{bonAchat.description}</td>
-                      <td className='px-2 py-1'>
-                        <span style={bonAchat.status === 'validé' ? styles.statusValide : styles.statusNonValide}>
-                          {bonAchat.status}
-                        </span>
-                      </td>
-                      <td className='px-2 py-1'>{formatDate(bonAchat.created_at)}</td>
-                      <td className='px-2 py-1 text-right'>
-                        <button
-                          onClick={() => openModal('edit', bonAchat)}
-                          className='text-blue-600 dark:text-blue-500 mx-1'
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
+                    <tr>
+                      <th className="px-6 py-6">
+                        <TextInput
+                          type="text"
+                          name="search"
+                          id="search"
+                          value={searchQuery}
+                          className="mt-1 block w-full"
+                          onChange={handleSearchChange}
+                          placeholder="Rechercher"
+                        />
+                      </th>
+                      <th className="px-2 py-1">
+                        <select
+                          name="searchStatus"
+                          id="searchStatus"
+                          value={searchStatus}
+                          className="mt-1 block w-full"
+                          onChange={(e) => setSearchStatus(e.target.value)}
                         >
-                          <FontAwesomeIcon icon={faEdit} />
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deleteBonAchat(bonAchat);
-                          }}
-                          className='text-red-600 dark:text-red-500 mx-1'
-                        >
-                          <FontAwesomeIcon icon={faTrashAlt} />
-                        </button>
-                      </td>
+                          <option value="">Statut</option>
+                          <option value="validé">Validé</option>
+                          <option value="non validé">Non Validé</option>
+                        </select>
+                      </th>
+                      <th className="px-2 py-1">
+                        <TextInput
+                          type="date"
+                          name="searchDateStart"
+                          id="searchDateStart"
+                          value={searchDateStart}
+                          className="mt-1 block w-full"
+                          onChange={(e) => setSearchDateStart(e.target.value)}
+                        />
+                        <TextInput
+                          type="date"
+                          name="searchDateEnd"
+                          id="searchDateEnd"
+                          value={searchDateEnd}
+                          className="mt-1 block w-full"
+                          onChange={(e) => setSearchDateEnd(e.target.value)}
+                        />
+                      </th>
+                      <th className="px-2 py-1"></th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                    <tr>
+                      <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('id')}>
+                        ID
+                        {sortConfig.key === 'id' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                      </th>
+                      <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('description')}>
+                        Description
+                        {sortConfig.key === 'description' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                      </th>
+                      <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('status')}>
+                        Statut
+                        {sortConfig.key === 'status' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                      </th>
+                      <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('created_at')}>
+                        Date
+                        {sortConfig.key === 'created_at' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                      </th>
+                      <th className="px-2 py-2 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredBonAchats.map((bonAchat) => (
+                      <tr
+                        key={bonAchat.id}
+                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
+                        style={styles.tableRow}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = styles.tableRowHover.backgroundColor}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
+                      >
+                        <td className="px-2 py-1" onClick={() => handleRowClick(bonAchat.id)}>{bonAchat.id}</td>
+                        <td className="px-2 py-1" onClick={() => handleRowClick(bonAchat.id)}>{bonAchat.description}</td>
+                        <td className="px-2 py-1" onClick={() => handleRowClick(bonAchat.id)}>
+                          <span style={bonAchat.status === 'validé' ? styles.statusValide : styles.statusNonValide}>
+                            {bonAchat.status}
+                          </span>
+                        </td>
+                        <td className="px-2 py-1">{formatDate(bonAchat.created_at)}</td>
+                        <td className="px-2 py-1 text-right">
+                          <button
+                            onClick={() => openModal('edit', bonAchat)}
+                            className="text-blue-600 dark:text-blue-500 mx-1"
+                          >
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteBonAchat(bonAchat);
+                            }}
+                            className="text-red-600 dark:text-red-500 mx-1"
+                          >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               <Pagination links={bonAchats.meta.links} />
             </div>
           </div>
@@ -286,13 +325,13 @@ function Index({ auth, bonAchats, success }) {
       </div>
 
       {isModalOpen && (
-        <div style={styles.modalOverlay} onClick={closeModal}>
-          <div style={styles.modalContainer} onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onClick={closeModal}>
+          <div className="relative top-20 mx-auto p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-xl mb-4">
-              {modalMode === 'add' ? 'Ajouter Bon Achat' : 'Modifier Bon Achat'}
+              {modalMode === 'add' ? 'Ajouter Bon d\'Achat' : 'Modifier Bon d\'Achat'}
             </h2>
             <form onSubmit={handleFormSubmit}>
-              <InputLabel htmlFor="description" value="Description" />
+              <InputLabel htmlFor="text" value="Description" />
               <TextInput
                 id="description"
                 name="description"
@@ -301,10 +340,10 @@ function Index({ auth, bonAchats, success }) {
                 onChange={(e) => setData('description', e.target.value)}
                 required
               />
+              {validationErrors.description && (
+                <div className='text-red-500 mt-2'>{validationErrors.description}</div>
+              )}
               <InputError message={errors.description} className="mt-2" />
-
-
-              <InputError message={errors.status} className="mt-2" />
 
               <div className="mt-6 flex justify-end">
                 <button

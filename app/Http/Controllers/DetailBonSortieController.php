@@ -95,9 +95,7 @@ class DetailBonSortieController extends Controller
             ->update(['cp.stock' => DB::raw('ps.stock')]);
         $mv = MouvmentStock::query();
         $mouvmentStock = $mv->paginate(10);
-        return inertia('DetailsMouvement/Index', [
-            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
-        ]);
+        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie])->with('success', 'Bien validé');
     }
 
     public function modifier($bonSortie)
@@ -115,9 +113,7 @@ class DetailBonSortieController extends Controller
             ->update(['cp.stock' => DB::raw('ps.stock')]);
         $mv = MouvmentStock::query();
         $mouvmentStock = $mv->paginate(10);
-        return inertia('DetailsMouvement/Index', [
-            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
-        ]);
+        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie])->with('success', 'Bien modifier');
     }
 
     public function exportPdf($idBonSortie)

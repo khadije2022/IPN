@@ -69,13 +69,22 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::resource('expressionbesoin',ExpressionBesoinController::class);
     Route::resource('detailsexpresionbesoin', Details_ExpBesoinController::class);
     Route::get('detailsexpresionbesoin/create/{id_expbesoin}', [Details_ExpBesoinController::class, 'create'])->name('detailsexpresionbesoin.create');
-    Route::get('/detailsexpresionbesoin/index_par_bonAchat/{id_expbesoin}', [Details_ExpBesoinController::class, 'index_par_expbesoin'])->name('detailsexpresionbesoin.index_par_expbesoin');
+    Route::get('/detailsexpresionbesoin/index_par_expbesoin/{id_expbesoin}', [Details_ExpBesoinController::class, 'index_par_expbesoin'])->name('detailsexpresionbesoin.index_par_expbesoin');
     Route::get('/expressionbesoin/valider/{id_expbesoin}', [ExpressionBesoinController::class, 'valider'])->name('valider');
 
     Route::get('/export-pdf', [CategorieController::class, 'exportPdf'])->name('export-pdf');
     Route::get('/pdf-details-expbesoin/{id_expbesoin}', [ExpressionBesoinController::class, 'exportPdf'])->name('pdf-DetailsExpbesoin');
     Route::get('/pdf-DetailsBonAchat/{bonAchat}', [BonAchatController::class, 'exportPdf'])->name('pdf-DetailsBonAchat');
     Route::get('/pdf-DetailsBonSortie/{bonSortie}', [BonSortieController::class, 'exportPdf'])->name('pdf-DetailsBonSortie');
+
+
+    Route::get('/export-expressionbesoin', [ExpressionBesoinController::class, 'exportExcel'])->name('export-expressionbesoin');
+    Route::get('/export-categories', [CategorieController::class, 'exportExcel'])->name('export-categories');
+    Route::get('/export-magasin', [MagasinController::class, 'exportExcel'])->name('export-magasin');
+    Route::get('/export-produit', [CatelogueProduitController::class, 'exportExcel'])->name('export-produit');
+    Route::get('/export-bonachat', [BonAchatController::class, 'exportExcel'])->name('export-bonachat');
+    Route::get('/export-bonsortie', [BonSortieController::class, 'exportExcel'])->name('export-bonsortie');
+    Route::get('/export-mouvement', [MouvementStockController::class, 'exportExcel'])->name('export-mouvement');
 
 
 

@@ -27,7 +27,6 @@ class DetailBonAchatController extends Controller
          $d=DetailBonAchatResource::collection($detailsexpresionbesoins);
 
 
-         // Return the Inertia.js response with the detailsexpresionbesoins data and any success message from the session
          return inertia('detailBonAchat/Index', [
              'detailBonAchats' => DetailBonAchatResource::collection($detailsexpresionbesoins),
              'success' => session('success'),
@@ -69,7 +68,6 @@ class DetailBonAchatController extends Controller
         return inertia('detailBonAchat/Create',[
             'categories' => CategorieResource::collection($categorie),
             'produits' => CatelogueResource::collection($produits),
-            // 'detailBonAchats' => DetailBonAchatResource::Collection($MouvmentStck),
             'bonAchat' => $bonAchat
         ]);
     }
@@ -89,7 +87,7 @@ class DetailBonAchatController extends Controller
         DetailBonAchat::create($data);
 
         return redirect()->route('detailBonAchat.index-par-bonAchat', ['bonAchat' => $data['idBonAchat']])
-            ->with('success', 'Mouvement stock created successfully!');
+            ->with('success', 'Bien créer');
     }
 
 
@@ -128,7 +126,8 @@ class DetailBonAchatController extends Controller
 
         $detailBonAchat->update($data);
 
-        return to_route('detailBonAchat.index-par-bonAchat',['bonAchat' => $data['idBonAchat']])->with('success','mouvmentStock was update');
+        return to_route('detailBonAchat.index-par-bonAchat',['bonAchat' => $data['idBonAchat']])->with('success','Bien modifier');
+
     }
 
     /**
@@ -138,6 +137,6 @@ class DetailBonAchatController extends Controller
     {
         
         $detailBonAchat->delete();
-        return redirect()->route('detailBonAchat.index-par-bonAchat', ['bonAchat' => $detailBonAchat->idBonAchat]);
+        return to_route('detailBonAchat.index-par-bonAchat',['bonAchat' => $data['idBonAchat']])->with('success','Bien supprimer');
     }
 }

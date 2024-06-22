@@ -29,16 +29,16 @@ class DatabaseSeeder extends Seeder
 
         // Categorie::factory()->count(30)->create();
 
-        Categorie::factory()
-        ->count(3)
-        ->has(CatelogueProduit::factory()->count(30),'catalogueProduits')
-        ->create();
+        // Categorie::factory()
+        // ->count(3)
+        // ->has(CatelogueProduit::factory()->count(30),'catalogueProduits')
+        // ->create();
 
 
-        Service::factory()
-        ->count(3)
-        ->has(ExpressionBesoin::factory()->count(30),'expressionbesoins')
-        ->create();
+        // Service::factory()
+        // ->count(3)
+        // ->has(ExpressionBesoin::factory()->count(30),'expressionbesoins')
+        // ->create();
 
 
     }

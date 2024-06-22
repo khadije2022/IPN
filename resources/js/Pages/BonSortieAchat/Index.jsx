@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faFileExcel, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import TextInput from '@/Components/TextInput';  // Assuming TextInput is a custom component
 
 const styles = {
@@ -35,13 +35,14 @@ const styles = {
     margin: 'auto',
     padding: '20px',
     border: '1px solid #ddd',
-    width: '400px',
+    width: '90%',
+    maxWidth: '500px',
     boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
     borderRadius: '8px',
     backgroundColor: 'white',
   },
   searchInput: {
-    width: '120px', // Adjust the width as needed
+    width: '100%', // Adjust the width as needed
   },
   tableRow: {
     transition: 'background-color 0.3s',
@@ -59,10 +60,10 @@ function Index({ auth, bonSorties, success }) {
   const [searchStatus, setSearchStatus] = useState('');
   const [searchDateStart, setSearchDateStart] = useState('');
   const [searchDateEnd, setSearchDateEnd] = useState('');
+  const [sortConfig, setSortConfig] = useState({ key: '', direction: 'asc' });
 
   const { data, setData, post, put, errors } = useForm({
     description: '',
-    // status: 'non validé',
   });
 
   const openModal = (mode, bonSortie = null) => {
@@ -72,12 +73,10 @@ function Index({ auth, bonSorties, success }) {
     if (mode === 'edit' && bonSortie) {
       setData({
         description: bonSortie.description,
-        // status: bonSortie.status,
       });
     } else {
       setData({
         description: '',
-        // status: 'non validé',
       });
     }
     setIsModalOpen(true);
@@ -98,7 +97,6 @@ function Index({ auth, bonSorties, success }) {
         closeModal();
         setData({
           description: '',
-          // status: 'non validé',
         });
       },
     });
@@ -110,7 +108,7 @@ function Index({ auth, bonSorties, success }) {
   };
 
   const deleteBonSortie = (bonSortie) => {
-    if (!confirm('Are you sure you want to delete this project?')) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')) {
       return;
     }
     router.delete(route('bonSortie.destroy', bonSortie.id));
@@ -120,7 +118,25 @@ function Index({ auth, bonSorties, success }) {
     setSearchQuery(e.target.value);
   };
 
-  const filteredBonSorties = bonSorties.data.filter((bonSortie) =>
+  const handleSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedBonSorties = [...bonSorties.data].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'asc' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'asc' ? 1 : -1;
+    }
+    return 0;
+  });
+
+  const filteredBonSorties = sortedBonSorties.filter((bonSortie) =>
     (bonSortie.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       bonSortie.status.toLowerCase().includes(searchQuery.toLowerCase())) &&
     (searchStatus === '' || bonSortie.status === searchStatus) &&
@@ -129,7 +145,7 @@ function Index({ auth, bonSorties, success }) {
   );
 
   const handleRowClick = (id) => {
-    router.visit(route('detailBonSortie.index_par_bonSortie', { bonSortie: id}));
+    router.visit(route('detailBonSortie.index_par_bonSortie', { bonSortie: id }));
   };
 
   return (
@@ -140,14 +156,6 @@ function Index({ auth, bonSorties, success }) {
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
             Bon Sortie
           </h2>
-          {/* <div>
-            <button
-              onClick={() => openModal('add')}
-              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-            >
-              <FontAwesomeIcon icon={faPlus} /> Ajouter
-            </button>
-          </div> */}
         </div>
       }
     >
@@ -163,23 +171,30 @@ function Index({ auth, bonSorties, success }) {
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
 
-            <div className='flex justify-between mb-4 '>
+              <div className='flex justify-between'>
 
-<div className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight space-x-2'>
-  <div>C'est la liste des Expression Besoin</div>
-  <div>vous pouvez recherchez par des services des satstus et entre des date donne</div>
-</div>
-<div>
-            <button
-              onClick={() => openModal('add')}
-              className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-            >
-              <FontAwesomeIcon icon={faPlus} /> Ajouter
-            </button>
-          </div>
+                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
+                  <div>C'est la liste des Expressions de Besoin. Vous pouvez rechercher par services, statuts et dates données.</div>
+                </div>
+                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
+                  <div>
+                    <button
+                      onClick={() => openModal('add')}
+                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
+                    >
+                      <FontAwesomeIcon icon={faPlus} /> Ajouter
+                    </button>
+                  </div>
 
-
-</div>
+                  <div>
+                    <a href={route('export-bonsortie')}
+                      className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
+                    >
+                      <FontAwesomeIcon icon={faFileExcel} className="mr-2" />Excel
+                    </a>
+                  </div>
+                </div>
+              </div>
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                   <tr>
@@ -232,10 +247,18 @@ function Index({ auth, bonSorties, success }) {
                     <th className='px-2 py-1'></th>
                   </tr>
                   <tr>
-                    <th className='px-2 py-2'>Description</th>
-                    <th className='px-2 py-2'>Statut</th>
-                    <th className='px-2 py-2'>Date</th>
-                    {/* <th className='px-2 py-2'>ID</th> */}
+                    <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('id')}>
+                      ID <FontAwesomeIcon icon={sortConfig.key === 'id' ? (sortConfig.direction === 'asc' ? faSortUp : faSortDown) : faSort} />
+                    </th>
+                    <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('description')}>
+                      Description <FontAwesomeIcon icon={sortConfig.key === 'description' ? (sortConfig.direction === 'asc' ? faSortUp : faSortDown) : faSort} />
+                    </th>
+                    <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('status')}>
+                      Statut <FontAwesomeIcon icon={sortConfig.key === 'status' ? (sortConfig.direction === 'asc' ? faSortUp : faSortDown) : faSort} />
+                    </th>
+                    <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('created_at')}>
+                      Date <FontAwesomeIcon icon={sortConfig.key === 'created_at' ? (sortConfig.direction === 'asc' ? faSortUp : faSortDown) : faSort} />
+                    </th>
                     <th className='px-2 py-2 text-right'>Action</th>
                   </tr>
                 </thead>
@@ -247,16 +270,15 @@ function Index({ auth, bonSorties, success }) {
                       style={styles.tableRow}
                       onMouseEnter={(e) => e.currentTarget.style.backgroundColor = styles.tableRowHover.backgroundColor}
                       onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
-                      onClick={() => handleRowClick(bonSortie.id)}
                     >
-                      <td className='px-2 py-1'>{bonSortie.description}</td>
-                      <td className='px-2 py-1'>
+                      <td className='px-2 py-1' onClick={() => handleRowClick(bonSortie.id)}>{bonSortie.id}</td>
+                      <td className='px-2 py-1' onClick={() => handleRowClick(bonSortie.id)}>{bonSortie.description}</td>
+                      <td className='px-2 py-1' onClick={() => handleRowClick(bonSortie.id)}>
                         <span style={bonSortie.status === 'validé' ? styles.statusValide : styles.statusNonValide}>
                           {bonSortie.status}
                         </span>
                       </td>
                       <td className='px-2 py-1'>{formatDate(bonSortie.created_at)}</td>
-                      {/* <td className='px-2 py-1'>{bonSortie.id}</td> */}
                       <td className='px-2 py-1 text-right'>
                         <button
                           onClick={() => openModal('edit', bonSortie)}
@@ -264,12 +286,6 @@ function Index({ auth, bonSorties, success }) {
                         >
                           <FontAwesomeIcon icon={faEdit} />
                         </button>
-                        {/* <a
-                          href={route('detailBonSortie.index_par_bonSortie', { bonSortie: bonSortie.id })}
-                          className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
-                        >
-                          Details
-                        </a> */}
                         <button
                           onClick={() => deleteBonSortie(bonSortie)}
                           className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
@@ -306,21 +322,6 @@ function Index({ auth, bonSorties, success }) {
                   required
                 />
               </div>
-              {/* <div className='mb-4'>
-                <label htmlFor='status' className='block text-sm font-medium text-gray-700'>
-                  Statut
-                </label>
-                <select
-                  id='status'
-                  className='mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-emerald-500 focus:ring focus:ring-emerald-200 focus:ring-opacity-50'
-                  onChange={(e) => setData('status', e.target.value)}
-                  value={data.status}
-                  required
-                >
-                  <option value='non validé'>Non Validé</option>
-                  <option value='validé'>Validé</option>
-                </select>
-              </div> */}
               <div className='flex justify-end'>
                 <button
                   type='button'

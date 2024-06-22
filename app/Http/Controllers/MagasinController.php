@@ -6,7 +6,7 @@ use App\Models\Magasin;
 use App\Http\Requests\StoreMagasinRequest;
 use App\Http\Requests\UpdateMagasinRequest;
 use Barryvdh\DomPDF\Facade\Pdf;
-use App\Exports\MagasinsExport;
+use App\Exports\MagasinExport;
 
 use Maatwebsite\Excel\Facades\Excel;
 class MagasinController extends Controller
@@ -48,7 +48,7 @@ class MagasinController extends Controller
         $data=$request->all();
         Magasin::create($data);
 
-        return to_route('magasin.index')->with('success','Magasin was create');
+        return to_route('magasin.index')->with('success','Magasin bien créer');
     }
 
     /**
@@ -79,7 +79,7 @@ class MagasinController extends Controller
         $data= $request->all();
 
         $magasin->update($data);
-        return to_route('magasin.index')->with('success','Magasin was update');
+        return to_route('magasin.index')->with('success','Magasin Bien modifier');
     }
 
     /**
@@ -88,7 +88,7 @@ class MagasinController extends Controller
     public function destroy(Magasin $magasin)
     {
         $magasin->delete();
-        return to_route('magasin.index')->with('success', 'Magasin was deleted');
+        return to_route('magasin.index')->with('success', 'Magasin Bien supprimer');
     }
 
 
@@ -125,7 +125,7 @@ class MagasinController extends Controller
     public function exportExcel()
     {
         $Magasins = Magasin::get();
-        return Excel::download(new MagasinsExport, 'bulkData.xlsx');
+        return Excel::download(new MagasinExport, 'Magasin.xlsx');
     }
 
 }

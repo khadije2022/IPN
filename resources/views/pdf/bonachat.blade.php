@@ -3,105 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bon de Achat</title>
+    <title>Bon de Sortie</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+            color: #555;
         }
+
         .container {
-            width: 80%;
+            max-width: 800px;
             margin: auto;
-            border: 1px solid #000;
-            padding: 20px;
+            padding: 30px;
+            /* border: 1px solid #eee; */
+            /* box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); */
         }
+
         header, footer {
             display: flex;
             justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        header div, footer div {
+            width: 30%;
+        }
+
+        h1, h2 ,.cen{
+            text-align: center;
+            margin: 0;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 24px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .info div {
+            width: 45%;
+        }
+
+        .invoice-box table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .invoice-box table th, .invoice-box table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .invoice-box table th {
+            background: #eee;
+            font-weight: bold;
+        }
+
+        .rtl {
+            text-align: right;
+            direction: rtl;
         }
         .left {
             text-align: left;
         }
+
+        .center {
+            text-align: center;
+        }
+
         .right {
             text-align: right;
-            direction: rtl;
         }
-        .rtl {
-            direction: rtl;
-        }
-        .info {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 10px;
-            text-align: left;
-        }
-        th span {
-            display: block;
+        @media only screen and (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            header, footer {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            header div, footer div {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .info {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            div {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+                margin:10px
+            }
+            .info {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="left">
+        <!-- <header> -->
+            <!-- <div> -->
                 <p>Institut pédagogique National<br>IPN</p>
-            </div>
-            <div class="right">
+            <!-- </div> -->
+            <div class="rtl">
                 <p>المعهد التربوي الوطني</p>
             </div>
-        </header>
+        <!-- </header> -->
 
-        <h1>BON DE ACHAT</h1>
-        <h2 class="rtl">وثيقة استخراج</h2>
+        <h1 class="center">BON DE SORTIE <br>وثيقة استخراج</h1>
+
+        
 
         <section class="info">
             <div>
-                <label for="number">N°:</label>
-                <input type="text" id="number" name="number" value="{{ $BonAchat->id }}">
+
+            <h3>N°: {{ $BonAchat->id }}</h3>
+
             </div>
             <div>
-                <label for="date">Date:</label>
-                <input type="date" id="date" name="date" value="{{ $BonAchat->created_at->format('Y-m-d') }}">
+                <h3>Date: {{ $BonAchat->created_at->format('Y-m-d') }}</h3>
+
             </div>
         </section>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Désignation<br><span class="rtl">المادة</span></th>
-                    <th>Quantité<br><span class="rtl">الكمية</span></th>
-                    <th>Motif<br><span class="rtl">الفرض</span></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($details_BonAchats as $detail)
-                <tr>
-                    <td>{{ $detail->produits->designation }}</td>
-                    <td>{{ $detail->quantite }}</td>
-                    <td>{{ $detail->date }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="invoice-box"> 
+            <table>
+                <thead>
+                    <tr>
+                        <th>Désignation<br><span class="rtl">المادة</span></th>
+                        <th>Quantité<br><span class="rtl">الكمية</span></th>
+                        <th>Motif<br><span class="rtl">الفرض</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($details_BonAchats as $detail)
+                    <tr>
+                        <td>{{ $detail->produits->designation }}</td>
+                        <td>{{ $detail->quantite }}</td>
+                        <td>{{ $BonAchat->description }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-        <footer>
-            <div class="left">
-                <p>La Directrice<br><span class="rtl">المديرة</span></p>
-                <p>Signature et cachet<br><span class="rtl">توقيع وختم</span></p>
-            </div>
+        <!-- <footer> -->
+<div class="left">
+        <p>Chef DEIS<br><span class="rtl">رئيس القطاع DEIS</span></p>
+
+<div>
+
             <div class="right">
-                <p>Chef de Service<br><span class="rtl">رئيس المصلحة</span></p>
-                <p>Chef DEIS<br><span class="rtl">رئيس القطاع DEIS</span></p>
+                La Directrice <span class="rtl">المديرة</span>
+                <p>Signature et cachet<br></p>
             </div>
-            <div class="center rtl">
-                <p>استلم مطابقا للمواصفات من طرف</
+
+            <div class="center">
+                <p>Chef de Service<br><span class="rtl">رئيس المصلحة</span></p>
+            </div>
+            <div class="center">
+                <p >استلم مطابقا للمواصفات من طرف</p>
+                <p>Reçu conforme par</p>
+            </div>
+        <!-- </footer> -->
+    </div>
+</body>
+</html>

@@ -50,7 +50,7 @@ public function store(StoreExpressionBesoinRequest $request)
     $expressionBesoin = ExpressionBesoin::create($data);
 
     // Redirection vers la page de création de détails d'expression de besoin en passant l'id_expbesoin
-    return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $expressionBesoin->id])->with('success', 'Detailsexpresionbesoin was created');
+    return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $expressionBesoin->id])->with('success', 'Detailsexpresionbesoin Bien créer');
 }
 
 
@@ -81,7 +81,7 @@ public function store(StoreExpressionBesoinRequest $request)
         $data= $request->all();
 
         $expressionbesoin->update($data);
-        return to_route('expressionbesoin.index')->with('success','expressionbesoin was update');
+        return to_route('expressionbesoin.index')->with('success','expressionbesoin Bien modifier');
     }
 
     /**
@@ -90,7 +90,7 @@ public function store(StoreExpressionBesoinRequest $request)
     public function destroy(expressionbesoin $expressionbesoin)
     {
         $expressionbesoin->delete();
-        return to_route('expressionbesoin.index')->with('success','expressionbesoin was deleted');
+        return to_route('expressionbesoin.index')->with('success','expressionbesoin Bien supprimer');
     }
 
     public function exportPdf($id_expbesoin)
@@ -143,7 +143,7 @@ public function store(StoreExpressionBesoinRequest $request)
             ]);
         }
 
-        return redirect()->route('detailBonAchat.index-par-bonAchat', ['bonAchat' => $bonAchat->id]);
+        return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $id_expbesoin])->with('success', 'Detailsexpresionbesoin Bien validé');
     }
 
 }
