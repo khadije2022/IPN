@@ -39,9 +39,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         <NavLink href={route('bonSortie.index')} active={route().current('bonSortie.index')}>
                             Bon Sortie
                         </NavLink>
-                        <NavLink href={route('mouvmentStock.index')} active={route().current('mouvmentStock.index')}>
+                       {  user.email === "22014@supnum.mr" && (<NavLink href={route('mouvmentStock.index')} active={route().current('mouvmentStock.index')}>
                             Mouvment Stock
-                        </NavLink>
+                        </NavLink>)}
                     </div>
                 </div>
 
@@ -53,7 +53,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     type="button"
                                     className="inline-flex items-center justify-between w-full px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 focus:outline-none transition ease-in-out duration-150"
                                 >
-                                    {user.name}
+                                    {user.email}
                                     <svg
                                         className="ml-2 h-5 w-5 text-gray-400"
                                         xmlns="http://www.w3.org/2000/svg"
