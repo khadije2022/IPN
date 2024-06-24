@@ -8,7 +8,7 @@ export default function NavLink({ active = false, className = '', children, ...p
             className={classNames(
                 'block px-4 py-2 rounded-md transition duration-150 ease-in-out',
                 {
-                    'text-gray-900 bg-gray-200 dark:bg-gray-700': active,
+                    'text-white bg-gray-200 dark:bg-gray-700': active,
                     'text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800': !active,
                 },
                 className

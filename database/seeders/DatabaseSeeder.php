@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'trt',
             'email' => '22013@supnum.mr',
-            'password' => bcrypt('Taher 41')
+            'password' => bcrypt('Taher 41'),
+            'role' =>'admin'
         ]);
         // Magasin::factory()->count(30)->create();
 

@@ -155,7 +155,7 @@ function Index({ auth, produits, categories, success, stock }) {
                 <div className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
                   <h1>C'est la liste des Produits disponible et Sa Stock</h1>
                 </div>
-                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
+                {/* <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
                   <button
                     onClick={() => openModal('add')}
                     className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
@@ -170,7 +170,7 @@ function Index({ auth, produits, categories, success, stock }) {
                     <FontAwesomeIcon icon={faFileExcel} className="mr-2" />
                     Export Excel
                   </a>
-                </div>
+                </div> */}
               </div>
               <div className="mb-4">
                 <TextInput
@@ -200,8 +200,8 @@ function Index({ auth, produits, categories, success, stock }) {
                         )}
                       </th>
                       <th className='px-3 py-3 cursor-pointer' onClick={() => handleSort('type')}>
-                      catégorie
-                        {sortConfig.key === 'catégorie' && (
+                        Catégorie
+                        {sortConfig.key === 'type' && (
                           <FontAwesomeIcon icon={sortConfig.direction === 'ascending' ? faSortUp : faSortDown} />
                         )}
                       </th>
@@ -254,8 +254,8 @@ function Index({ auth, produits, categories, success, stock }) {
       </div>
 
       {isModalOpen && (
-        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full'>
-          <div className='relative top-20 mx-auto p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white'>
+        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center'>
+          <div className='relative p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white dark:bg-gray-800'>
             <form
               onSubmit={handleFormSubmit}
               className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg'

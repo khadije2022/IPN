@@ -92,9 +92,6 @@ function Index_par_expbesoin({
     if (!data.quantite || data.quantite <= 0) {
       errors.quantite = 'Le champ "Quantité" est obligatoire et doit être un nombre positif.';
     }
-    // if (!data.prix || data.prix <= 0) {
-    //   errors.prix = 'Le champ "Prix" est obligatoire et doit être un nombre positif.';
-    // }
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -164,102 +161,104 @@ function Index_par_expbesoin({
           )}
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
-              <div className='flex justify-between'>
-                <div className='font-semibold'>
-                  <h1>Bon Sortie N° {BonAchat.id}</h1>
+              <div className='flex flex-col sm:flex-row justify-between mb-4'>
+                <div>
+                  <h1 className='font-semibold text-lg'>Bon Sortie N° {BonAchat.id}</h1>
                   <h1>Description: {BonAchat.description}</h1>
                   <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs</h1>
                 </div>
-                <div>
+                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
                   {Status === 'non-validé' && (
-                    <button
-                      onClick={() => openModal('add')}
-                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-                    >
-                      <FontAwesomeIcon icon={faPlus} /> Ajouter
-                    </button>
-                  )}
-                  {Status === 'non-validé' && (
-                    <a
-                      href={route('bonAchat.valider', { bonAchat: bonAchat })}
-                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-                    >
-                      Valider
-                    </a>
+                    <>
+                      <button
+                        onClick={() => openModal('add')}
+                        className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
+                      >
+                        <FontAwesomeIcon icon={faPlus} /> Ajouter
+                      </button>
+                      <a
+                        href={route('bonAchat.valider', { bonAchat: bonAchat })}
+                        className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
+                      >
+                        Valider
+                      </a>
+                    </>
                   )}
                   {Status === 'validé' && (
                     <a
                       href={route('bonAchat.modify', { bonAchat: bonAchat })}
-                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                      className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
                     >
                       Modifier
                     </a>
                   )}
                   <a
                     href={route('pdf-DetailsBonAchat', { bonAchat: bonAchat })}
-                    className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
+                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
                   >
                     <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
                   </a>
                 </div>
               </div>
-              <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-                <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
-                  <tr className='text-nowrap'>
-                    <th className='px-3 py-3'>
-                      ID
-                      <button onClick={() => requestSort('id')}>
-                        <FontAwesomeIcon icon={faSort} className="ml-1" />
-                      </button>
-                    </th>
-                    <th className='px-3 py-3'>
-                      Produits
-                      <button onClick={() => requestSort('produit.designation')}>
-                        {/* <FontAwesomeIcon icon={faSort} className="ml-1" /> */}
-                      </button>
-                    </th>
-                    <th className='px-3 py-3'>
-                      Catégorie
-                      <button onClick={() => requestSort('produit.type.type')}>
-                        {/* <FontAwesomeIcon icon={faSort} className="ml-1" /> */}
-                      </button>
-                    </th>
-                    <th className='px-3 py-3'>
-                      Quantité
-                      <button onClick={() => requestSort('quantite')}>
-                        <FontAwesomeIcon icon={faSort} className="ml-1" />
-                      </button>
-                    </th>
-                    {Status === 'non-validé' && (<th className='px-3 py-3 text-right'>Action</th>)}
-                  </tr>
-                </thead>
-                <tbody>
-                  {sortedData.map((detailBonAchat) => (
-                    <tr key={detailBonAchat.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                      <td className='px-3 py-2'>{detailBonAchat.id}</td>
-                      <td className='px-3 py-2'>{detailBonAchat.produit.designation}</td>
-                      <td className='px-3 py-2'>{detailBonAchat.produit.type.type}</td>
-                      <td className='px-3 py-2'>{detailBonAchat.quantite}</td>
-                      {Status === 'non-validé' && (
-                        <td className='px-3 py-2 text-nowrap'>
-                          <button
-                            onClick={() => openModal('edit', detailBonAchat)}
-                            className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
-                          >
-                            <FontAwesomeIcon icon={faEdit} />
-                          </button>
-                          <button
-                            onClick={() => deleteDetailsexpresionbesoin(detailBonAchat)}
-                            className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
-                          >
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                          </button>
-                        </td>
-                      )}
+              <div className="overflow-x-auto">
+                <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
+                  <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
+                    <tr>
+                      <th className='px-4 py-3'>
+                        ID
+                        <button onClick={() => requestSort('id')}>
+                          <FontAwesomeIcon icon={faSort} className="ml-1" />
+                        </button>
+                      </th>
+                      <th className='px-4 py-3'>
+                        Produits
+                        <button onClick={() => requestSort('produit.designation')}>
+                          <FontAwesomeIcon icon={faSort} className="ml-1" />
+                        </button>
+                      </th>
+                      <th className='px-4 py-3'>
+                        Catégorie
+                        <button onClick={() => requestSort('produit.type.type')}>
+                          <FontAwesomeIcon icon={faSort} className="ml-1" />
+                        </button>
+                      </th>
+                      <th className='px-4 py-3'>
+                        Quantité
+                        <button onClick={() => requestSort('quantite')}>
+                          <FontAwesomeIcon icon={faSort} className="ml-1" />
+                        </button>
+                      </th>
+                      {Status === 'non-validé' && (<th className='px-4 py-3 text-right'>Action</th>)}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {sortedData.map((detailBonAchat) => (
+                      <tr key={detailBonAchat.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
+                        <td className='px-4 py-3'>{detailBonAchat.id}</td>
+                        <td className='px-4 py-3'>{detailBonAchat.produit.designation}</td>
+                        <td className='px-4 py-3'>{detailBonAchat.produit.type.type}</td>
+                        <td className='px-4 py-3'>{detailBonAchat.quantite}</td>
+                        {Status === 'non-validé' && (
+                          <td className='px-4 py-3 text-right'>
+                            <button
+                              onClick={() => openModal('edit', detailBonAchat)}
+                              className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
+                            >
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button
+                              onClick={() => deleteDetailsexpresionbesoin(detailBonAchat)}
+                              className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
+                            >
+                              <FontAwesomeIcon icon={faTrashAlt} />
+                            </button>
+                          </td>
+                        )}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -267,7 +266,7 @@ function Index_par_expbesoin({
 
       {isModalOpen && (
         <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full'>
-          <div className='relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white'>
+          <div className='relative top-20 mx-auto p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white dark:bg-gray-800'>
             <form onSubmit={handleFormSubmit} className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg'>
               <div className='mt-4'>
                 <InputLabel htmlFor='type' value='Catégorie Type' />
@@ -315,7 +314,7 @@ function Index_par_expbesoin({
                 />
                 <InputError message={validationErrors.quantite || errors.quantite} className='mt-2' />
               </div>
-              {/* <div className='mt-4'>
+              <div className='mt-4'>
                 <InputLabel htmlFor='prix' value='Estimation prix' />
                 <TextInput
                   type="number"
@@ -326,7 +325,7 @@ function Index_par_expbesoin({
                   onChange={(e) => setData('prix', e.target.value)}
                 />
                 <InputError message={validationErrors.prix || errors.prix} className='mt-2' />
-              </div> */}
+              </div>
               <div className='mt-4 text-right'>
                 <button
                   type='button'
@@ -337,7 +336,7 @@ function Index_par_expbesoin({
                 </button>
                 <button
                   type="submit"
-                  className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+                  className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600"
                 >
                   {modalMode === 'add' ? 'Ajouter' : 'Enregistrer'}
                 </button>
