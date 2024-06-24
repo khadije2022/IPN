@@ -15,7 +15,7 @@ function index_par_bonSortie({
   detailBonSorties = { data: [] },
   Status,
   BonSortie,
-  bonSortie, // ID de bon sortie 
+  bonSortie, // ID de bon sortie
   success,
   error,
   valider,
@@ -222,53 +222,50 @@ function index_par_bonSortie({
                   <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs</h1>
                 </div>
 
-                <div >
-                  
+                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+                  <div>
+                  <a
+                    href={route("pdf-DetailsBonSortie", { bonSortie: bonSortie })}
+                    className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
+                  >
+                    <FontAwesomeIcon icon={faFilePdf} className="mr-2" />
+                    PDF
+                  </a>
+                  </div>
+
+
+
+                  {Status === "Non-Valider" && (
+                    <div>
                     <a
-                      href={route("pdf-DetailsBonSortie", { bonSortie: bonSortie })}
-                      className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
+                      href={route("bonSortie.valider", { bonSortie: bonSortie })}
+                      className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
                     >
-                      <FontAwesomeIcon icon={faFilePdf} className="mr-2" />
-                      PDF
+                      Valider
                     </a>
-                  
-                  
-                    <a href={route('export-Details_Sortie')}
-                      className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
-                    >
-                      <FontAwesomeIcon icon={faFileExcel} />Excel
-                    </a>
-
-
-
-
-
-
-                  {Status === "non-validé" && (
-                      <a
-                        href={route("bonSortie.valider", { bonSortie: bonSortie })}
-                        className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
-                      >
-                        Valider
-                      </a>
+                    </div>
                   )}
 
-                  {Status === "non-validé" && (
-                      <button
-                        onClick={() => openModal("add")}
-                        className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
-                      >
-                        <FontAwesomeIcon icon={faPlus} /> Ajouter
-                      </button>
+{Status === "non-validé" && (
+                    <div>
+                    <button
+                      onClick={() => openModal("add")}
+                      className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
+                    >
+                      <FontAwesomeIcon icon={faPlus} /> Ajouter
+                    </button>
+                    </div>
                   )}
 
-                  {Status === 'validé' && (
-                      <Link
-                        href={route("bonSortie.modify", { bonSortie: bonSortie })}
-                        className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
-                      >
-                        Modifier
-                      </Link>
+                  {Status === 'valider' && (
+                    <div>
+                    <Link
+                      href={route("bonSortie.modify", { bonSortie: bonSortie })}
+                      className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
+                    >
+                      Modifier
+                    </Link>
+                    </div>
                   )}
                 </div>
               </div>
@@ -279,6 +276,7 @@ function index_par_bonSortie({
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('produit.designation')}>Produits <FontAwesomeIcon icon={faSort} /></th>
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('produit.type.type')}>Catégorie <FontAwesomeIcon icon={faSort} /></th>
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('quantite')}>Qté <FontAwesomeIcon icon={faSort} /></th>
+                    
                     {Status === "non-validé" && (
                       <th className="px-3 py-3 text-right">Action</th>
                     )}

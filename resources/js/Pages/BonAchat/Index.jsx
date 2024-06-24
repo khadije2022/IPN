@@ -203,10 +203,10 @@ function Index({ auth, bonAchats, success }) {
                     onClick={() => openModal('add')}
                     className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
                   >
-                    <FontAwesomeIcon icon={faPlus} className="mr-2" />Ajouter
+                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
                   </button>
                   <a href={route('export-bonachat')} className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center">
-                    <FontAwesomeIcon icon={faFileExcel} className="mr-2" />Excel
+                    <FontAwesomeIcon icon={faFileExcel} className="mr-2" />
                   </a>
                 </div>
               </div>
@@ -215,6 +215,7 @@ function Index({ auth, bonAchats, success }) {
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                     <tr>
+                      <th className="px-2 py-1"></th>
                       <th className="px-6 py-6">
                         <TextInput
                           type="text"

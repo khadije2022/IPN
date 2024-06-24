@@ -131,7 +131,7 @@ public function store(StoreExpressionBesoinRequest $request)
         // Create a purchase order with the same description
         $bonAchat = BonAchat::create([
             'description' => $expressionbesoin->description,
-            'status' => 'Non-valider'
+            'status' => 'non-validé'
         ]);
 
         // Create purchase order details for each need expression detail

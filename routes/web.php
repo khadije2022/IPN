@@ -35,6 +35,7 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))
     ->name('dashboard');
 
+    Route::resource('user', UserController::class);
 
 
     Route::resource('magasin',MagasinController::class);
@@ -82,10 +83,16 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::get('/export-produit', [CatelogueProduitController::class, 'exportExcel'])->name('export-produit');
     Route::get('/export-bonachat', [BonAchatController::class, 'exportExcel'])->name('export-bonachat');
     Route::get('/export-bonsortie', [BonSortieController::class, 'exportExcel'])->name('export-bonsortie');
-    Route::get('/export-mouvement', [MouvementStockController::class, 'exportExcel'])->name('export-mouvement');
+
+    // Route::get('/export-mouvement', [MouvementStockController::class, 'exportExcel'])->name('export-mouvement');
+
+
+
+    // Route::get('/export-mouvement', [MouvementStockController::class, 'exportExcel'])->name('export-mouvement');
     Route::get('/export-detailexpbesoin', [Details_ExpBesoinController::class, 'exportExcel'])->name('export-detailexpbesoin');
     Route::get('/export-Details_bonAchat', [DetailBonAchatController::class, 'exportExcel'])->name('export-Details_bonAchat');
     Route::get('/export-Details_bonSortie', [DetailBonSortieController::class, 'exportExcel'])->name('export-Details_Sortie');
+
 
 
     Route::get('/export-pdf', [CategorieController::class, 'exportPdf'])->name('export-pdf');
@@ -114,7 +121,7 @@ Route::middleware('auth')->group(function () {
     // Route::get('/magasins/{magasin}/edit', [MagasinController::class, 'edit'])->name('magasin.edit');
     // Route::patch('/magasins/{magasin}', [MagasinController::class, 'update'])->name('magasin.update');
     // Route::delete('/magasins/{magasin}', [MagasinController::class, 'destroy'])->name('magasin.destroy');
-    // Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 });
 
 

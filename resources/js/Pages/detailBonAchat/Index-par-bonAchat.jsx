@@ -6,9 +6,10 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus, faFileExcel,faFilePdf, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faFileExcel, faFilePdf, faSort } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 function Index_par_expbesoin({
   auth,
   detailBonAchats = { data: [] },
@@ -35,7 +36,7 @@ function Index_par_expbesoin({
       setSuccessMessage(success);
       const timer = setTimeout(() => {
         setSuccessMessage(null);
-      }, 10000); 
+      }, 10000);
       return () => clearTimeout(timer);
     }
   }, [success]);
@@ -97,7 +98,6 @@ function Index_par_expbesoin({
     if (!data.quantite || data.quantite <= 0) {
       errors.quantite = 'Le champ "Quantité" est obligatoire et doit être un nombre positif.';
     }
-
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -160,7 +160,7 @@ function Index_par_expbesoin({
 
       <div className='py-12'>
         <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
-        <ToastContainer />
+          <ToastContainer />
           {successMessage && (
             <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
               {successMessage}
@@ -168,52 +168,50 @@ function Index_par_expbesoin({
           )}
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
-              <div className='flex justify-between'>
-                <div className='font-semibold'>
-                  <h1>Bon Sortie N° {BonAchat.id}</h1>
+              <div className='flex flex-col sm:flex-row justify-between mb-4'>
+                <div>
+                  <h1 className='font-semibold text-lg'>Bon Sortie N° {BonAchat.id}</h1>
                   <h1>Description: {BonAchat.description}</h1>
                   <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs</h1>
                 </div>
                 <div>
-                <a href={route('export-Details_bonAchat')}
-                      className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
-                    ><FontAwesomeIcon icon={faFileExcel}/>Excel
-                    </a>
+                  <a href={route('export-Details_bonAchat')}
+                    className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
+                  ><FontAwesomeIcon icon={faFileExcel} /> Excel
+                  </a>
                   {Status === 'non-validé' && (
-                    <button
-                      onClick={() => openModal('add')}
-                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-                    >
-                      <FontAwesomeIcon icon={faPlus} /> Ajouter
-                    </button>
-                  )}
-                  {Status === 'non-validé' && (
-                    <a
-                      href={route('bonAchat.valider', { bonAchat: bonAchat })}
-                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-                    >
-                      Valider
-                    </a>
+                    <>
+                      <button
+                        onClick={() => openModal('add')}
+                        className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                      >
+                        <FontAwesomeIcon icon={faPlus} /> Ajouter
+                      </button>
+                      <a
+                        href={route('bonAchat.valider', { bonAchat: bonAchat })}
+                        className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                      >
+                        Valider
+                      </a>
+                    </>
                   )}
                   {Status === 'validé' && (
                     <a
                       href={route('bonAchat.modify', { bonAchat: bonAchat })}
-                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                      className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
                     >
                       Modifier
                     </a>
                   )}
                   <a
                     href={route('pdf-DetailsBonAchat', { bonAchat: bonAchat })}
-                    className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
+                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
                   >
-                    <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
+                    <FontAwesomeIcon icon={faFilePdf} className="mr-2" /> PDF
                   </a>
-                  
-                    
-                  
                 </div>
               </div>
+
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                   <tr className='text-nowrap'>
@@ -226,13 +224,13 @@ function Index_par_expbesoin({
                     <th className='px-3 py-3'>
                       Produits
                       <button onClick={() => requestSort('produit.designation')}>
-                        {/* <FontAwesomeIcon icon={faSort} className="ml-1" /> */}
+                        <FontAwesomeIcon icon={faSort} className="ml-1" />
                       </button>
                     </th>
                     <th className='px-3 py-3'>
                       Catégorie
                       <button onClick={() => requestSort('produit.type.type')}>
-                        {/* <FontAwesomeIcon icon={faSort} className="ml-1" /> */}
+                        <FontAwesomeIcon icon={faSort} className="ml-1" />
                       </button>
                     </th>
                     <th className='px-3 py-3'>
@@ -277,8 +275,8 @@ function Index_par_expbesoin({
       </div>
 
       {isModalOpen && (
-        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full'>
-          <div className='relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white'>
+        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full' onClick={closeModal}>
+          <div className='relative top-20 mx-auto p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white dark:bg-gray-800' onClick={(e) => e.stopPropagation()}>
             <form onSubmit={handleFormSubmit} className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg'>
               <div className='mt-4'>
                 <InputLabel htmlFor='type' value='Catégorie Type' />
@@ -326,7 +324,20 @@ function Index_par_expbesoin({
                 />
                 <InputError message={validationErrors.quantite || errors.quantite} className='mt-2' />
               </div>
-    
+
+              <div className='mt-4'>
+                <InputLabel htmlFor='prix' value='Estimation prix' />
+                <TextInput
+                  type="number"
+                  name="prix"
+                  id="prix"
+                  value={data.prix}
+                  className="mt-1 block w-full"
+                  onChange={(e) => setData('prix', e.target.value)}
+                />
+                <InputError message={validationErrors.prix || errors.prix} className='mt-2' />
+              </div>
+
               <div className='mt-4 text-right'>
                 <button
                   type='button'
@@ -337,7 +348,7 @@ function Index_par_expbesoin({
                 </button>
                 <button
                   type="submit"
-                  className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+                  className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600"
                 >
                   {modalMode === 'add' ? 'Ajouter' : 'Enregistrer'}
                 </button>

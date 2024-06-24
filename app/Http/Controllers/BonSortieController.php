@@ -162,18 +162,18 @@ class BonSortieController extends Controller
     public function exportPdf($bonSortie)
     {
 
-        
+
         $BonSortie = BonSortie::findOrFail($bonSortie);
         $details_BonSorties = DetailBonSortie::with('produits')->where('idBonDeSortie', $bonSortie)->get();
         $totalQuantite = $details_BonSorties->sum('quantite');
-    
+
 
         $html = View::make('pdf.bonsortie', [
             'details_BonSorties' => $details_BonSorties,
             'BonSortie' => $BonSortie,
             'totalQuantite' => $totalQuantite
         ])->render();
-    
+
         try {
             $mpdf = new \Mpdf\Mpdf();
             $mpdf->autoScriptToLang = true;
@@ -189,5 +189,5 @@ class BonSortieController extends Controller
         $categories = BonSortie::get();
         return Excel::download(new BonSortieExport, 'BonSortie.xlsx');
   }
-    
+
 }

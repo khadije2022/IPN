@@ -62,7 +62,7 @@ class BonAchatController extends Controller
 
     public function show(BonAchat $bonAchat)
     {
-       
+
     }
 
     /**
@@ -73,10 +73,8 @@ class BonAchatController extends Controller
 
         return inertia('BonAchat/Edit',[
             'bonAchat' => $bonAchat,
-            
-        ]);
 
-        
+        ]);
     }
 
     /**
