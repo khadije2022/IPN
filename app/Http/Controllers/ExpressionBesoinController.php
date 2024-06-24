@@ -10,6 +10,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Service;
 use App\Http\Requests\StoreExpressionBesoinRequest;
 use App\Http\Requests\UpdateExpressionBesoinRequest;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ExpressionBesoinExport;
 
 class ExpressionBesoinController extends Controller
 {
@@ -145,7 +147,11 @@ public function store(StoreExpressionBesoinRequest $request)
 
         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $id_expbesoin])->with('valider', 'Details Expresionbesoin Bien validé');
     }
-    
+    public function exportExcel()
+    {
+        $categories = ExpressionBesoin::get();
+        return Excel::download(new ExpressionBesoinExport(), 'Expression.xlsx');
+    }
 
 }
 

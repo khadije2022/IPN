@@ -12,9 +12,13 @@ use Mpdf\Mpdf;
 use App\Exports\DetailExpressionBesoinExport;
 use App\Http\Requests\StoreDetails_ExpBesoinRequest;
 use App\Http\Requests\UpdateDetails_ExpBesoinRequest;
+
 use App\Http\Resources\CategorieResource;
 use App\Http\Resources\CatelogueResource;
 use Maatwebsite\Excel\Facades\Excel;
+
+
+
 
 class Details_ExpBesoinController extends Controller
 {
@@ -49,7 +53,7 @@ class Details_ExpBesoinController extends Controller
          $expressionbesoin = ExpressionBesoin::with('service')->findOrFail($id_expbesoin);
 
          $detailsexpresionbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->get();
-            
+
          $categories = Categorie::all();
          $catelogue_produits = CatelogueProduit::all();
     //  dd($catelogue_produits );
@@ -116,7 +120,7 @@ class Details_ExpBesoinController extends Controller
 
      public function exportExcel()
     {
-        $categories = CatelogueProduit::get();
-        return Excel::download(new DetailExpressionBesoinExport(), 'Deatils_Expression.xlsx');
+        $details_expbesoins = Details_ExpBesoin::get();
+        return Excel::download(new DetailExpressionBesoinExport(), 'detailexpbesoin.xlsx');
     }
 }
