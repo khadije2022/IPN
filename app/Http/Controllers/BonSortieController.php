@@ -33,6 +33,7 @@ class BonSortieController extends Controller
         return inertia('BonSortieAchat/Index', [
             'bonSorties' => BonSortieResource::collection($expressionbesoins),
             'success' => session('success'),
+            'valider' => session('valider'),
         ]);
     }
 
@@ -112,7 +113,7 @@ class BonSortieController extends Controller
         $mouvment->save();
 
         $mv = MouvmentStock::query();
-        $BonSortie->status = 'valider';
+        $BonSortie->status = 'validé';
         $BonSortie->save();
 
         DB::table('catelogue_produits AS cp')
@@ -125,7 +126,8 @@ class BonSortieController extends Controller
 
 
 
-        return to_route('bonSortie.index')->with('success','Bien validé');
+        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie])->with('valider', 'Bon de sortie bien validé avec succès.');
+    
 
     }
     public function modifier($bonSortie){
@@ -140,7 +142,7 @@ class BonSortieController extends Controller
         MouvmentStock::where('idBonDeSortie', $BonSortie->id)->delete();
 
         // Mettre à jour le statut du bon de sortie à non-validé
-        $BonSortie->status = 'Non-Valider';
+        $BonSortie->status = 'non-validé';
         $BonSortie->save();
 
         DB::table('catelogue_produits AS cp')

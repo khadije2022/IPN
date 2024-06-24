@@ -19,9 +19,6 @@ class CategorieController extends Controller
     {
         // Initialize the query builder for the Categorie model
         $query = Categorie::query();
-
-
-        // Execute the query with pagination
         $categories = $query->paginate(10);
 
         // Return the Inertia.js response with the categories data and any success message from the session

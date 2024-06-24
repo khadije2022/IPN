@@ -143,8 +143,9 @@ public function store(StoreExpressionBesoinRequest $request)
             ]);
         }
 
-        return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $id_expbesoin])->with('success', 'Detailsexpresionbesoin Bien validé');
+        return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $id_expbesoin])->with('valider', 'Details Expresionbesoin Bien validé');
     }
+    
 
 }
 

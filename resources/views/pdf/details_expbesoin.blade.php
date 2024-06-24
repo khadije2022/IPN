@@ -19,10 +19,13 @@
         }
 
         header, footer {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #000;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
 
         header div, footer div {
             width: 30%;
@@ -120,6 +123,15 @@
     </style>
 </head>
 <body>
+<header>
+            <div class="left">
+                <p>Institut pédagogique National<br>IPN</p>
+            </div>
+            <img src="https://search.brave.com/images?q=facture+entete&source=web" />
+            <div class="right">
+                <p>المعهد التربوي الوطني</p>
+            </div>
+        </header>
     <div class="container">
 <div class="left">
     <p>IPN</p>

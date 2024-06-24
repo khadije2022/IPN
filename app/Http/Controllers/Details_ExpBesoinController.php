@@ -8,7 +8,8 @@ use App\Models\Categorie;
 use App\Models\CatelogueProduit;
 use App\Models\ExpressionBesoin;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Mpdf\Mpdf;
+use App\Exports\DetailExpressionBesoinExport;
 use App\Http\Requests\StoreDetails_ExpBesoinRequest;
 use App\Http\Requests\UpdateDetails_ExpBesoinRequest;
 
@@ -55,6 +56,8 @@ class Details_ExpBesoinController extends Controller
              'categories' => $categories,
              'produits' => $catelogue_produits,
              'success' => session('success'),
+             'valider' => session('valider'),
+
          ]);
      }
 
@@ -105,4 +108,11 @@ class Details_ExpBesoinController extends Controller
          $detailsexpresionbesoin->delete();
          return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $detailsexpresionbesoin->id_expbesoin])->with('success', 'Detailsexpresionbesoin Bien supprimer');
      }
+
+
+     public function exportExcel()
+    {
+        $categories = CatelogueProduit::get();
+        return Excel::download(new DetailExpressionBesoinExport(), 'Deatils_Expression.xlsx');
+    }
 }

@@ -12,8 +12,7 @@ class DetailBonAchat extends Model
     protected $fillable = [
         'produit', 
         'quantite', 
-        'prix', 
-        'idBonAchat'
+        'idBonAchat',
     ];
 
     public function produits()

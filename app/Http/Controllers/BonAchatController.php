@@ -122,7 +122,8 @@ class BonAchatController extends Controller
         // Execute the query with pagination
         $mouvmentStock = $mv->paginate(10);
 
-        return to_route('bonAchat.index')->with('success',"Bien validé");
+        return redirect()->route('detailBonAchat.index-par-bonAchat', ['bonAchat' => $bonAchat])
+        ->with('valider', 'Bon de Achat bien validé avec succès');
     }
 
 
@@ -136,7 +137,7 @@ class BonAchatController extends Controller
         MouvmentStock::where('idBonAchat', $BonAchat->id)->delete();
 
         // Mettre à jour le statut du bon de sortie à non-validé
-        $BonAchat->status = 'non validé';
+        $BonAchat->status = 'non-validé';
         $BonAchat->save();
 
 

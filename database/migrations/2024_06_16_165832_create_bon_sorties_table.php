@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('bon_sorties', function (Blueprint $table) {
             $table->id();
             $table->text('description');
-            $table->string('status')->default("Non-Valider");
+            $table->string('status')->default("non-validé");
             $table->timestamps();
         });
     }

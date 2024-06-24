@@ -14,7 +14,8 @@ use App\Models\MouvmentStock;
 use App\Models\Categorie;
 use App\Models\CatelogueProduit;
 use App\Http\Resources\CategorieResource;
-
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DetailBonSortieExport;
 
 
 class DetailBonSortieController extends Controller
@@ -45,6 +46,7 @@ class DetailBonSortieController extends Controller
             'Status' => $BonSortie->status,
             'success' => session('success'),
             'error' => session('error'),
+            'valider' => session('valider'),
             'categories' => CategorieResource::collection($categories),
             'produits' => CategorieResource::collection($catelogue_produits),
         ]);
@@ -74,47 +76,13 @@ class DetailBonSortieController extends Controller
         return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $detailBonSortie->idBonDeSortie])->with('success', 'Le bon de sortie a été supprimé');
     }
 
-    public function valider($bonSortie)
+    public function exportExcel()
     {
-        $BonSortie = BonSortie::find($bonSortie);
-        if (!$BonSortie) {
-            return response()->json(['error' => 'BonSortie non trouvé'], 404);
-        }
-        $totalQuantity = DetailBonSortie::where('idBonDeSortie', $bonSortie)->sum('quantite');
-        $mouvment = new MouvmentStock();
-        $mouvment->idBonDeSortie = $BonSortie->id;
-        $mouvment->idBonAchat = null;
-        $mouvment->typeMouvments = 'Sortie';
-        $mouvment->stock = $totalQuantity;
-        $mouvment->save();
-        $BonSortie->status = 'valider';
-        $BonSortie->save();
-        DB::table('catalogue_produits AS cp')
-            ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
-            ->where('cp.id', '=', DB::raw('ps.product_id'))
-            ->update(['cp.stock' => DB::raw('ps.stock')]);
-        $mv = MouvmentStock::query();
-        $mouvmentStock = $mv->paginate(10);
-        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie])->with('success', 'Bien validé');
+        $categories = DetailBonSortie::get();
+        return Excel::download(new DetailBonSortie(), 'Details_BonSortie.xlsx');
     }
 
-    public function modifier($bonSortie)
-    {
-        $BonSortie = BonSortie::find($bonSortie);
-        if (!$BonSortie) {
-            return response()->json(['error' => 'BonSortie non trouvé'], 404);
-        }
-        MouvmentStock::where('idBonDeSortie', $BonSortie->id)->delete();
-        $BonSortie->status = 'Non-Valider';
-        $BonSortie->save();
-        DB::table('catalogue_produits AS cp')
-            ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
-            ->where('cp.id', '=', DB::raw('ps.product_id'))
-            ->update(['cp.stock' => DB::raw('ps.stock')]);
-        $mv = MouvmentStock::query();
-        $mouvmentStock = $mv->paginate(10);
-        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie])->with('success', 'Bien modifier');
-    }
+
 
     public function exportPdf($idBonSortie)
     {
@@ -123,7 +91,7 @@ class DetailBonSortieController extends Controller
             ->where('idBonSortie', $idBonSortie)
             ->get();
         $totalQuantite = $details_BonSorties->sum('quantite');
-        $pdf = Pdf::loadView('pdf.bonachat', [
+        $pdf = Pdf::loadView('pdf.bonsortie', [
             'details_BonSorties' => $details_BonSorties,
             'BonSortie' => $BonSortie,
             'totalQuantite' => $totalQuantite

@@ -12,7 +12,8 @@ use App\Models\BonAchat;
 use App\Models\Categorie;
 use App\Models\CatelogueProduit;
 
-
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\DetailBonSortieExport;
 class DetailBonAchatController extends Controller
 {
     /**
@@ -49,6 +50,7 @@ class DetailBonAchatController extends Controller
             'BonAchat' => $BonAchat,
             'Status' => $BonAchat->status,
             'success' => session('success'),
+            'valider' => session('valider'),
             'categories' => CategorieResource::collection($categories),
             'produits' => CategorieResource::collection($catelogue_produits)
         ]);
@@ -61,9 +63,7 @@ class DetailBonAchatController extends Controller
     {
         $categorie = Categorie::all();
         $produits = CatelogueProduit::all();
-        // $MouvmentStck = DetailBonAchat::query()
-        //     ->where('idBonAchat', $bonAchat)
-        //     ->get();
+
 
         return inertia('detailBonAchat/Create',[
             'categories' => CategorieResource::collection($categorie),
@@ -81,7 +81,6 @@ class DetailBonAchatController extends Controller
             'quantite' => 'required|integer',
             'produit' => 'required|integer',
             'idBonAchat' => 'required|integer|exists:bon_achats,id',
-            'prix' => 'required|numeric',
         ]);
 
         DetailBonAchat::create($data);
@@ -106,9 +105,7 @@ class DetailBonAchatController extends Controller
     {
         $categorie = Categorie::all();
         $produits = CatelogueProduit::all();
-
-
-        // dd($mouvements_stock);
+        
         return inertia('detailBonAchat/Edit',
         [
            'detailBonAchat' => $detailBonAchat,
@@ -135,8 +132,15 @@ class DetailBonAchatController extends Controller
      */
     public function destroy(DetailBonAchat $detailBonAchat)
     {
-        
         $detailBonAchat->delete();
         return to_route('detailBonAchat.index-par-bonAchat',['bonAchat' => $data['idBonAchat']])->with('success','Bien supprimer');
     }
+
+
+    public function exportExcel()
+    {
+        $categories = DetailBonAchat::get();
+        return Excel::download(new DetailBonAchat(), 'Details_BonAchat.xlsx');
+    }
+
 }

@@ -1,10 +1,14 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faPlus, faFileExcel, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import TextInput from '@/Components/TextInput';  // Assuming TextInput is a custom component
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
 
 const styles = {
   statusValide: {
@@ -52,7 +56,7 @@ const styles = {
   },
 };
 
-function Index({ auth, bonSorties, success }) {
+function Index({ auth, bonSorties, success,valider }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
   const [currentBonSortie, setCurrentBonSortie] = useState(null);
@@ -86,7 +90,11 @@ function Index({ auth, bonSorties, success }) {
     setIsModalOpen(false);
     setCurrentBonSortie(null);
   };
-
+  useEffect(() => {
+    if (valider) {
+      toast.success(success);
+    }
+  }, [valider]);
   const handleFormSubmit = (event) => {
     event.preventDefault();
     const routeName = modalMode === 'add' ? 'bonSortie.store' : 'bonSortie.update';
@@ -148,6 +156,11 @@ function Index({ auth, bonSorties, success }) {
     router.visit(route('detailBonSortie.index_par_bonSortie', { bonSortie: id }));
   };
 
+
+
+
+
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -168,6 +181,7 @@ function Index({ auth, bonSorties, success }) {
               {success}
             </div>
           )}
+           <ToastContainer />
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
 

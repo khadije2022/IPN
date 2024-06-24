@@ -6,8 +6,9 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus, faFilePdf, faSort } from '@fortawesome/free-solid-svg-icons';
-
+import { faEdit, faTrashAlt, faPlus, faFileExcel,faFilePdf, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function Index_par_expbesoin({
   auth,
   detailBonAchats = { data: [] },
@@ -16,6 +17,7 @@ function Index_par_expbesoin({
   bonAchat,
   BonAchat,
   success,
+  valider,
   categories,
   produits
 }) {
@@ -33,10 +35,16 @@ function Index_par_expbesoin({
       setSuccessMessage(success);
       const timer = setTimeout(() => {
         setSuccessMessage(null);
-      }, 10000); // 30000 milliseconds = 30 seconds
+      }, 10000); 
       return () => clearTimeout(timer);
     }
   }, [success]);
+
+  useEffect(() => {
+    if (valider) {
+      toast.success(valider);
+    }
+  }, [valider]);
 
   useEffect(() => {
     if (selectedCategory && produits?.data) {
@@ -50,7 +58,6 @@ function Index_par_expbesoin({
   const { data, setData, post, put, errors, reset } = useForm({
     quantite: "",
     produit: "",
-    prix: "",
     idBonAchat: bonAchat
   });
 
@@ -62,14 +69,12 @@ function Index_par_expbesoin({
         produit: detail.produit.id || "",
         idBonAchat: detail.idBonAchat.id || "",
         quantite: detail.quantite || "",
-        prix: detail.prix || "",
       });
       setSelectedCategory(detail.produit.type);
     } else {
       setData({
         quantite: "",
         produit: "",
-        prix: "",
         idBonAchat: bonAchat
       });
       setSelectedCategory('');
@@ -92,9 +97,7 @@ function Index_par_expbesoin({
     if (!data.quantite || data.quantite <= 0) {
       errors.quantite = 'Le champ "Quantité" est obligatoire et doit être un nombre positif.';
     }
-    // if (!data.prix || data.prix <= 0) {
-    //   errors.prix = 'Le champ "Prix" est obligatoire et doit être un nombre positif.';
-    // }
+
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -157,6 +160,7 @@ function Index_par_expbesoin({
 
       <div className='py-12'>
         <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
+        <ToastContainer />
           {successMessage && (
             <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
               {successMessage}
@@ -171,7 +175,11 @@ function Index_par_expbesoin({
                   <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs</h1>
                 </div>
                 <div>
-                  {Status === 'Non-Valider' && (
+                <a href={route('export-Details_bonAchat')}
+                      className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
+                    ><FontAwesomeIcon icon={faFileExcel}/>Excel
+                    </a>
+                  {Status === 'non-validé' && (
                     <button
                       onClick={() => openModal('add')}
                       className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
@@ -179,7 +187,7 @@ function Index_par_expbesoin({
                       <FontAwesomeIcon icon={faPlus} /> Ajouter
                     </button>
                   )}
-                  {Status === 'Non-Valider' && (
+                  {Status === 'non-validé' && (
                     <a
                       href={route('bonAchat.valider', { bonAchat: bonAchat })}
                       className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
@@ -187,7 +195,7 @@ function Index_par_expbesoin({
                       Valider
                     </a>
                   )}
-                  {Status === 'valider' && (
+                  {Status === 'validé' && (
                     <a
                       href={route('bonAchat.modify', { bonAchat: bonAchat })}
                       className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
@@ -201,6 +209,9 @@ function Index_par_expbesoin({
                   >
                     <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
                   </a>
+                  
+                    
+                  
                 </div>
               </div>
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
@@ -230,7 +241,7 @@ function Index_par_expbesoin({
                         <FontAwesomeIcon icon={faSort} className="ml-1" />
                       </button>
                     </th>
-                    {Status === 'Non-Valider' && (<th className='px-3 py-3 text-right'>Action</th>)}
+                    {Status === 'non-validé' && (<th className='px-3 py-3 text-right'>Action</th>)}
                   </tr>
                 </thead>
                 <tbody>
@@ -240,7 +251,7 @@ function Index_par_expbesoin({
                       <td className='px-3 py-2'>{detailBonAchat.produit.designation}</td>
                       <td className='px-3 py-2'>{detailBonAchat.produit.type.type}</td>
                       <td className='px-3 py-2'>{detailBonAchat.quantite}</td>
-                      {Status === 'Non-Valider' && (
+                      {Status === 'non-validé' && (
                         <td className='px-3 py-2 text-nowrap'>
                           <button
                             onClick={() => openModal('edit', detailBonAchat)}
@@ -315,18 +326,7 @@ function Index_par_expbesoin({
                 />
                 <InputError message={validationErrors.quantite || errors.quantite} className='mt-2' />
               </div>
-              {/* <div className='mt-4'>
-                <InputLabel htmlFor='prix' value='Estimation prix' />
-                <TextInput
-                  type="number"
-                  name="prix"
-                  id="prix"
-                  value={data.prix}
-                  className="mt-1 block w-full"
-                  onChange={(e) => setData('prix', e.target.value)}
-                />
-                <InputError message={validationErrors.prix || errors.prix} className='mt-2' />
-              </div> */}
+    
               <div className='mt-4 text-right'>
                 <button
                   type='button'
