@@ -99,7 +99,7 @@ public function store(StoreExpressionBesoinRequest $request)
     {
         $expressionbesoin = ExpressionBesoin::with('service')->findOrFail($id_expbesoin);
 
-        $details_expbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->with('categorie', 'catalogueProduit')->get();
+        $details_expbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->get();
 
 
         $totalQuantite = $details_expbesoins->sum('quantite');
@@ -119,7 +119,7 @@ public function store(StoreExpressionBesoinRequest $request)
     public function valider($id_expbesoin)
     {
         $expressionbesoin = ExpressionBesoin::with('service')->findOrFail($id_expbesoin);
-        $details_expbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->with('categorie', 'catalogueProduit')->get();
+        $details_expbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->get();
 
 
         $details_expbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->get();
@@ -138,7 +138,7 @@ public function store(StoreExpressionBesoinRequest $request)
         foreach ($details_expbesoins as $detail) {
             DetailBonAchat::create([
                 'idBonAchat' => $bonAchat->id,
-                'produit' => $detail->id_catproduit,
+                'produit' => $detail->produit,
                 'quantite' => $detail->quantite,
                 'prix' => 0 // Adjust this as needed
 

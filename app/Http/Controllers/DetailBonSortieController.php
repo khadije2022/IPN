@@ -36,7 +36,7 @@ class DetailBonSortieController extends Controller
     {
         $BonSortie = BonSortie::findOrFail($bonSortie);
         $detailsexpresionbesoins = DetailBonSortie::where('idBonDeSortie', $bonSortie)->get();
-        dd($detailsexpresionbesoins);
+        
         $categories = Categorie::all();
         $catelogue_produits = CatelogueProduit::all();
 
@@ -57,7 +57,7 @@ class DetailBonSortieController extends Controller
     {
         $data = $request->validated();
         $produit = CatelogueProduit::find($data['produit']);
-        if ($produit->quantite < $data['quantite']) {
+        if ($produit['stock'] < $data['quantite']) {
             return redirect()->back()->with('error', 'Quantité demandée supérieure à la quantité disponible.');
         }
         $bonSortie = DetailBonSortie::create($data);

@@ -67,10 +67,10 @@ export default function AuthenticatedLayout({ user, header, children }) {
                     </div>
 
                     <div className="mt-11 flex flex-col space-y-4">
-                        <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                            <div className='flex flex-row space-x-2'>
+                        <NavLink href={route('mouvmentStock.Accueil')} active={route().current('mouvmentStock.Accueil')}>
+                            <div className='flex flex-row spacein-x-2'>
                                 <Squares2X2Icon className="h-5 w-5 mr-2 text-gray-500" />
-                                Introduction
+                                Accueil
                             </div>
                         </NavLink>
                         <NavLink href={route('categorie.index')} active={route().current('categorie.index')}>
@@ -109,16 +109,11 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 Bon Sortie
                             </div>
                         </NavLink>
-                        <NavLink href={route('mouvmentStock.index')} active={route().current('mouvmentStock.index')}>
-                            <div className='flex flex-row space-x-2'>
-                                <CubeTransparentIcon className="h-5 w-5 mr-2 text-gray-500" />
-                                Mouvment Stock
-                            </div>
-                        </NavLink>
+                        
                         { user.role === "admin" && (<NavLink href={route('user.index')} active={route().current('user.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <UsersIcon className="h-5 w-5 mr-2 text-gray-500" />
-                                User
+                                Utilisateur
                             </div>
                         </NavLink>)}
                     </div>

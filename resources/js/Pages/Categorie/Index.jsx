@@ -7,8 +7,10 @@ import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faFilePdf, faFileExcel, faPlus, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import SelectInput from '@/Components/SelectInput';
 
-function Index({ auth, categories, queryParams = null, success }) {
+
+function Index({ auth, categories, magasins,queryParams = null, success }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
     const [currentCategorie, setCurrentCategorie] = useState(null);
@@ -35,6 +37,7 @@ function Index({ auth, categories, queryParams = null, success }) {
 
     const { data, setData, post, put, errors, reset } = useForm({
         type: '',
+        id_magasin: '',
     });
 
     const [validationErrors, setValidationErrors] = useState({});
@@ -45,10 +48,12 @@ function Index({ auth, categories, queryParams = null, success }) {
         if (mode === 'edit' && categorie) {
             setData({
                 type: categorie.type,
+                id_magasin: categorie.id_magasin,
             });
         } else {
             setData({
                 type: '',
+                id_magasin: '',
             });
         }
         setValidationErrors({});
@@ -76,6 +81,9 @@ function Index({ auth, categories, queryParams = null, success }) {
         if (!data.type) {
             errors.type = 'Le champ catégorie est obligatoire.';
         }
+        if (!data.id_magasin) {
+          errors.id_magasin = 'Le champ magasin est obligatoire.';
+      }
         setValidationErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -123,7 +131,9 @@ function Index({ auth, categories, queryParams = null, success }) {
 
     const filteredCategories = sortedCategories.filter((categorie) =>
         categorie.id.toString().includes(searchQuery) ||
-        categorie.type.toLowerCase().includes(searchQuery.toLowerCase())
+        categorie.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        categorie.id_magasin.toLowerCase().includes(searchQuery.toLowerCase())
+
     );
 
     return (
@@ -198,6 +208,11 @@ function Index({ auth, categories, queryParams = null, success }) {
                                                     <FontAwesomeIcon icon={sortConfig.direction === 'asc' ? faSortUp : faSortDown} />
                                                 )}
                                             </th>
+                                            <th className='px-4 py-3 cursor-pointer' onClick={() => handleSort('id_magasin')}>
+                                                Magasin {sortConfig.key === 'id_magasin' && (
+                                                    <FontAwesomeIcon icon={sortConfig.direction === 'asc' ? faSortUp : faSortDown} />
+                                                )}
+                                            </th>
                                             <th className='px-4 py-3 text-right'>Action</th>
                                         </tr>
                                     </thead>
@@ -206,6 +221,7 @@ function Index({ auth, categories, queryParams = null, success }) {
                                             <tr key={categorie.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                                                 <td className='px-4 py-3'>{categorie.id}</td>
                                                 <td className='px-4 py-3'>{categorie.type}</td>
+                                                <td className='px-4 py-3'>{categorie.id_magasin.nomMagasin}</td>
                                                 <td className='px-4 py-3 text-right flex justify-end'>
                                                     <button
                                                         onClick={() => openModal('edit', categorie)}
@@ -222,6 +238,7 @@ function Index({ auth, categories, queryParams = null, success }) {
                                                 </td>
                                             </tr>
                                         ))}
+
                                     </tbody>
                                 </table>
                             </div>
@@ -250,6 +267,30 @@ function Index({ auth, categories, queryParams = null, success }) {
                                 )}
                                 <InputError message={errors.type} className='mt-2' />
                             </div>
+
+                            <div className='mt-4'>
+                <InputLabel htmlFor='id_magasin' value='Magasin' />
+                <SelectInput
+                  name='id_magasin'
+                  id='id_magasin'
+                  className='mt-1 block w-full'
+                  value={data.type}
+                  onChange={(e) => setData('id_magasin', e.target.value)}
+                >
+                  <option value=''>Sélectionnez une option</option>
+                  {magasins.map((magasin) => (
+                    <option key={magasin.id} value={magasin.id}>
+                      {magasin.nomMagasin}
+                    </option>
+                  ))}
+                </SelectInput>
+                {validationErrors.type && (
+                  <div className='text-red-500 mt-2'>{validationErrors.id_magasin}</div>
+                )}
+                <InputError message={errors.id_magasin} className='mt-2' />
+              </div>
+
+
                             <div className='mt-4 text-right'>
                                 <button
                                     type='button'

@@ -52,7 +52,7 @@ class DetailBonAchatController extends Controller
             'success' => session('success'),
             'valider' => session('valider'),
             'categories' => CategorieResource::collection($categories),
-            'produits' => CategorieResource::collection($catelogue_produits)
+            'produits' => CatelogueResource::collection($catelogue_produits)
         ]);
     }
 

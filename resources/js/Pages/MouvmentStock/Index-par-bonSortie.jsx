@@ -51,7 +51,7 @@ function index_par_bonSortie({
   useEffect(() => {
     if (selectedCategory && produits?.data) {
       const filtered = produits.data.filter(
-        (product) => product.type === parseInt(selectedCategory)
+        (product) => product.type.id === parseInt(selectedCategory)
       );
       setFilteredProducts(filtered);
     } else {
@@ -229,7 +229,7 @@ function index_par_bonSortie({
                     <FontAwesomeIcon icon={faFilePdf} className="mr-2" />
                     PDF
                   </a>
-                  {Status === "non-validé" && (
+                  {Status === "non-validé" &&  auth.user.role ==='admin' && (
                     <a
                       href={route("bonSortie.valider", { bonSortie: bonSortie })}
                       className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
@@ -239,7 +239,7 @@ function index_par_bonSortie({
                   )}
 
 
-                  {Status === "non-validé" && (
+                  {Status === "non-validé" &&  (
                     <button
                       onClick={() => openModal("add")}
                       className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"

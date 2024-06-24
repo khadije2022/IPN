@@ -27,7 +27,7 @@ class StoreUserRequest extends FormRequest
             'role' => ['required', 'string', 'in:admin,service'],
             "password" => [
                 "required",
-                // 'confirmed',
+                
                 Password::min(8),
             ],
         ];

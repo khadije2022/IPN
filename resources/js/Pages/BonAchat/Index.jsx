@@ -155,7 +155,6 @@ function Index({ auth, bonAchats, success }) {
               <div className="mb-4">
                 <div className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                   <div>Liste des Bons d'Achat</div>
-                  <div className="text-red-600">Vous pouvez rechercher par description, statut, et entre des dates données</div>
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row justify-between mb-4 space-y-2 sm:space-y-0">

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCategorieRequest;
 use App\Http\Requests\UpdateCategorieRequest;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Exports\CategoriesExport;
+use App\Models\Magasin;
 
 // use App\Exports\CategoriesExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -20,10 +21,12 @@ class CategorieController extends Controller
         // Initialize the query builder for the Categorie model
         $query = Categorie::query();
         $categories = $query->paginate(10);
+        $magasins = Magasin::all();
 
         // Return the Inertia.js response with the categories data and any success message from the session
         return inertia('Categorie/Index', [
             'categories' => CategorieResource::collection($categories),
+            'magasins' => $magasins,
             'success' => session('success'),
         ]);
     }
@@ -44,6 +47,7 @@ class CategorieController extends Controller
     public function store(StoreCategorieRequest $request)
     {
         $data=$request->all();
+        // dd($data['type'],$data['id_magasin']);
         Categorie::create($data);
 
         return to_route('categorie.index')->with('success', 'La catégorie a été créée avec succès.');
@@ -116,7 +120,7 @@ class CategorieController extends Controller
 
 
 
-    
+
 
 
 

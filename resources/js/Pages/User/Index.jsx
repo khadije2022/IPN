@@ -8,6 +8,9 @@ import Model from "@/Components/Model"; // Assume you have a Modal component
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import { PlusIcon } from '@heroicons/react/24/outline';
+import { faEdit, faTrashAlt, faFilePdf, faFileExcel, faPlus, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 export default function Index({ auth, users, queryParams = {}, success }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -85,7 +88,7 @@ export default function Index({ auth, users, queryParams = {}, success }) {
   };
 
   const deleteUser = (user) => {
-    if (window.confirm("Are you sure you want to delete the user?")) {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer cette utilisateur?")) {
       router.delete(route("user.destroy", user.id));
     }
   };
@@ -96,7 +99,7 @@ export default function Index({ auth, users, queryParams = {}, success }) {
       header={
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Users
+          Utilisateur
           </h2>
         </div>
       }
@@ -170,7 +173,7 @@ export default function Index({ auth, users, queryParams = {}, success }) {
                         sort_direction={queryParams.sort_direction || ""}
                         sortChanged={sortChanged}
                       >
-                        Create Date
+                        Date
                       </TableHeading>
                       <th className="px-3 py-3 text-right">Role</th>
                       <th className="px-3 py-3 text-right">Actions</th>
@@ -198,13 +201,13 @@ export default function Index({ auth, users, queryParams = {}, success }) {
                             onClick={() => openModal('edit', user)}
                             className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1"
                           >
-                            Edit
+                              <FontAwesomeIcon icon={faEdit}/>
                           </button>
                           <button
                             onClick={() => deleteUser(user)}
                             className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
                           >
-                            Delete
+                            <FontAwesomeIcon icon={faTrashAlt}/>
                           </button>
                         </td>
                       </tr>
@@ -269,7 +272,7 @@ export default function Index({ auth, users, queryParams = {}, success }) {
               >
                 <option value="">Select Role</option>
                 <option value="admin">Admin</option>
-                <option value="service">Services</option>
+                <option value="service">Service</option>
               </select>
               <InputError message={errors.role} className="mt-2" />
             </div>
@@ -279,10 +282,10 @@ export default function Index({ auth, users, queryParams = {}, success }) {
                 onClick={closeModal}
                 className="bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2"
               >
-                Cancel
+                Annuler
               </button>
               <button className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
-                Submit
+                Create
               </button>
             </div>
           </form>

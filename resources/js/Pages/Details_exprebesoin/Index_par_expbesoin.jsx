@@ -29,7 +29,7 @@ function Index_par_expbesoin({
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
   const [validationErrors, setValidationErrors] = useState({});
 
-  console.log(produits.data)
+  console.log(auth.user)
   useEffect(() => {
     if (selectedCategory && produits?.data) {
       const filtered = produits.data.filter(product => product.type.id === parseInt(selectedCategory));
@@ -154,7 +154,7 @@ function Index_par_expbesoin({
       header={
         <div className='flex justify-between items-center'>
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
-            Expression des Besoins
+            Expression des Besoins {auth.user.name}
           </h2>
         </div>
       }
@@ -176,11 +176,11 @@ function Index_par_expbesoin({
                   <h1>Nom de Responsabilité: {expressionbesoin.service.nom_responsabiliter}</h1>
                   <h1>Description: {expressionbesoin.description}</h1>
                 </div>
-                <div className='mt-4 lg:mt-0 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto'>
+                <div className='mt-7 mb-6  flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto'>
                   {expressionbesoin.status !== 'validé' && (
                     <button
                       onClick={() => openModal('add')}
-                      className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center'
+                      className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center'
                     >
                       <FontAwesomeIcon icon={faPlus} /> Ajouter
                     </button>
@@ -188,12 +188,12 @@ function Index_par_expbesoin({
                   <a
                     href={route('export-detailexpbesoin')}
                     download
-                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center"
+                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
                   >
                     <FontAwesomeIcon icon={faFileExcel} /> Excel
                   </a>
 
-                  {expressionbesoin.status !== 'validé' && (
+                  {expressionbesoin.status !== 'validé'  && auth.user.role === 'admin' && (
                     <a
                       href={route('valider', { id_expbesoin: id_expbesoin })}
                       className='bg-emerald-500  px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center'
@@ -252,7 +252,6 @@ function Index_par_expbesoin({
                       </tr>
 
                     ))}
-                    {/* {JSON.stringify(detailsexpresionbesoins.data)} */}
                   </tbody>
                 </table>
               </div>

@@ -29,30 +29,37 @@ class MouvmentStockController extends Controller
     }
     public function Mouvement()
     {
+        $mv = MouvmentStock::query();
+
+        // Execute the query with pagination
+        $mouvmentStock = $mv->paginate(10);
+
+
+
         // Calculate percentages for BonAchat
         $totalBonAchat = BonAchat::count();
         $validatedBonAchat = BonAchat::where('status', 'validé')->count();
         $nonValidatedBonAchat = BonAchat::where('status', 'non-validé')->count();
-    
+
         $percentageValidatedBonAchat = $totalBonAchat > 0 ? ($validatedBonAchat / $totalBonAchat) * 100 : 0;
         $percentageNonValidatedBonAchat = $totalBonAchat > 0 ? ($nonValidatedBonAchat / $totalBonAchat) * 100 : 0;
-    
+
         // Calculate percentages for BonSortie
         $totalBonSortie = BonSortie::count();
         $validatedBonSortie = BonSortie::where('status', 'validé')->count();
         $nonValidatedBonSortie = BonSortie::where('status', 'non-validé')->count();
-    
+
         $percentageValidatedBonSortie = $totalBonSortie > 0 ? ($validatedBonSortie / $totalBonSortie) * 100 : 0;
         $percentageNonValidatedBonSortie = $totalBonSortie > 0 ? ($nonValidatedBonSortie / $totalBonSortie) * 100 : 0;
-    
+
         // Calculate percentages for ExpressionBesoin
         $totalExpressionBesoin = ExpressionBesoin::count();
         $validatedExpressionBesoin = ExpressionBesoin::where('status', 'validé')->count();
         $nonValidatedExpressionBesoin = ExpressionBesoin::where('status', 'non-validé')->count();
-    
+
         $percentageValidatedExpressionBesoin = $totalExpressionBesoin > 0 ? ($validatedExpressionBesoin / $totalExpressionBesoin) * 100 : 0;
         $percentageNonValidatedExpressionBesoin = $totalExpressionBesoin > 0 ? ($nonValidatedExpressionBesoin / $totalExpressionBesoin) * 100 : 0;
-    
+
         return inertia('Accueil', [
             'percentages' => [
                 'BonAchat' => [
@@ -68,9 +75,10 @@ class MouvmentStockController extends Controller
                     'nonValidated' => $percentageNonValidatedExpressionBesoin,
                 ],
             ],
+            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
         ]);
     }
-    
+
 
 
 //     public function Mouvement(Request $request)

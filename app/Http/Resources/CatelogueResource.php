@@ -20,8 +20,7 @@ class CatelogueResource extends JsonResource
             'designation' => $this->designation,
             'type' => new CategorieResource($this->typeCategorie),
             'stock' => $this->stock,
-
-            'created_at' =>   (new Carbon($this->created_at))->format
+            'created_at' => (new Carbon($this->created_at))->format
             ( 'Y-m-d'),
         ];
     }

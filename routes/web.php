@@ -31,7 +31,7 @@ Route::redirect('/','/Accueil');
 
 
 
-Route::middleware(['auth','verified'])->group(function() {
+Route::middleware(['auth'])->group(function() {
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))
     ->name('dashboard');
 
