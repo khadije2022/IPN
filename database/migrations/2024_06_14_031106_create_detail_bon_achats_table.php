@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('produit')->constrained('catelogue_produits')->onDelete('cascade');
             $table->foreignId('idBonAchat')->constrained('bon_achats')->onDelete('cascade');
             $table->float('prix')->default(0);
-            $table->timestamps(); 
+            $table->timestamps(); // This ensures created_at and updated_at fields are automatically managed
         });
     }
 

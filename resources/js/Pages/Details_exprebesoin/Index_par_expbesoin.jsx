@@ -6,14 +6,16 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus, faFilePdf, faSort } from '@fortawesome/free-solid-svg-icons';
-
+import { faEdit, faTrashAlt, faPlus, faFilePdf, faSort, faFileExcel } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function Index_par_expbesoin({
   auth,
   detailsexpresionbesoins = { data: [] },
   expressionbesoin,
   id_expbesoin,
   success,
+  valider,
   categories = [],
   produits = [],
 }) {
@@ -41,6 +43,11 @@ function Index_par_expbesoin({
     quantite: "",
   });
 
+  useEffect(() => {
+    if (valider) {
+      toast.success(valider);
+    }
+  }, [valider]);
   const openModal = (mode, detail = null) => {
     setModalMode(mode);
     setCurrentDetail(detail);
@@ -153,6 +160,7 @@ function Index_par_expbesoin({
       <Head title="Expression des Besoins" />
       <div className='py-12'>
         <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
+          <ToastContainer />
           {success && (
             <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
               {success}
@@ -167,13 +175,22 @@ function Index_par_expbesoin({
                   <h1>Description: {expressionbesoin.description}</h1>
                 </div>
                 <div className='mt-4 lg:mt-0'>
-                  <button
-                    onClick={() => openModal('add')}
-                    className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                  {expressionbesoin.status !== 'validé' && (
+                    <button
+                      onClick={() => openModal('add')}
+                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                    >
+                      <FontAwesomeIcon icon={faPlus} /> Ajouter
+                    </button>
+                  )}
+                  <a
+                    href={route('export-detailexpbesoin')}
+                    download
+                    className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
                   >
-                    <FontAwesomeIcon icon={faPlus} /> Ajouter
-                  </button>
-                  
+                    <FontAwesomeIcon icon={faFileExcel}/>Excel
+                  </a>
+
                   {expressionbesoin.status !== 'validé' && (
                     <a
                       href={route('valider', { id_expbesoin: id_expbesoin })}
@@ -276,7 +293,7 @@ function Index_par_expbesoin({
                   name="id_catproduit"
                   id="id_catproduit"
                   value={data.id_catproduit}
-                  onChange={(e) => 
+                  onChange={(e) =>
                     setData('id_catproduit', e.target.value)
                   }
                   className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"

@@ -7,7 +7,7 @@ import InputError from "@/Components/InputError";
 import SelectInput from "@/Components/SelectInput";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { faEdit, faTrashAlt, faPlus, faFilePdf, faSort } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faFileExcel, faFilePdf, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function index_par_bonSortie({
@@ -18,6 +18,7 @@ function index_par_bonSortie({
   bonSortie, // ID de bon sortie
   success,
   error,
+  valider,
   categories,
   produits,
 }) {
@@ -39,6 +40,13 @@ function index_par_bonSortie({
       return () => clearTimeout(timer);
     }
   }, [error]);
+
+  useEffect(() => {
+    if (valider) {
+      toast.success(valider);
+    }
+  }, [valider]);
+
 
   useEffect(() => {
     if (selectedCategory && produits?.data) {
@@ -116,6 +124,9 @@ function index_par_bonSortie({
       console.error("Erreur lors de la soumission du formulaire:", error);
     }
   };
+
+
+
 
   const deleteDetailsexpresionbesoin = (detailBonSortie) => {
     if (!confirm("Êtes-vous sûr de vouloir supprimer cette ligne?")) {
@@ -204,7 +215,7 @@ function index_par_bonSortie({
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
 
-              <div className='flex flex-col sm:flex-row justify-between mb-4'>
+              <div className='flex justify-between'>
                 <div className='font-semibold'>
                   <h1>Bon Sortie N° {BonSortie.id}</h1>
                   <h1>Description: {BonSortie.description}</h1>
@@ -224,7 +235,7 @@ function index_par_bonSortie({
 
 
 
-                  {Status === "non-validé" && (
+                  {Status === "Non-Valider" && (
                     <div>
                     <a
                       href={route("bonSortie.valider", { bonSortie: bonSortie })}
@@ -246,7 +257,7 @@ function index_par_bonSortie({
                     </div>
                   )}
 
-                  {Status === 'validé' && (
+                  {Status === 'valider' && (
                     <div>
                     <Link
                       href={route("bonSortie.modify", { bonSortie: bonSortie })}
@@ -265,6 +276,7 @@ function index_par_bonSortie({
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('produit.designation')}>Produits <FontAwesomeIcon icon={faSort} /></th>
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('produit.type.type')}>Catégorie <FontAwesomeIcon icon={faSort} /></th>
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('quantite')}>Qté <FontAwesomeIcon icon={faSort} /></th>
+                    
                     {Status === "non-validé" && (
                       <th className="px-3 py-3 text-right">Action</th>
                     )}
@@ -280,7 +292,7 @@ function index_par_bonSortie({
                       <td className="px-3 py-2">{detailBonSortie.produit.designation}</td>
                       <td className="px-3 py-2">{detailBonSortie.produit.type.type}</td>
                       <td className="px-3 py-2">{detailBonSortie.quantite}</td>
-                      {Status === "Non-Valider" && (
+                      {Status === "non-validé" && (
                         <td className="px-3 py-2 text-nowrap">
                           <button
                             onClick={() => openModal("edit", detailBonSortie)}

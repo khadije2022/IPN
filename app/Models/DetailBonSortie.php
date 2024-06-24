@@ -15,6 +15,7 @@ class DetailBonSortie extends Model
         'idBonDeSortie',
         'produit',
         'quantite',
+        'created_at'
     ];
 
 

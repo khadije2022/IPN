@@ -2,6 +2,7 @@ import React from 'react';
 
 const ProductCard = ({ product }) => {
   const quantityOut = product.quantity_out || 0;
+  const quantityIn = product.quantity_in || 0;
   const stock = product.stock || 0;
   const percentage = stock > 0 ? (quantityOut / stock) * 100 : 0;
 
@@ -16,8 +17,8 @@ const ProductCard = ({ product }) => {
             <span className="text-xl font-bold text-orange-500">{percentage.toFixed(0)}%</span>
           </div>
           <div className="ml-4">
-            <p className="text-gray-600 dark:text-gray-400">Savings: ${product.quantity_in}</p>
-            <p className="text-gray-600 dark:text-gray-400">Target Reached: ${product.quantity_out}</p>
+            <p className="text-gray-600 dark:text-gray-400">Savings: ${quantityIn}</p>
+            <p className="text-gray-600 dark:text-gray-400">Target Reached: ${quantityOut}</p>
           </div>
         </div>
       </div>

@@ -33,6 +33,7 @@ class BonSortieController extends Controller
         return inertia('BonSortieAchat/Index', [
             'bonSorties' => BonSortieResource::collection($expressionbesoins),
             'success' => session('success'),
+            'valider' => session('valider'),
         ]);
     }
 
@@ -125,7 +126,8 @@ class BonSortieController extends Controller
 
 
 
-        return to_route('bonSortie.index')->with('success','Bien validé');
+        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie])->with('valider', 'Bon de sortie bien validé avec succès.');
+    
 
     }
     public function modifier($bonSortie){

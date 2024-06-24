@@ -1,14 +1,58 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import React, { useState } from 'react';
-import { Head, router, useForm } from '@inertiajs/react';
-import TextInput from '@/Components/TextInput';
-import InputLabel from '@/Components/InputLabel';
-import InputError from '@/Components/InputError';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faFileExcel, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import TextInput from '@/Components/TextInput';  // Assuming TextInput is a custom component
 
-function Index({ auth, bonSorties, success }) {
+const styles = {
+  statusValide: {
+    backgroundColor: '#2ecc71',
+    color: 'white',
+    padding: '3px 8px',
+    borderRadius: '5px',
+    textAlign: 'center',
+  },
+  statusNonValide: {
+    backgroundColor: '#e74c3c',
+    color: 'white',
+    padding: '3px 8px',
+    borderRadius: '5px',
+    textAlign: 'center',
+  },
+  modalOverlay: {
+    position: 'fixed',
+    inset: '0',
+    backgroundColor: 'rgba(96, 125, 139, 0.5)',
+    overflowY: 'auto',
+    height: '100%',
+    width: '100%',
+  },
+  modalContainer: {
+    position: 'relative',
+    top: '20%',
+    margin: 'auto',
+    padding: '20px',
+    border: '1px solid #ddd',
+    width: '90%',
+    maxWidth: '500px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    borderRadius: '8px',
+    backgroundColor: 'white',
+  },
+  searchInput: {
+    width: '100%', // Adjust the width as needed
+  },
+  tableRow: {
+    transition: 'background-color 0.3s',
+  },
+  tableRowHover: {
+    backgroundColor: '#d3d3d3',
+  },
+};
+
+function Index({ auth, bonSorties, success,valider }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
   const [currentBonSortie, setCurrentBonSortie] = useState(null);
@@ -54,7 +98,11 @@ function Index({ auth, bonSorties, success }) {
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
-
+  useEffect(() => {
+    if (valider) {
+      toast.success(success);
+    }
+  }, [valider]);
   const handleFormSubmit = (event) => {
     event.preventDefault();
     if (!validateForm()) {
@@ -89,9 +137,7 @@ function Index({ auth, bonSorties, success }) {
     setSearchQuery(e.target.value);
   };
 
-  const handleRowClick = (id) => {
-    router.visit(route('detailBonSortie.index-par-bonSortie', { bonSortie: id }));
-  };
+  
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -125,6 +171,10 @@ function Index({ auth, bonSorties, success }) {
     (searchDateEnd === '' || new Date(bonSortie.created_at) <= new Date(searchDateEnd))
   );
 
+  const handleRowClick = (id) => {
+    router.visit(route('detailBonSortie.index_par_bonSortie', { bonSortie: id }));
+  };
+
   return (
     <AuthenticatedLayout
       user={auth.user}
@@ -145,12 +195,13 @@ function Index({ auth, bonSorties, success }) {
               {success}
             </div>
           )}
-          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div className="p-6 text-gray-900 dark:text-gray-100">
-              <div className="flex flex-col sm:flex-row justify-between mb-4">
-                <div className="font-semibold">
-                  <h1>Liste des Bons de Sortie</h1>
-                  <h1 className="text-red-600">Vous pouvez rechercher par description, statut, et entre des dates données</h1>
+          <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
+            <div className='p-6 text-gray-900 dark:text-gray-100'>
+
+              <div className='flex justify-between'>
+
+                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
+                  <div>C'est la liste des Expressions de Besoin. Vous pouvez rechercher par services, statuts et dates données.</div>
                 </div>
                 <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                   <button

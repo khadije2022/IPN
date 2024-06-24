@@ -120,7 +120,8 @@ class BonAchatController extends Controller
         // Execute the query with pagination
         $mouvmentStock = $mv->paginate(10);
 
-        return to_route('bonAchat.index')->with('success',"Bien validé");
+        return redirect()->route('detailBonAchat.index-par-bonAchat', ['bonAchat' => $bonAchat])
+        ->with('valider', 'Bon de Achat bien validé avec succès');
     }
 
 

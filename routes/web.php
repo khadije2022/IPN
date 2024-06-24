@@ -17,7 +17,6 @@ use App\Http\Controllers\ExpressionBesoinController;
 use App\Http\Controllers\MouvmentStockController;
 use App\Http\Controllers\UserController;
 use App\Models\BonAchat;
-use App\Models\BonAchats;
 use App\Models\BonSortie;
 use App\Models\DetailBonAchat;
 use App\Models\MouvmentStock;
@@ -28,16 +27,14 @@ use Inertia\Inertia;
 
 use function Termwind\render;
 
-Route::redirect('/','/dashboard');
+Route::redirect('/','/Accueil');
 
-// Route::get('/dashboard', function () {
-//     return Inertia::render('Dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware(['auth','verified'])->group(function() {
     Route::get('/dashboard', fn() => Inertia::render('Dashboard'))
     ->name('dashboard');
-    
+
     Route::resource('user', UserController::class);
 
 
@@ -65,6 +62,7 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::resource('stock',StockController::class);
 
     Route::get('/MouvmentStock', [MouvmentStockController::class, 'index'])->name('mouvmentStock.index');
+    Route::get('/Accueil', [MouvmentStockController::class, 'Mouvement'])->name('mouvmentStock.Accueil');
 
 
     Route::resource('expressionbesoin',ExpressionBesoinController::class);
@@ -85,8 +83,15 @@ Route::middleware(['auth','verified'])->group(function() {
     Route::get('/export-produit', [CatelogueProduitController::class, 'exportExcel'])->name('export-produit');
     Route::get('/export-bonachat', [BonAchatController::class, 'exportExcel'])->name('export-bonachat');
     Route::get('/export-bonsortie', [BonSortieController::class, 'exportExcel'])->name('export-bonsortie');
+
     // Route::get('/export-mouvement', [MouvementStockController::class, 'exportExcel'])->name('export-mouvement');
 
+
+
+    // Route::get('/export-mouvement', [MouvementStockController::class, 'exportExcel'])->name('export-mouvement');
+    Route::get('/export-detailexpbesoin', [Details_ExpBesoinController::class, 'exportExcel'])->name('export-detailexpbesoin');
+    Route::get('/export-Details_bonAchat', [DetailBonAchatController::class, 'exportExcel'])->name('export-Details_bonAchat');
+    Route::get('/export-Details_bonSortie', [DetailBonSortieController::class, 'exportExcel'])->name('export-Details_Sortie');
 
 
 

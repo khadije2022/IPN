@@ -6,7 +6,9 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus, faFilePdf, faSort } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faFileExcel, faFilePdf, faSort } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Index_par_expbesoin({
   auth,
@@ -16,6 +18,7 @@ function Index_par_expbesoin({
   bonAchat,
   BonAchat,
   success,
+  valider,
   categories,
   produits
 }) {
@@ -33,10 +36,16 @@ function Index_par_expbesoin({
       setSuccessMessage(success);
       const timer = setTimeout(() => {
         setSuccessMessage(null);
-      }, 10000); // 30000 milliseconds = 30 seconds
+      }, 10000);
       return () => clearTimeout(timer);
     }
   }, [success]);
+
+  useEffect(() => {
+    if (valider) {
+      toast.success(valider);
+    }
+  }, [valider]);
 
   useEffect(() => {
     if (selectedCategory && produits?.data) {
@@ -50,7 +59,6 @@ function Index_par_expbesoin({
   const { data, setData, post, put, errors, reset } = useForm({
     quantite: "",
     produit: "",
-    prix: "",
     idBonAchat: bonAchat
   });
 
@@ -62,14 +70,12 @@ function Index_par_expbesoin({
         produit: detail.produit.id || "",
         idBonAchat: detail.idBonAchat.id || "",
         quantite: detail.quantite || "",
-        prix: detail.prix || "",
       });
       setSelectedCategory(detail.produit.type);
     } else {
       setData({
         quantite: "",
         produit: "",
-        prix: "",
         idBonAchat: bonAchat
       });
       setSelectedCategory('');
@@ -154,6 +160,7 @@ function Index_par_expbesoin({
 
       <div className='py-12'>
         <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
+          <ToastContainer />
           {successMessage && (
             <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
               {successMessage}
@@ -167,18 +174,22 @@ function Index_par_expbesoin({
                   <h1>Description: {BonAchat.description}</h1>
                   <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs</h1>
                 </div>
-                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
+                <div>
+                  <a href={route('export-Details_bonAchat')}
+                    className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
+                  ><FontAwesomeIcon icon={faFileExcel} /> Excel
+                  </a>
                   {Status === 'non-validé' && (
                     <>
                       <button
                         onClick={() => openModal('add')}
-                        className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
+                        className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
                       >
                         <FontAwesomeIcon icon={faPlus} /> Ajouter
                       </button>
                       <a
                         href={route('bonAchat.valider', { bonAchat: bonAchat })}
-                        className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
+                        className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
                       >
                         Valider
                       </a>
@@ -196,77 +207,76 @@ function Index_par_expbesoin({
                     href={route('pdf-DetailsBonAchat', { bonAchat: bonAchat })}
                     className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600'
                   >
-                    <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
+                    <FontAwesomeIcon icon={faFilePdf} className="mr-2" /> PDF
                   </a>
                 </div>
               </div>
-              <div className="overflow-x-auto">
-                <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
-                  <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400'>
-                    <tr>
-                      <th className='px-4 py-3'>
-                        ID
-                        <button onClick={() => requestSort('id')}>
-                          <FontAwesomeIcon icon={faSort} className="ml-1" />
-                        </button>
-                      </th>
-                      <th className='px-4 py-3'>
-                        Produits
-                        <button onClick={() => requestSort('produit.designation')}>
-                          <FontAwesomeIcon icon={faSort} className="ml-1" />
-                        </button>
-                      </th>
-                      <th className='px-4 py-3'>
-                        Catégorie
-                        <button onClick={() => requestSort('produit.type.type')}>
-                          <FontAwesomeIcon icon={faSort} className="ml-1" />
-                        </button>
-                      </th>
-                      <th className='px-4 py-3'>
-                        Quantité
-                        <button onClick={() => requestSort('quantite')}>
-                          <FontAwesomeIcon icon={faSort} className="ml-1" />
-                        </button>
-                      </th>
-                      {Status === 'non-validé' && (<th className='px-4 py-3 text-right'>Action</th>)}
+
+              <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
+                <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
+                  <tr className='text-nowrap'>
+                    <th className='px-3 py-3'>
+                      ID
+                      <button onClick={() => requestSort('id')}>
+                        <FontAwesomeIcon icon={faSort} className="ml-1" />
+                      </button>
+                    </th>
+                    <th className='px-3 py-3'>
+                      Produits
+                      <button onClick={() => requestSort('produit.designation')}>
+                        <FontAwesomeIcon icon={faSort} className="ml-1" />
+                      </button>
+                    </th>
+                    <th className='px-3 py-3'>
+                      Catégorie
+                      <button onClick={() => requestSort('produit.type.type')}>
+                        <FontAwesomeIcon icon={faSort} className="ml-1" />
+                      </button>
+                    </th>
+                    <th className='px-3 py-3'>
+                      Quantité
+                      <button onClick={() => requestSort('quantite')}>
+                        <FontAwesomeIcon icon={faSort} className="ml-1" />
+                      </button>
+                    </th>
+                    {Status === 'non-validé' && (<th className='px-3 py-3 text-right'>Action</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedData.map((detailBonAchat) => (
+                    <tr key={detailBonAchat.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
+                      <td className='px-3 py-2'>{detailBonAchat.id}</td>
+                      <td className='px-3 py-2'>{detailBonAchat.produit.designation}</td>
+                      <td className='px-3 py-2'>{detailBonAchat.produit.type.type}</td>
+                      <td className='px-3 py-2'>{detailBonAchat.quantite}</td>
+                      {Status === 'non-validé' && (
+                        <td className='px-3 py-2 text-nowrap'>
+                          <button
+                            onClick={() => openModal('edit', detailBonAchat)}
+                            className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
+                          >
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button
+                            onClick={() => deleteDetailsexpresionbesoin(detailBonAchat)}
+                            className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
+                          >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                          </button>
+                        </td>
+                      )}
                     </tr>
-                  </thead>
-                  <tbody>
-                    {sortedData.map((detailBonAchat) => (
-                      <tr key={detailBonAchat.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                        <td className='px-4 py-3'>{detailBonAchat.id}</td>
-                        <td className='px-4 py-3'>{detailBonAchat.produit.designation}</td>
-                        <td className='px-4 py-3'>{detailBonAchat.produit.type.type}</td>
-                        <td className='px-4 py-3'>{detailBonAchat.quantite}</td>
-                        {Status === 'non-validé' && (
-                          <td className='px-4 py-3 text-right'>
-                            <button
-                              onClick={() => openModal('edit', detailBonAchat)}
-                              className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
-                            >
-                              <FontAwesomeIcon icon={faEdit} />
-                            </button>
-                            <button
-                              onClick={() => deleteDetailsexpresionbesoin(detailBonAchat)}
-                              className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
-                            >
-                              <FontAwesomeIcon icon={faTrashAlt} />
-                            </button>
-                          </td>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
 
       {isModalOpen && (
-        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full'>
-          <div className='relative top-20 mx-auto p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white dark:bg-gray-800'>
+        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full' onClick={closeModal}>
+          <div className='relative top-20 mx-auto p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white dark:bg-gray-800' onClick={(e) => e.stopPropagation()}>
             <form onSubmit={handleFormSubmit} className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg'>
               <div className='mt-4'>
                 <InputLabel htmlFor='type' value='Catégorie Type' />
@@ -314,6 +324,7 @@ function Index_par_expbesoin({
                 />
                 <InputError message={validationErrors.quantite || errors.quantite} className='mt-2' />
               </div>
+
               <div className='mt-4'>
                 <InputLabel htmlFor='prix' value='Estimation prix' />
                 <TextInput
@@ -326,6 +337,7 @@ function Index_par_expbesoin({
                 />
                 <InputError message={validationErrors.prix || errors.prix} className='mt-2' />
               </div>
+
               <div className='mt-4 text-right'>
                 <button
                   type='button'

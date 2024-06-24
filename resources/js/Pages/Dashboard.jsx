@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 
 export default function Dashboard({ auth }) {
+
   const [darkMode, setDarkMode] = useState(false);
 
   const toggleDarkMode = () => {
@@ -10,9 +11,11 @@ export default function Dashboard({ auth }) {
     document.documentElement.classList.toggle('dark');
   };
 
+
   return (
     <AuthenticatedLayout
       user={auth.user}
+
       header={
        <h1></h1>
       }
@@ -81,6 +84,12 @@ export default function Dashboard({ auth }) {
           </div>
         </div>
       </div>
+
+      header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Dashboard</h2>}
+    
+      <Head title="Accueil" />
+
+
     </AuthenticatedLayout>
   );
 }

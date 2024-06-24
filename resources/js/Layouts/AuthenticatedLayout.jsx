@@ -48,7 +48,9 @@ export default function AuthenticatedLayout({ user, header, children }) {
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col md:flex-row">
             {menuOpen && (
+
                 <div className="fixed inset-0 bg-black opacity-50 md:hidden" onClick={() => setMenuOpen(false)}></div>
+
             )}
             <nav className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 border-r border-gray-100 dark:border-gray-700 p-4 overflow-y-auto flex flex-col justify-between ${menuOpen ? 'block' : 'hidden md:block'}`}>
                 <div>

@@ -8,13 +8,31 @@ import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faFilePdf, faFileExcel, faPlus, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 
-function Index({ auth, categories, success }) {
+function Index({ auth, categories, queryParams = null, success }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
     const [currentCategorie, setCurrentCategorie] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [successMessage, setSuccessMessage] = useState(success);
     const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'asc' });
+
+
+    queryParams = queryParams || {};
+    const searchFieldChanged = (type, value) => {
+      if (value) {
+        queryParams[type] = value;
+      } else {
+        delete queryParams[type];
+      }
+  
+      router.get(route("categorie.index"), queryParams);
+    };
+  
+    const onKeyPress = (name, e) => {
+      if (e.key !== "Enter") return;
+  
+      searchFieldChanged(name, e.target.value);
+    };
 
     const { data, setData, post, put, errors, reset } = useForm({
         type: '',
