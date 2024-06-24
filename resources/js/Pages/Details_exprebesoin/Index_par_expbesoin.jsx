@@ -5,10 +5,12 @@ import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
+import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faPlus, faFilePdf, faSort, faFileExcel } from '@fortawesome/free-solid-svg-icons';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 function Index_par_expbesoin({
   auth,
   detailsexpresionbesoins = { data: [] },
@@ -16,8 +18,8 @@ function Index_par_expbesoin({
   id_expbesoin,
   success,
   valider,
-  categories = [],
-  produits = [],
+  categories ,
+  produits ,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
@@ -27,19 +29,20 @@ function Index_par_expbesoin({
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
   const [validationErrors, setValidationErrors] = useState({});
 
+  console.log(produits.data)
   useEffect(() => {
     if (selectedCategory && produits?.data) {
-      const filtered = produits.data.filter(product => product.id_categorie === parseInt(selectedCategory));
+      const filtered = produits.data.filter(product => product.type.id === parseInt(selectedCategory));
       setFilteredProducts(filtered);
     } else {
       setFilteredProducts([]);
     }
   }, [selectedCategory, produits]);
 
+  console.log(filteredProducts)
   const { data, setData, post, put, errors, reset } = useForm({
     id_expbesoin: id_expbesoin,
-    id_categorie: "",
-    id_catproduit: "",
+    produit: "",
     quantite: "",
   });
 
@@ -48,22 +51,21 @@ function Index_par_expbesoin({
       toast.success(valider);
     }
   }, [valider]);
+
   const openModal = (mode, detail = null) => {
     setModalMode(mode);
     setCurrentDetail(detail);
     if (mode === 'edit' && detail) {
       setData({
         id_expbesoin: detail.id_expbesoin,
-        id_categorie: detail.id_categorie,
-        id_catproduit: detail.id_catproduit,
+        produit: detail.produit,
         quantite: detail.quantite,
       });
-      setSelectedCategory(detail.id_categorie);
+      setSelectedCategory(detail.produit.type);
     } else {
       setData({
         id_expbesoin: id_expbesoin,
-        id_categorie: "",
-        id_catproduit: "",
+        produit: "",
         quantite: "",
       });
       setSelectedCategory('');
@@ -80,11 +82,11 @@ function Index_par_expbesoin({
 
   const validateForm = () => {
     const errors = {};
-    if (!data.id_categorie) {
-      errors.id_categorie = 'Le champ "Catégorie" est obligatoire.';
-    }
-    if (!data.id_catproduit) {
-      errors.id_catproduit = 'Le champ "Produit" est obligatoire.';
+    // if (!data.id_categorie) {
+    //   errors.id_categorie = 'Le champ "Catégorie" est obligatoire.';
+    // }
+    if (!data.produit) {
+      errors.produit = 'Le champ "Produit" est obligatoire.';
     }
     if (!data.quantite || data.quantite <= 0) {
       errors.quantite = 'Le champ "Quantité" est obligatoire et doit être un nombre positif.';
@@ -118,15 +120,15 @@ function Index_par_expbesoin({
     router.delete(route('detailsexpresionbesoin.destroy', detailsexpresionbesoin.id));
   };
 
-  const getProduitname = (id) => {
-    const produit = produits.data.find((produit) => produit.id === id);
-    return produit ? produit.designation : 'N/A';
-  };
+  // const getProduitname = (id) => {
+  //   const produit = produits.data.find((produit) => produit.id === id);
+  //   return produit ? produit.designation : 'N/A';
+  // };
 
-  const getcategoriename = (id) => {
-    const categorie = categories.find((categorie) => categorie.id === id);
-    return categorie ? categorie.type : 'N/A';
-  };
+  // const getcategoriename = (id) => {
+  //   const categorie = categories.find((categorie) => categorie.id === id);
+  //   return categorie ? categorie.type : 'N/A';
+  // };
 
   const requestSort = (key) => {
     let direction = 'ascending';
@@ -174,11 +176,11 @@ function Index_par_expbesoin({
                   <h1>Nom de Responsabilité: {expressionbesoin.service.nom_responsabiliter}</h1>
                   <h1>Description: {expressionbesoin.description}</h1>
                 </div>
-                <div className='mt-4 lg:mt-0'>
+                <div className='mt-4 lg:mt-0 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto'>
                   {expressionbesoin.status !== 'validé' && (
                     <button
                       onClick={() => openModal('add')}
-                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                      className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center'
                     >
                       <FontAwesomeIcon icon={faPlus} /> Ajouter
                     </button>
@@ -186,24 +188,24 @@ function Index_par_expbesoin({
                   <a
                     href={route('export-detailexpbesoin')}
                     download
-                    className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2"
+                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center"
                   >
-                    <FontAwesomeIcon icon={faFileExcel}/>Excel
+                    <FontAwesomeIcon icon={faFileExcel} /> Excel
                   </a>
 
                   {expressionbesoin.status !== 'validé' && (
                     <a
                       href={route('valider', { id_expbesoin: id_expbesoin })}
-                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                      className='bg-emerald-500  px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center'
                     >
                       Valider
                     </a>
                   )}
                   <a
                     href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
-                    className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
+                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center'
                   >
-                    <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
+                    <FontAwesomeIcon icon={faFilePdf} className="mr-2" /> PDF
                   </a>
                 </div>
               </div>
@@ -230,8 +232,8 @@ function Index_par_expbesoin({
                     {sortedDetails.map((detailsexpresionbesoin) => (
                       <tr key={detailsexpresionbesoin.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                         <td className='px-3 py-2'>{detailsexpresionbesoin.id}</td>
-                        <td className='px-3 py-2'>{getcategoriename(detailsexpresionbesoin.id_categorie)}</td>
-                        <td className='px-3 py-2'>{getProduitname(detailsexpresionbesoin.id_catproduit)}</td>
+                        <td className='px-3 py-2'>{detailsexpresionbesoin.produit.type.type}</td>
+                        <td className='px-3 py-2'>{detailsexpresionbesoin.produit.designation}</td>
                         <td className='px-3 py-2'>{detailsexpresionbesoin.quantite}</td>
                         <td className='px-3 py-2 text-nowrap'>
                           <button
@@ -248,7 +250,9 @@ function Index_par_expbesoin({
                           </button>
                         </td>
                       </tr>
+
                     ))}
+                    {/* {JSON.stringify(detailsexpresionbesoins.data)} */}
                   </tbody>
                 </table>
               </div>
@@ -258,24 +262,23 @@ function Index_par_expbesoin({
       </div>
 
       {isModalOpen && (
-        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full'>
-          <div className='relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white'>
+        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center'>
+          <div className='relative mx-auto p-5 border w-full sm:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white dark:bg-gray-800'>
             <form onSubmit={handleFormSubmit} className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg'>
               <div className='mt-4'>
                 <InputLabel htmlFor='id_categorie' value='Catégorie' />
                 <select
                   name="id_categorie"
                   id="id_categorie"
-                  value={data.id_categorie}
+
                   onChange={(e) => {
-                    const value = e.target.value;
-                    setSelectedCategory(value);
-                    setData('id_categorie', value); //the category in form data
+                    setSelectedCategory(e.target.value);
+                    setData('produit', '');
                   }}
                   className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="" className="text-gray-500">Sélectionner une catégorie</option>
-                  {categories.map((category) => (
+                  {categories.data.map((category) => (
                     <option key={category.id} value={category.id} className="text-gray-800 dark:text-gray-200">
                       {category.type}
                     </option>
@@ -284,7 +287,7 @@ function Index_par_expbesoin({
                 {validationErrors.id_categorie && (
                   <div className='text-red-500 mt-2'>{validationErrors.id_categorie}</div>
                 )}
-                <InputError message={errors.id_categorie} className='mt-2' />
+                <InputError message={errors.type} className='mt-2' />
               </div>
 
               <div className='mt-4'>
@@ -292,10 +295,8 @@ function Index_par_expbesoin({
                 <select
                   name="id_catproduit"
                   id="id_catproduit"
-                  value={data.id_catproduit}
-                  onChange={(e) =>
-                    setData('id_catproduit', e.target.value)
-                  }
+                  value={data.produit}
+                  onChange={(e) => setData('produit', e.target.value)}
                   className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 >
                   <option value="" className="text-gray-500">Sélectionner un produit</option>
@@ -305,10 +306,10 @@ function Index_par_expbesoin({
                     </option>
                   ))}
                 </select>
-                {validationErrors.id_catproduit && (
-                  <div className='text-red-500 mt-2'>{validationErrors.id_catproduit}</div>
+                {validationErrors.produit && (
+                  <div className='text-red-500 mt-2'>{validationErrors.produit}</div>
                 )}
-                <InputError message={errors.id_catproduit} className='mt-2' />
+                <InputError message={errors.produit} className='mt-2' />
               </div>
 
               <div className='mt-4'>
@@ -337,7 +338,7 @@ function Index_par_expbesoin({
                 </button>
                 <button
                   type="submit"
-                  className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+                  className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
                 >
                   {modalMode === 'add' ? 'Ajouter' : 'Sauvegarder'}
                 </button>

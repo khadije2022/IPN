@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import React, { useState, useEffect } from 'react';
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
@@ -132,79 +132,76 @@ function Index({ auth, magasins, success }) {
           )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
-
-              <div className='flex flex-col sm:flex-row justify-between mb-4'>
-                <div className='font-semibold'>
-                  <h1>Liste de Magasins</h1>
-                </div>
-
-                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
-                  <button
-                    onClick={() => openModal('add')}
-                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
-                  >
-                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                    Ajouter
-                  </button>
-                
-                  <a
-                    href={route('export-magasin')}
-                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
-                  >
-                    <FontAwesomeIcon icon={faFileExcel} className="mr-2" />
-                    Export Excel
-                  </a>
-                </div>
+              <div className='font-semibold'>
+                <h1>Liste de Magasins</h1>
               </div>
-            
-              <div className="mb-4">
+              <div className='flex flex-col sm:flex-row justify-between mb-4'>
                 <TextInput
                   type="text"
                   name="search"
                   id="search"
                   value={searchQuery}
-                  className="mt-1 block w-full"
+                  className="mt-1 block w-full sm:w-60 mb-2 sm:mb-0"
                   onChange={handleSearchChange}
                   placeholder="Rechercher..."
                 />
+                <div className='flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto'>
+                  <button
+                    onClick={() => openModal('add')}
+                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center'
+                  >
+                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                    Ajouter
+                  </button>
+                  <a
+                    href={route('export-magasin')}
+                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center"
+                  >
+                    <FontAwesomeIcon icon={faFileExcel} className="mr-2" />
+                    Excel
+                  </a>
+                </div>
               </div>
-              <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
-                  <tr className='text-nowrap'>
-                    <th className='px-4 py-3 cursor-pointer' onClick={() => handleSort('id')}>
-                      ID
-                      {sortConfig.key === 'id' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
-                    </th>
-                    <th className='px-4 py-3 cursor-pointer' onClick={() => handleSort('nomMagasin')}>
-                      Nom Magasin
-                      {sortConfig.key === 'nomMagasin' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
-                    </th>
-                    <th className='px-4 py-3 text-right'>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredMagasins.map((magasin) => (
-                    <tr key={magasin.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                      <td className='px-4 py-3'>{magasin.id}</td>
-                      <td className='px-4 py-3'>{magasin.nomMagasin}</td>
-                      <td className='px-4 py-3 text-right flex justify-end'>
-                        <button
-                          onClick={() => openModal('edit', magasin)}
-                          className='text-blue-600 dark:text-blue-500 mx-1'
-                        >
-                          <FontAwesomeIcon icon={faEdit} />
-                        </button>
-                        <button
-                          onClick={() => deleteMagasin(magasin)}
-                          className='text-red-600 dark:text-red-500 mx-1'
-                        >
-                          <FontAwesomeIcon icon={faTrashAlt} />
-                        </button>
-                      </td>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
+                    <tr className='text-nowrap'>
+                      <th className='px-4 py-3 cursor-pointer' onClick={() => handleSort('id')}>
+                        ID
+                        {sortConfig.key === 'id' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                      </th>
+                      <th className='px-4 py-3 cursor-pointer' onClick={() => handleSort('nomMagasin')}>
+                        Nom Magasin
+                        {sortConfig.key === 'nomMagasin' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                      </th>
+                      <th className='px-4 py-3 text-right'>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {filteredMagasins.map((magasin) => (
+                      <tr key={magasin.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
+                        <td className='px-4 py-3'>{magasin.id}</td>
+                        <td className='px-4 py-3'>{magasin.nomMagasin}</td>
+                        <td className='px-4 py-3 text-right flex justify-end'>
+                          <button
+                            onClick={() => openModal('edit', magasin)}
+                            className='text-blue-600 dark:text-blue-500 mx-1'
+                          >
+                            <FontAwesomeIcon icon={faEdit} />
+                          </button>
+                          <button
+                            onClick={() => deleteMagasin(magasin)}
+                            className='text-red-600 dark:text-red-500 mx-1'
+                          >
+                            <FontAwesomeIcon icon={faTrashAlt} />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
               <Pagination links={magasins.meta.links} />
             </div>
           </div>
@@ -212,8 +209,8 @@ function Index({ auth, magasins, success }) {
       </div>
 
       {isModalOpen && (
-        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full'>
-          <div className='relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white'>
+        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center'>
+          <div className='relative p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white'>
             <form onSubmit={handleFormSubmit} className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg'>
               <div className='mt-4'>
                 <InputLabel htmlFor='nomMagasin' value='Nom du Magasin' />

@@ -115,12 +115,12 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 Mouvment Stock
                             </div>
                         </NavLink>
-                        <NavLink href={route('user.index')} active={route().current('user.index')}>
+                        { user.role === "admin" && (<NavLink href={route('user.index')} active={route().current('user.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <UsersIcon className="h-5 w-5 mr-2 text-gray-500" />
                                 User
                             </div>
-                        </NavLink>
+                        </NavLink>)}
                     </div>
                 </div>
             </nav>
@@ -136,17 +136,17 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 <Bars3BottomRightIcon className='h-5 w-5 text-gray-500' />
                             </button>
                             {header}
-                            <div className="flex items-center space-x-4">
+                            <div className="flex items-center space-x-3">
                                 <button
                                     onClick={toggleDarkMode}
                                     className="p-2 rounded-full bg-gray-100 dark:bg-gray-700"
                                 >
                                     <SunIcon className='h-5 w-5 text-gray-500' />
                                 </button>
-                                <button className="relative flex items-center justify-center p-2 rounded-full bg-gray-100 dark:bg-gray-700">
+                                {/* <button className="relative flex items-center justify-center p-2 rounded-full bg-gray-100 dark:bg-gray-700">
                                     <BellIcon className='h-5 w-5 text-gray-500' />
                                     <span className="absolute top-0 right-0 inline-block w-2 h-2 bg-red-600 rounded-full"></span>
-                                </button>
+                                </button> */}
 
                                 <Dropdown>
                                     <Dropdown.Trigger>

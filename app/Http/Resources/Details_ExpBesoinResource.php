@@ -14,6 +14,12 @@ class Details_ExpBesoinResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'quantite' => $this->quantite,
+            'produit' => new CatelogueResource($this->Produit),
+        //   'magasin' => $this->magasin,
+           'id_expression' => $this->expressionBesoin,
+        ];
     }
 }

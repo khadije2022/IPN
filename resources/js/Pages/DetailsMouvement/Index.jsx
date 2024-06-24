@@ -34,11 +34,11 @@ function Index({ auth, mouvmentStocks, produits, success }) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+              {/* <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
                 {produits.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}
-              </div>
+              </div> */}
 
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

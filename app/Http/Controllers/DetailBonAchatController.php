@@ -105,7 +105,7 @@ class DetailBonAchatController extends Controller
     {
         $categorie = Categorie::all();
         $produits = CatelogueProduit::all();
-        
+
         return inertia('detailBonAchat/Edit',
         [
            'detailBonAchat' => $detailBonAchat,
@@ -133,7 +133,7 @@ class DetailBonAchatController extends Controller
     public function destroy(DetailBonAchat $detailBonAchat)
     {
         $detailBonAchat->delete();
-        return to_route('detailBonAchat.index-par-bonAchat',['bonAchat' => $data['idBonAchat']])->with('success','Bien supprimer');
+        return to_route('detailBonAchat.index-par-bonAchat',['bonAchat' => $detailBonAchat['idBonAchat']])->with('success','Bien supprimer');
     }
 
 

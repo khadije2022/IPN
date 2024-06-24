@@ -16,7 +16,7 @@ use App\Models\CatelogueProduit;
 use App\Http\Resources\CategorieResource;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DetailBonSortieExport;
-
+use App\Http\Resources\CatelogueResource;
 
 class DetailBonSortieController extends Controller
 {
@@ -36,6 +36,7 @@ class DetailBonSortieController extends Controller
     {
         $BonSortie = BonSortie::findOrFail($bonSortie);
         $detailsexpresionbesoins = DetailBonSortie::where('idBonDeSortie', $bonSortie)->get();
+        dd($detailsexpresionbesoins);
         $categories = Categorie::all();
         $catelogue_produits = CatelogueProduit::all();
 
@@ -48,7 +49,7 @@ class DetailBonSortieController extends Controller
             'error' => session('error'),
             'valider' => session('valider'),
             'categories' => CategorieResource::collection($categories),
-            'produits' => CategorieResource::collection($catelogue_produits),
+            'produits' => CatelogueResource::collection($catelogue_produits),
         ]);
     }
 

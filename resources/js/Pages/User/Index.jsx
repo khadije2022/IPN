@@ -112,7 +112,23 @@ export default function Index({ auth, users, queryParams = {}, success }) {
           )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
-              <div className="flex justify-end items-center mb-4">
+              <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
+                <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto">
+                  <TextInput
+                    className="w-full sm:w-auto mr-2 mb-2 sm:mb-0"
+                    defaultValue={queryParams.name || ""}
+                    placeholder="User Name"
+                    onBlur={(e) => searchFieldChanged("name", e.target.value)}
+                    onKeyPress={(e) => onKeyPress("name", e)}
+                  />
+                  <TextInput
+                    className="w-full sm:w-auto mr-2 mb-2 sm:mb-0"
+                    defaultValue={queryParams.email || ""}
+                    placeholder="User Email"
+                    onBlur={(e) => searchFieldChanged("email", e.target.value)}
+                    onKeyPress={(e) => onKeyPress("email", e)}
+                  />
+                </div>
                 <button
                   onClick={() => openModal('add')}
                   className="bg-blue-500 py-2 px-4 flex items-center text-white rounded shadow transition-all hover:bg-blue-600 w-full sm:w-auto"
@@ -158,36 +174,6 @@ export default function Index({ auth, users, queryParams = {}, success }) {
                       </TableHeading>
                       <th className="px-3 py-3 text-right">Role</th>
                       <th className="px-3 py-3 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
-                    <tr className="text-nowrap">
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3">
-                        <TextInput
-                          className="w-full"
-                          defaultValue={queryParams.name || ""}
-                          placeholder="User Name"
-                          onBlur={(e) =>
-                            searchFieldChanged("name", e.target.value)
-                          }
-                          onKeyPress={(e) => onKeyPress("name", e)}
-                        />
-                      </th>
-                      <th className="px-3 py-3">
-                        <TextInput
-                          className="w-full"
-                          defaultValue={queryParams.email || ""}
-                          placeholder="User Email"
-                          onBlur={(e) =>
-                            searchFieldChanged("email", e.target.value)
-                          }
-                          onKeyPress={(e) => onKeyPress("email", e)}
-                        />
-                      </th>
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3"></th>
                     </tr>
                   </thead>
                   <tbody>

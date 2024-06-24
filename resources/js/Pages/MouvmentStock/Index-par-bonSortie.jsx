@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Head, Link, router, useForm } from "@inertiajs/react";
+import { Head, router, useForm } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TextInput from "@/Components/TextInput";
 import InputLabel from "@/Components/InputLabel";
@@ -7,7 +7,7 @@ import InputError from "@/Components/InputError";
 import SelectInput from "@/Components/SelectInput";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { faEdit, faTrashAlt, faPlus, faFileExcel, faFilePdf, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faFileExcel, faFilePdf, faSort } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function index_par_bonSortie({
@@ -31,6 +31,7 @@ function index_par_bonSortie({
   const [validationErrors, setValidationErrors] = useState({});
   const [successMessage, setSuccessMessage] = useState(success);
   const [errorMessage, seterrorMessage] = useState(error);
+
   useEffect(() => {
     if (error) {
       seterrorMessage(error);
@@ -46,7 +47,6 @@ function index_par_bonSortie({
       toast.success(valider);
     }
   }, [valider]);
-
 
   useEffect(() => {
     if (selectedCategory && produits?.data) {
@@ -124,9 +124,6 @@ function index_par_bonSortie({
       console.error("Erreur lors de la soumission du formulaire:", error);
     }
   };
-
-
-
 
   const deleteDetailsexpresionbesoin = (detailBonSortie) => {
     if (!confirm("Êtes-vous sûr de vouloir supprimer cette ligne?")) {
@@ -214,58 +211,49 @@ function index_par_bonSortie({
           )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
-
-              <div className='flex justify-between'>
-                <div className='font-semibold'>
-                  <h1>Bon Sortie N° {BonSortie.id}</h1>
+              <div className='flex flex-col sm:flex-row justify-between mb-4'>
+                <div>
+                  <h1 className='font-semibold text-lg'>Bon Sortie N° {BonSortie.id}</h1>
                   <h1>Description: {BonSortie.description}</h1>
-                  <h1 className='text-red-600'>Pour ajouter, cliquez sur le bouton en face et remplissez les champs</h1>
-                </div>
 
-                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
-                  <div>
+                </div>
+                <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
+                <a href={route('export-Details_Sortie')}
+                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
+                  ><FontAwesomeIcon icon={faFileExcel} /> Excel
+                  </a>
                   <a
                     href={route("pdf-DetailsBonSortie", { bonSortie: bonSortie })}
-                    className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
+                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
                   >
                     <FontAwesomeIcon icon={faFilePdf} className="mr-2" />
                     PDF
                   </a>
-                  </div>
-
-
-
-                  {Status === "Non-Valider" && (
-                    <div>
+                  {Status === "non-validé" && (
                     <a
                       href={route("bonSortie.valider", { bonSortie: bonSortie })}
-                      className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
+                      className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
                     >
                       Valider
                     </a>
-                    </div>
                   )}
 
-{Status === "non-validé" && (
-                    <div>
+
+                  {Status === "non-validé" && (
                     <button
                       onClick={() => openModal("add")}
-                      className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
+                      className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
                     >
-                      <FontAwesomeIcon icon={faPlus} /> Ajouter
+                      <FontAwesomeIcon icon={faPlus} className="mr-2" /> Ajouter
                     </button>
-                    </div>
                   )}
-
-                  {Status === 'valider' && (
-                    <div>
+                  {Status === 'validé' && (
                     <Link
                       href={route("bonSortie.modify", { bonSortie: bonSortie })}
-                      className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
+                      className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
                     >
                       Modifier
                     </Link>
-                    </div>
                   )}
                 </div>
               </div>
@@ -276,7 +264,7 @@ function index_par_bonSortie({
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('produit.designation')}>Produits <FontAwesomeIcon icon={faSort} /></th>
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('produit.type.type')}>Catégorie <FontAwesomeIcon icon={faSort} /></th>
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('quantite')}>Qté <FontAwesomeIcon icon={faSort} /></th>
-                    
+
                     {Status === "non-validé" && (
                       <th className="px-3 py-3 text-right">Action</th>
                     )}
@@ -390,7 +378,7 @@ function index_par_bonSortie({
                 </button>
                 <button
                   type="submit"
-                  className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+                  className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600"
                 >
                   {modalMode === "add" ? "Ajouter" : "Enregistrer"}
                 </button>

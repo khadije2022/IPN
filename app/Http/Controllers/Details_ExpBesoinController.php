@@ -12,6 +12,9 @@ use Mpdf\Mpdf;
 use App\Exports\DetailExpressionBesoinExport;
 use App\Http\Requests\StoreDetails_ExpBesoinRequest;
 use App\Http\Requests\UpdateDetails_ExpBesoinRequest;
+use App\Http\Resources\CategorieResource;
+use App\Http\Resources\CatelogueResource;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Details_ExpBesoinController extends Controller
 {
@@ -22,18 +25,19 @@ class Details_ExpBesoinController extends Controller
      public function index()
      {
          // Initialize the query builder for the detailsexpresionbesoin model
-         $query = Details_ExpBesoin::with('categorie', 'catalogueProduit'); // Assurez-vous de charger les relations
-     
+         $query = Details_ExpBesoin::query();
+          // Assurez-vous de charger les relations
+
          // Execute the query with pagination
          $detailsexpresionbesoins = $query->paginate(10);
          $categories = Categorie::all();
          $catelogue_produits = CatelogueProduit::all();
-     
+
          // Return the Inertia.js response with the detailsexpresionbesoins data and any success message from the session
          return inertia('Details_exprebesoin/Index', [
              'detailsexpresionbesoins' => Details_ExpBesoinResource::collection($detailsexpresionbesoins),
-             'categories' => $categories,
-             'catelogue_produits' => $catelogue_produits,
+             'categories' => CategorieResource::collection($categories),
+             'produits' => CatelogueResource::collection($catelogue_produits),
              'success' => session('success'),
          ]);
      }
@@ -43,9 +47,9 @@ class Details_ExpBesoinController extends Controller
      public function index_par_expbesoin($id_expbesoin)
      {
          $expressionbesoin = ExpressionBesoin::with('service')->findOrFail($id_expbesoin);
-     
-         $detailsexpresionbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->with('categorie', 'catalogueProduit')->get();
-     
+
+         $detailsexpresionbesoins = Details_ExpBesoin::where('id_expbesoin', $id_expbesoin)->get();
+            
          $categories = Categorie::all();
          $catelogue_produits = CatelogueProduit::all();
     //  dd($catelogue_produits );
@@ -53,8 +57,8 @@ class Details_ExpBesoinController extends Controller
              'detailsexpresionbesoins' => Details_ExpBesoinResource::collection($detailsexpresionbesoins),
              'expressionbesoin' => $expressionbesoin,
              'id_expbesoin' => $id_expbesoin,
-             'categories' => $categories,
-             'produits' => $catelogue_produits,
+             'categories' => CategorieResource::collection($categories),
+             'produits' => CatelogueResource::collection($catelogue_produits),
              'success' => session('success'),
              'valider' => session('valider'),
 
@@ -65,11 +69,11 @@ class Details_ExpBesoinController extends Controller
      {
          $categories = Categorie::all();
          $catelogue_produits = CatelogueProduit::all();
-     
+
          return inertia('Details_exprebesoin/Create', [
              'categories' => $categories,
              'catelogue_produits' => $catelogue_produits,
-             'id_expbesoin' => $id_expbesoin 
+             'id_expbesoin' => $id_expbesoin
          ]);
      }
 
@@ -77,7 +81,7 @@ class Details_ExpBesoinController extends Controller
      {
          $data = $request->all();
          $detailsexpresionbesoin = Details_ExpBesoin::create($data);
-     
+
          return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $detailsexpresionbesoin->id_expbesoin])->with('success', 'Detailsexpresionbesoin Bien créer');
      }
 
@@ -98,7 +102,7 @@ class Details_ExpBesoinController extends Controller
      {
          $data = $request->all();
          // dd($data); // Correction : Retirez les guillemets autour de $data
-     
+
          $detailsexpresionbesoin->update($data);
          return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $detailsexpresionbesoin->id_expbesoin])->with('success', 'Detailsexpresionbesoin Bien modifier');
      }
