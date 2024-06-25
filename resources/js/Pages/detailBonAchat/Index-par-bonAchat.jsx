@@ -183,7 +183,7 @@ function Index_par_expbesoin({
             <div className='p-6 text-gray-900 dark:text-gray-100'>
               <div className='flex flex-col sm:flex-row justify-between mb-4'>
                 <div>
-                  <h1 className='font-semibold text-lg'>Bon Sortie N° {BonAchat.id}</h1>
+                  <h1 className='font-semibold text-lg'>Bon Achat N° {BonAchat.id}</h1>
                   <h1>Description: {BonAchat.description}</h1>
                 </div>
                 <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">

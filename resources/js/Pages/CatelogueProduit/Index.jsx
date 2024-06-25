@@ -94,7 +94,7 @@ function Index({ auth, produits, categories, success, stock }) {
                 <TextInput type="text" name="search" value={searchQuery} onChange={handleSearchChange} placeholder="Rechercher..." className="mt-2 block w-full sm:w-60 " />
 
                 <div className='flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto'>
-                  <button onClick={() => openModal('add')} className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center w-full  sm-w-60 sm:mt-4'>
+                  <button onClick={() => openModal('add')} className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center w-full  sm-w-60 '>
                     <FontAwesomeIcon icon={faPlus} className="mr-2" /> Ajouter
                   </button>
                   <a href={route('export-produit')} className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center w-full sm-w-60">

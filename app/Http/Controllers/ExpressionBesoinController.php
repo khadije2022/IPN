@@ -165,7 +165,7 @@ public function store(StoreExpressionBesoinRequest $request)
 
         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $id_expbesoin])->with('valider', 'Details Expresionbesoin Bien validé');
     }
-    public function exportExcel()
+    public function exportExceld()
     {
         $categories = ExpressionBesoin::get();
         return Excel::download(new ExpressionBesoinExport(), 'Expression.xlsx');
