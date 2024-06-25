@@ -36,12 +36,12 @@ class DetailBonSortieController extends Controller
     {
         $BonSortie = BonSortie::findOrFail($bonSortie);
         $detailsexpresionbesoins = DetailBonSortie::where('idBonDeSortie', $bonSortie)->get();
-        
+
         $categories = Categorie::all();
         $catelogue_produits = CatelogueProduit::all();
 
         return inertia('MouvmentStock/Index-par-bonSortie', [
-            'detailSorties' => DetailSortieResource::collection($detailsexpresionbesoins),
+            'detailBonSorties' => DetailSortieResource::collection($detailsexpresionbesoins),
             'bonSortie' => $bonSortie,
             'BonSortie' => $BonSortie,
             'Status' => $BonSortie->status,
@@ -53,20 +53,24 @@ class DetailBonSortieController extends Controller
         ]);
     }
 
+
     public function store(StoreDetailBonSortieRequest $request)
     {
         $data = $request->validated();
-        
+
         $produit = CatelogueProduit::find($data['produit']);
-        
-        // dd($produit['stock']  );
+
+        // dd($data['quantite'] >  $produit['stock'] );
 
         if ($produit['stock'] < $data['quantite']) {
             return redirect()->back()->with('error', 'Quantité demandée supérieure à la quantité disponible.');
         }
-        $bonSortie = DetailBonSortie::create($data);
-        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie->bonSortie->id])->with('success', 'Bon de sortie créé avec succès.');
+        else
+      {  $bonSortie = DetailBonSortie::create($data);
+        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie->idBonDeSortie])->with('success', 'Bon de sortie créé avec succès.');}
     }
+
+
 
     public function update(UpdateDetailBonSortieRequest $request, DetailBonSortie $detailBonSortie)
     {

@@ -295,7 +295,7 @@ function Index({ auth, bonAchats, success }) {
               {modalMode === 'add' ? 'Ajouter Bon d\'Achat' : 'Modifier Bon d\'Achat'}
             </h2>
             <form onSubmit={handleFormSubmit}>
-              <InputLabel htmlFor="description" value="uuu" />
+              <InputLabel htmlFor="description" value="description" />
               <TextInput
                 id="description"
                 name="description"

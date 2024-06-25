@@ -12,6 +12,8 @@ use App\Http\Requests\StoreExpressionBesoinRequest;
 use App\Http\Requests\UpdateExpressionBesoinRequest;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExpressionBesoinExport;
+use App\Models\MouvmentStock;
+use Illuminate\Support\Facades\DB;
 
 class ExpressionBesoinController extends Controller
 {
@@ -136,7 +138,7 @@ public function store(StoreExpressionBesoinRequest $request)
 
         // Create purchase order details for each need expression detail
         foreach ($details_expbesoins as $detail) {
-            DetailBonAchat::create([
+           $Achat = DetailBonAchat::create([
                 'idBonAchat' => $bonAchat->id,
                 'produit' => $detail->produit,
                 'quantite' => $detail->quantite,
@@ -144,10 +146,26 @@ public function store(StoreExpressionBesoinRequest $request)
 
             ]);
         }
+        $totalQuantity = DetailBonAchat::where('idBonAchat', $bonAchat->id)->sum('quantite');
+
+        $mouvment = new MouvmentStock();
+        $mouvment->idBonDeSortie = null;
+        $mouvment->idBonAchat = $Achat->idBonAchat; // Set to null or the appropriate value if available
+        $mouvment->typeMouvments = 'Achat'; // or any type that you need to define
+        $mouvment->stock = $totalQuantity;
+        $mouvment->save();
+        $mv = MouvmentStock::query();
+        $bonAchat->status = 'validé';
+        $bonAchat->save();
+
+        DB::table('catelogue_produits AS cp')
+        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+     ->where('cp.id', '=', DB::raw('ps.product_id'))
+        ->update(['cp.stock' => DB::raw('ps.stock')]);
 
         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $id_expbesoin])->with('valider', 'Details Expresionbesoin Bien validé');
     }
-    public function exportExcel()
+    public function exportExceld()
     {
         $categories = ExpressionBesoin::get();
         return Excel::download(new ExpressionBesoinExport(), 'Expression.xlsx');

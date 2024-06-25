@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Head, router, useForm } from "@inertiajs/react";
+import { Head, router, useForm ,Link } from "@inertiajs/react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import TextInput from "@/Components/TextInput";
 import InputLabel from "@/Components/InputLabel";
@@ -43,6 +43,7 @@ function index_par_bonSortie({
   }, [error]);
 
   useEffect(() => {
+    
     if (valider) {
       toast.success(valider);
     }
@@ -123,6 +124,15 @@ function index_par_bonSortie({
     } catch (error) {
       console.error("Erreur lors de la soumission du formulaire:", error);
     }
+  };
+
+  const handel = (e) => {
+    const value = e.target.value;
+    if(value < 0){
+      toast.error('La quantité ne peut être négative');
+      return;
+    }
+    setData('quantite', value);
   };
 
   const deleteDetailsexpresionbesoin = (detailBonSortie) => {
@@ -218,6 +228,14 @@ function index_par_bonSortie({
 
                 </div>
                 <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
+                {Status === "non-validé" &&  (
+                    <button
+                      onClick={() => openModal("add")}
+                      className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
+                    >
+                      <FontAwesomeIcon icon={faPlus} className="mr-2" /> Ajouter
+                    </button>
+                  )}
                 <a href={route('export-Details_Sortie')}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
                   ><FontAwesomeIcon icon={faFileExcel} /> Excel
@@ -239,14 +257,7 @@ function index_par_bonSortie({
                   )}
 
 
-                  {Status === "non-validé" &&  (
-                    <button
-                      onClick={() => openModal("add")}
-                      className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
-                    >
-                      <FontAwesomeIcon icon={faPlus} className="mr-2" /> Ajouter
-                    </button>
-                  )}
+
                   {Status === 'validé' && (
                     <Link
                       href={route("bonSortie.modify", { bonSortie: bonSortie })}
@@ -361,7 +372,7 @@ function index_par_bonSortie({
                   id="quantite"
                   value={data.quantite}
                   className="mt-1 block w-full"
-                  onChange={(e) => setData("quantite", e.target.value)}
+                  onChange={handel}
                 />
                 <InputError message={validationErrors.quantite || errors.quantite} className="mt-2" />
                 {errors.quantite && (

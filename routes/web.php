@@ -77,7 +77,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/pdf-DetailsBonSortie/{bonSortie}', [BonSortieController::class, 'exportPdf'])->name('pdf-DetailsBonSortie');
 
 
-    Route::get('/export-expressionbesoin', [ExpressionBesoinController::class, 'exportExcel'])->name('export-expressionbesoin');
+    Route::get('/export-expressionbesoin', [ExpressionBesoinController::class, 'exportExceld'])->name('export-expressionbesoin');
     Route::get('/export-categories', [CategorieController::class, 'exportExcel'])->name('export-categories');
     Route::get('/export-magasin', [MagasinController::class, 'exportExcel'])->name('export-magasin');
     Route::get('/export-produit', [CatelogueProduitController::class, 'exportExcel'])->name('export-produit');

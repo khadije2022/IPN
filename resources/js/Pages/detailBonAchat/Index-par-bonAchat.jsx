@@ -117,7 +117,19 @@ function Index_par_expbesoin({
 
   const handleQuantityChange = (e) => {
     const value = e.target.value;
-    setData('quantite', value >= 0 ? value : '');
+    if(value < 0){
+      toast.error('La quantité ne peut être négative');
+      return;
+    }
+    setData('quantite', value);
+  };
+  const handle = (e) => {
+    const value = e.target.value;
+    if(value < 0){
+      toast.error('La  prix ne peut être négative');
+      return;
+    }
+    setData('prix', value);
   };
 
   const deleteDetailsexpresionbesoin = (detailBonAchat) => {
@@ -171,7 +183,7 @@ function Index_par_expbesoin({
             <div className='p-6 text-gray-900 dark:text-gray-100'>
               <div className='flex flex-col sm:flex-row justify-between mb-4'>
                 <div>
-                  <h1 className='font-semibold text-lg'>Bon Sortie N° {BonAchat.id}</h1>
+                  <h1 className='font-semibold text-lg'>Bon Achat N° {BonAchat.id}</h1>
                   <h1>Description: {BonAchat.description}</h1>
                 </div>
                 <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
@@ -179,6 +191,7 @@ function Index_par_expbesoin({
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
                   ><FontAwesomeIcon icon={faFileExcel} /> Excel
                   </a>
+
                   {Status === 'non-validé' &&
 
                       (<button
@@ -188,6 +201,10 @@ function Index_par_expbesoin({
                         <FontAwesomeIcon icon={faPlus} /> Ajouter
                       </button>)
 }
+                  <a href={route('export-Details_bonAchat')}
+                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
+                  ><FontAwesomeIcon icon={faFileExcel} /> Excel
+                  </a>
                      { Status === 'non-validé' && auth.user.role === 'admin' &&( <a
                         href={route('bonAchat.valider', { bonAchat: bonAchat })}
                         className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
@@ -335,7 +352,7 @@ function Index_par_expbesoin({
                   id="prix"
                   value={data.prix}
                   className="mt-1 block w-full"
-                  onChange={(e) => setData('prix', e.target.value)}
+                  onChange={handle}
                 />
                 <InputError message={validationErrors.prix || errors.prix} className='mt-2' />
               </div>

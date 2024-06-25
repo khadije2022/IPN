@@ -84,7 +84,7 @@ height: 160;
         <table class="surmeme_ligne">
             <tr>
                 <td class="left"><h4>Institut pédagogique National IPN</h4></td>
-                <td><img src="C:\wamp64\www\laravel\laravel-react-inertia\resources\images\logoipn.jpg" alt="Logo IPN"></td>
+                <td><img src="../../images/logoipn.jpg" alt="Logo IPN"></td>
                 <td class="right">
                     <h3 class="rtl">
                         المعهد التربوي الوطني
@@ -281,7 +281,7 @@ height: 160;
 
         <h1 class="center">BON DE SORTIE <br>وثيقة استخراج</h1>
 
-        
+
 
         <section class="info">
             <div>
@@ -295,7 +295,7 @@ height: 160;
             </div>
         </section>
 
-        <div class="invoice-box"> 
+        <div class="invoice-box">
             <table>
                 <thead>
                     <tr>

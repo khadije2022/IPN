@@ -91,17 +91,17 @@ function Index({ auth, produits, categories, success, stock }) {
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <div className='flex flex-col sm:flex-row justify-between mb-4'>
-                <TextInput type="text" name="search" value={searchQuery} onChange={handleSearchChange} placeholder="Rechercher..." className="mt-1 block w-full sm:w-60" />
+                <TextInput type="text" name="search" value={searchQuery} onChange={handleSearchChange} placeholder="Rechercher..." className="mt-2 block w-full sm:w-60 " />
 
                 <div className='flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto'>
-                  <button onClick={() => openModal('add')} className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'>
+                  <button onClick={() => openModal('add')} className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center w-full  sm-w-60 '>
                     <FontAwesomeIcon icon={faPlus} className="mr-2" /> Ajouter
                   </button>
-                  <a href={route('export-produit')} className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center">
-                    <FontAwesomeIcon icon={faFileExcel} className="mr-2" /> Export Excel
+                  <a href={route('export-produit')} className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center w-full sm-w-60">
+                    <FontAwesomeIcon icon={faFileExcel} className="mr-2" /> Excel
                   </a>
                 </div>
-                
+
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

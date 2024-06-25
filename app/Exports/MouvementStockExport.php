@@ -6,7 +6,7 @@ namespace App\Exports;
 use App\Models\MouvmentStock;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class MouvmentStockExport implements FromCollection
+class MouvementStockExport implements FromCollection
 {
     /**
     * @return \Illuminate\Support\Collection

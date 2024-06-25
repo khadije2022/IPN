@@ -29,8 +29,8 @@ function Index({ auth, mouvmentStocks, produits, success }) {
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <div className="flex flex-col sm:flex-row justify-between mb-4">
                 <div className="font-semibold">
-                  <h1>C'est la liste de mouvement stock</h1>
-                  <h1 className="text-red-600">pour bien visiter le mouvement</h1>
+                  <h1 className='text-red-600'>C'est la liste de mouvement stock</h1>
+                  
                 </div>
               </div>
 

@@ -122,12 +122,12 @@ class BonSortieController extends Controller
         ->update(['cp.stock' => DB::raw('ps.stock')]);
 
         // Execute the query with pagination
-        $mouvmentStock = $mv->paginate(10);
+        // $mouvmentStock = $mv->paginate(10);
 
 
 
         return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie])->with('valider', 'Bon de sortie bien validé avec succès.');
-    
+
 
     }
     public function modifier($bonSortie){
@@ -156,7 +156,7 @@ class BonSortieController extends Controller
         // Execute the query with pagination
         $mouvmentStock = $mv->paginate(10);
 
-        return to_route('bonSortie.index')->with('success','Bien Modifier le status');
+        return to_route('detailBonSortie.index_par_bonSortie',['bonSortie' => $bonSortie])->with('success','Bien Modifier le status');
     }
 
     public function exportPdf($bonSortie)
