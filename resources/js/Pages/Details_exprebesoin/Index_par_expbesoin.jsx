@@ -341,7 +341,7 @@ function Index_par_expbesoin({
                 </button>
                 <button
                   type="submit"
-                  className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
+                  className="bg-emerald-500 py-1 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-30"
                 >
                   {modalMode === 'add' ? 'Ajouter' : 'Sauvegarder'}
                 </button>

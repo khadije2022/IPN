@@ -80,7 +80,7 @@ function Index({ auth, expressionbesoins, services, success }) {
         setData({
           id_service: '',
           description: '',
-          status: 'non validé',
+          status: 'non-validé',
         });
       },
     });
@@ -92,7 +92,7 @@ function Index({ auth, expressionbesoins, services, success }) {
   };
 
   const deleteExpressionBesoin = (expressionbesoin) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer ce projet?')) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce Expression ?')) {
       return;
     }
     router.delete(route('expressionbesoin.destroy', expressionbesoin.id));
@@ -353,7 +353,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                 </div>
               )}
 
-              <div className='mt-4 text-right'>
+              <div className='mt-4 text-right flex flex-row'>
                 <button
                   type='button'
                   onClick={closeModal}
