@@ -43,6 +43,7 @@ function index_par_bonSortie({
   }, [error]);
 
   useEffect(() => {
+    
     if (valider) {
       toast.success(valider);
     }
