@@ -15,13 +15,12 @@ class MagasinExport implements FromCollection
     public function collection()
     {
         return Magasin::all([
-            "id",'nomMagasin', 
+           'nomMagasin', 
         ]);
     }
     public function headings(): array
     {
         return [
-            'ID',
             'NOM',
         ];
     }
@@ -32,7 +31,6 @@ class MagasinExport implements FromCollection
     public function map($bulk): array
     {
         return [
-            $bulk->id,
             $bulk->nomMagasin,
         ];
     }

@@ -13,13 +13,13 @@ class CategoriesExport implements FromCollection
     public function collection()
     {
         return Categorie::all([
-            'parent_id','type' 
+            'type' 
         ]);
     }
     public function headings(): array
     {
         return [
-            'PARENT_ID',
+            
             'TYPE'
             
         ];
@@ -32,7 +32,7 @@ class CategoriesExport implements FromCollection
     {
         return [
             $bulk->type,
-            $bulk->parent_id,
+            
         ];
     }
 }

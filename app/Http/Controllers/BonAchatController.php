@@ -148,29 +148,30 @@ class BonAchatController extends Controller
 
 
     public function exportPdf($bonAchat)
-    {
-        $BonAchat = BonAchat::findOrFail($bonAchat);
+{
+    $BonAchat = BonAchat::findOrFail($bonAchat);
 
-        $details_BonAchats = DetailBonAchat::with('produits')->where('idBonAchat', $bonAchat)->get();
+    $details_BonAchats = DetailBonAchat::with('produits')->where('idBonAchat', $bonAchat)->get();
 
-        $totalQuantite = $details_BonAchats->sum('quantite');
+    $totalQuantite = $details_BonAchats->sum('quantite');
 
-        $html = View::make('pdf.bonachat', [
-            'details_BonAchats' => $details_BonAchats,
-            'BonAchat' => $BonAchat,
-            'totalQuantite' => $totalQuantite
-        ])->render();
+    $html = View::make('pdf.bonachat', [
+        'details_BonAchats' => $details_BonAchats,
+        'BonAchat' => $BonAchat,
+        'totalQuantite' => $totalQuantite
+    ])->render();
 
-        try {
-            $mpdf = new Mpdf();
-            $mpdf->autoScriptToLang = true;
-            $mpdf->autoLangToFont = true;
-            $mpdf->WriteHTML($html);
-            return $mpdf->Output('BonAchat.pdf', 'D');
-        } catch (\Mpdf\MpdfException $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+    try {
+        $mpdf = new \Mpdf\Mpdf();
+        $mpdf->autoScriptToLang = true;
+        $mpdf->autoLangToFont = true;
+        $mpdf->WriteHTML($html);
+        return $mpdf->Output('BonAchat.pdf', 'D');
+    } catch (\Mpdf\MpdfException $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
     }
+}
+
 
 
 

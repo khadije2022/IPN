@@ -1,40 +1,37 @@
 <?php
-
-
 namespace App\Exports;
 
 use App\Models\ExpressionBesoin;
+use App\Models\Service;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class ExpressionBesoinExport implements FromCollection
+class ExpressionBesoinExport implements FromCollection, WithHeadings, WithMapping
 {
     /**
     * @return \Illuminate\Support\Collection
     */
     public function collection()
     {
-        return ExpressionBesoin::all([
-            'id_service' ,'description', 'status'  
-        ]);
+        return ExpressionBesoin::with('service')->get();
     }
+
     public function headings(): array
     {
         return [
-            'ID',
-            'DESCRIPTION',
+            'Nom du Service',
+            'Description',
             'Status'
         ];
     }
-    public function query()
-    {
-        return ExpressionBesoin::query();
-    }
-    public function map($bulk): array
+
+    public function map($expressionBesoin): array
     {
         return [
-            $bulk->id_service,
-            $bulk->status,
-            $bulk->description,
+            $expressionBesoin->service->nom_responsabiliter ?? 'N/A',
+            $expressionBesoin->description,
+            $expressionBesoin->status,
         ];
     }
 }

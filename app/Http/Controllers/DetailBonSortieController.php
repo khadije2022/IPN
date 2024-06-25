@@ -55,8 +55,11 @@ class DetailBonSortieController extends Controller
     public function store(StoreDetailBonSortieRequest $request)
     {
         $data = $request->validated();
+        
         $produit = CatelogueProduit::find($data['produit']);
-        if ($produit->quantite < $data['quantite']) {
+        
+        // dd($produit['stock']  );
+        if ($produit['stock'] < $data['quantite']) {
             return redirect()->back()->with('error', 'Quantité demandée supérieure à la quantité disponible.');
         }
         $bonSortie = DetailBonSortie::create($data);

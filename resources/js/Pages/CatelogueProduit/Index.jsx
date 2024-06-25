@@ -155,7 +155,7 @@ function Index({ auth, produits, categories, success, stock }) {
                 <div className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
                   <h1>C'est la liste des Produits disponible et Sa Stock</h1>
                 </div>
-                {/* <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
+                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
                   <button
                     onClick={() => openModal('add')}
                     className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
@@ -170,7 +170,7 @@ function Index({ auth, produits, categories, success, stock }) {
                     <FontAwesomeIcon icon={faFileExcel} className="mr-2" />
                     Export Excel
                   </a>
-                </div> */}
+                </div>
               </div>
               <div className="mb-4">
                 <TextInput
