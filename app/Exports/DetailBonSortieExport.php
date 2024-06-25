@@ -3,39 +3,40 @@
 namespace App\Exports;
 
 use App\Models\DetailBonSortie;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class DetailBonSortieExport implements FromCollection
+class DetailBonSortieExport implements FromQuery, WithHeadings, WithMapping
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+    protected $bonSortie;
+
+    public function __construct($bonSortie)
     {
-        return DetailBonSortie::all([
-            'description',
-            'created_at',
-            'status'
-        ]);
+        $this->bonSortie = $bonSortie;
     }
+
+    public function query()
+    {
+        return DetailBonSortie::with('produits')
+            ->where('idBonDeSortie', $this->bonSortie);
+    }
+
     public function headings(): array
     {
         return [
-            'id_expbesoin',
-            'id_categorie',
-            'id_catproduit'
+            'Produit',
+            'Catégorie',
+            'Quantité',
         ];
     }
-    public function query()
-    {
-        return DetailBonSortie::query();
-    }
-    public function map($bulk): array
+
+    public function map($detailBonSortie): array
     {
         return [
-            $bulk->id_expbesoin,
-            $bulk->id_categorie,
-            $bulk->id_catproduit,
+            $detailBonSortie->produits->designation ?? 'N/A',
+            $detailBonSortie->produits->typeCategorie->type ?? 'N/A',
+            $detailBonSortie->quantite,
         ];
     }
 }
