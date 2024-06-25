@@ -89,8 +89,8 @@ Route::middleware(['auth'])->group(function() {
 
 
     // Route::get('/export-mouvement', [MouvementStockController::class, 'exportExcel'])->name('export-mouvement');
-    Route::get('/export-detailexpbesoin', [Details_ExpBesoinController::class, 'exportExcel'])->name('export-detailexpbesoin');
-    Route::get('/export-Details_bonAchat', [DetailBonAchatController::class, 'exportExcel'])->name('export-Details_bonAchat');
+    Route::get('/export-detailexpbesoin/{id_expbesoin}', [Details_ExpBesoinController::class, 'exportExcel'])->name('export-detailexpbesoin');
+    Route::get('/export-Details_bonAchat/{bonAchat}', [DetailBonAchatController::class, 'exportExcel'])->name('export-Details_bonAchat');
     Route::get('/export-Details_bonSortie', [DetailBonSortieController::class, 'exportExcel'])->name('export-Details_Sortie');
 
 

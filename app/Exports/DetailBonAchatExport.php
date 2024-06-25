@@ -1,50 +1,43 @@
 <?php
+
 namespace App\Exports;
 
 use App\Models\DetailBonAchat;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class DetailBonAchatExport implements FromCollection, WithHeadings, WithMapping
+class DetailBonAchatExport implements FromQuery, WithHeadings, WithMapping
 {
-    /**
-     * Récupère la collection de détails de bon d'achat
+    protected $bonAchat;
 
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    public function collection()
+    public function __construct($bonAchat)
     {
-        return DetailBonAchat::with('produit')->get();
+        $this->bonAchat = $bonAchat;
     }
 
-    /**
-     * Définit les en-têtes du fichier Excel
+    public function query()
+    {
+        return DetailBonAchat::with('produits')
+            ->where('idBonAchat', $this->bonAchat);
+    }
 
-     *
-     * @return array
-     */
     public function headings(): array
     {
         return [
-            'Quantité',
             'Produit',
+            'Catégorie',
+            'Quantité',
+            
         ];
     }
 
-    /**
-     * Mappe les données de chaque détail de bon d'achat
-
-     *
-     * @param mixed $detailBonAchat
-     * @return array
-     */
     public function map($detailBonAchat): array
     {
         return [
+            $detailBonAchat->produits->designation ?? 'N/A', 
+            $detailBonAchat->produits->typeCategorie->type,
             $detailBonAchat->quantite,
-            $detailBonAchat->produit->designation, // Assuming 'produit' relationship returns the related product model
         ];
     }
 }

@@ -17,6 +17,7 @@ class BonSortieExport implements FromCollection, WithHeadings, WithMapping
         return BonSortie::all([
             'description',
             'status',
+            'created_at'
         ]);
     }
 
@@ -28,6 +29,7 @@ class BonSortieExport implements FromCollection, WithHeadings, WithMapping
         return [
             'DESCRIPTION',
             'STATUS',
+            'Date',
         ];
     }
 
@@ -40,6 +42,7 @@ class BonSortieExport implements FromCollection, WithHeadings, WithMapping
         return [
             $bonSortie->description,
             $bonSortie->status,
+            $bonSortie->created_at->format('Y-m-d'),
         ];
     }
 }

@@ -216,7 +216,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                     Ajouter
                   </button>
                   <a
-                    href={route('export-magasin')}
+                    href={route('export-expressionbesoin')}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center"
                   >
                     <FontAwesomeIcon icon={faFileExcel} className="mr-2" />

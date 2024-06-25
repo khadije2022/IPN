@@ -22,7 +22,8 @@ class ExpressionBesoinExport implements FromCollection, WithHeadings, WithMappin
         return [
             'Nom du Service',
             'Description',
-            'Status'
+            'Status',
+            'Date',
         ];
     }
 
@@ -32,6 +33,7 @@ class ExpressionBesoinExport implements FromCollection, WithHeadings, WithMappin
             $expressionBesoin->service->nom_responsabiliter ?? 'N/A',
             $expressionBesoin->description,
             $expressionBesoin->status,
+            $expressionBesoin->created_at->format('Y-m-d'),
         ];
     }
 }

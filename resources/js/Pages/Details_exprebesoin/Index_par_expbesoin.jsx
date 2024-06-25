@@ -186,7 +186,7 @@ function Index_par_expbesoin({
                     </button>
                   )}
                   <a
-                    href={route('export-detailexpbesoin')}
+                    href={route('export-detailexpbesoin',{id_expbesoin: id_expbesoin})}
                     download
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
                   >
