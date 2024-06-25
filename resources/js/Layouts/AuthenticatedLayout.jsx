@@ -109,7 +109,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 Bon Sortie
                             </div>
                         </NavLink>
-                        
+
                         { user.role === "admin" && (<NavLink href={route('user.index')} active={route().current('user.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <UsersIcon className="h-5 w-5 mr-2 text-gray-500" />

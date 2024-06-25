@@ -111,6 +111,7 @@ class BonAchatController extends Controller
         $mv = MouvmentStock::query();
         $BonAchat->status = 'validé';
         $BonAchat->save();
+
         DB::table('catelogue_produits AS cp')
         ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
      ->where('cp.id', '=', DB::raw('ps.product_id'))
@@ -138,11 +139,16 @@ class BonAchatController extends Controller
         $BonAchat->status = 'non-validé';
         $BonAchat->save();
 
+        DB::table('catelogue_produits AS cp')
+        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+     ->where('cp.id', '=', DB::raw('ps.product_id'))
+        ->update(['cp.stock' => DB::raw('ps.stock')]);
+
 
         $mv = MouvmentStock::query();
         // Execute the query with pagination
         $mouvmentStock = $mv->paginate(10);
-        return to_route('bonAchat.index')->with('success',"Bien Modifier le status");
+        return to_route('detailBonAchat.index-par-bonAchat' , ['bonAchat' => $bonAchat]);
     }
 
 

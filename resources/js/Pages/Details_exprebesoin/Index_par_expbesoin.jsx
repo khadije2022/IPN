@@ -110,7 +110,11 @@ function Index_par_expbesoin({
 
   const handleQuantityChange = (e) => {
     const value = e.target.value;
-    setData('quantite', value >= 0 ? value : '');
+    if(value < 0){
+      toast.error('La quantité ne peut être négative');
+      return;
+    }
+    setData('quantite', value);
   };
 
   const deleteDetailsexpresionbesoin = (detailsexpresionbesoin) => {
@@ -173,7 +177,7 @@ function Index_par_expbesoin({
               <div className='flex flex-col lg:flex-row justify-between'>
                 <div className='font-semibold'>
                   <h1>Expression du Besoin N° {expressionbesoin.id}</h1>
-                  <h1>Nom de Responsabilité: {expressionbesoin.service.nom_responsabiliter}</h1>
+                  <h1>Service: {expressionbesoin.service.nom_responsabiliter}</h1>
                   <h1>Description: {expressionbesoin.description}</h1>
                 </div>
                 <div className='mt-7 mb-6  flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto'>
@@ -186,7 +190,7 @@ function Index_par_expbesoin({
                     </button>
                   )}
                   <a
-                    href={route('export-detailexpbesoin')}
+                    href={route('export-expressionbesoin')}
                     download
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
                   >

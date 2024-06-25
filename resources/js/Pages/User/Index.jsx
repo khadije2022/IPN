@@ -120,14 +120,14 @@ export default function Index({ auth, users, queryParams = {}, success }) {
                   <TextInput
                     className="w-full sm:w-auto mr-2 mb-2 sm:mb-0"
                     defaultValue={queryParams.name || ""}
-                    placeholder="User Name"
+                    placeholder="Nom"
                     onBlur={(e) => searchFieldChanged("name", e.target.value)}
                     onKeyPress={(e) => onKeyPress("name", e)}
                   />
                   <TextInput
                     className="w-full sm:w-auto mr-2 mb-2 sm:mb-0"
                     defaultValue={queryParams.email || ""}
-                    placeholder="User Email"
+                    placeholder="Email"
                     onBlur={(e) => searchFieldChanged("email", e.target.value)}
                     onKeyPress={(e) => onKeyPress("email", e)}
                   />
@@ -225,7 +225,7 @@ export default function Index({ auth, users, queryParams = {}, success }) {
         <Model isOpen={isModalOpen} onClose={closeModal}>
           <form onSubmit={handleSubmit} className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
             <div className="mt-4">
-              <InputLabel htmlFor="user_name" value="User Name" />
+              <InputLabel htmlFor="user_name" value="Nom" />
               <TextInput
                 id="user_name"
                 type="text"
@@ -238,7 +238,7 @@ export default function Index({ auth, users, queryParams = {}, success }) {
               <InputError message={errors.name} className="mt-2" />
             </div>
             <div className="mt-4">
-              <InputLabel htmlFor="user_email" value="User Email" />
+              <InputLabel htmlFor="user_email" value="Email" />
               <TextInput
                 id="user_email"
                 type="text"
@@ -250,7 +250,7 @@ export default function Index({ auth, users, queryParams = {}, success }) {
               <InputError message={errors.email} className="mt-2" />
             </div>
             <div className="mt-4">
-              <InputLabel htmlFor="user_password" value="Password" />
+              <InputLabel htmlFor="user_password" value="Mot de passe" />
               <TextInput
                 id="user_password"
                 type="password"
@@ -285,7 +285,7 @@ export default function Index({ auth, users, queryParams = {}, success }) {
                 Annuler
               </button>
               <button className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
-                Create
+                Ajouer
               </button>
             </div>
           </form>

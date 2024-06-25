@@ -9,8 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faFilePdf, faFileExcel, faPlus, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import SelectInput from '@/Components/SelectInput';
 
-
-function Index({ auth, categories, magasins,queryParams = null, success }) {
+function Index({ auth, categories, magasins, queryParams = null, success }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
     const [currentCategorie, setCurrentCategorie] = useState(null);
@@ -25,13 +24,11 @@ function Index({ auth, categories, magasins,queryParams = null, success }) {
       } else {
         delete queryParams[type];
       }
-
       router.get(route("categorie.index"), queryParams);
     };
 
     const onKeyPress = (name, e) => {
       if (e.key !== "Enter") return;
-
       searchFieldChanged(name, e.target.value);
     };
 
@@ -65,7 +62,7 @@ function Index({ auth, categories, magasins,queryParams = null, success }) {
             setSuccessMessage(success);
             const timer = setTimeout(() => {
                 setSuccessMessage(null);
-            }, 10000); // 10000 milliseconds = 10 seconds
+            }, 10000); // 10 seconds
             return () => clearTimeout(timer);
         }
     }, [success]);
@@ -82,8 +79,8 @@ function Index({ auth, categories, magasins,queryParams = null, success }) {
             errors.type = 'Le champ catégorie est obligatoire.';
         }
         if (!data.id_magasin) {
-          errors.id_magasin = 'Le champ magasin est obligatoire.';
-      }
+            errors.id_magasin = 'Le champ magasin est obligatoire.';
+        }
         setValidationErrors(errors);
         return Object.keys(errors).length === 0;
     };
@@ -133,7 +130,6 @@ function Index({ auth, categories, magasins,queryParams = null, success }) {
         categorie.id.toString().includes(searchQuery) ||
         categorie.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
         categorie.id_magasin.toLowerCase().includes(searchQuery.toLowerCase())
-
     );
 
     return (
@@ -159,15 +155,6 @@ function Index({ auth, categories, magasins,queryParams = null, success }) {
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <div className="flex flex-col sm:flex-row justify-between mb-4">
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 sm:mb-0">
-                                    <button
-                                        onClick={() => openModal('add')}
-                                        className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
-                                    >
-                                        <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                                        Ajouter
-                                    </button>
-                                </div>
                                 <div className="flex flex-col sm:flex-row items-start sm:items-center w-full sm:w-auto">
                                     <TextInput
                                         type="text"
@@ -178,20 +165,32 @@ function Index({ auth, categories, magasins,queryParams = null, success }) {
                                         onChange={handleSearchChange}
                                         placeholder="Rechercher ..."
                                     />
-                                    <a
-                                        href={route('export-pdf')}
-                                        download
-                                        className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto mb-2 sm:mb-0 sm:mr-2"
-                                    >
-                                        <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
-                                    </a>
-                                    <a
-                                        href={route('export-excel')}
-                                        className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
-                                    >
-                                        <FontAwesomeIcon icon={faFileExcel} className="mr-2" />Excel
-                                    </a>
                                 </div>
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center mb-4 sm:mb-0">
+    <button
+        onClick={() => openModal('add')}
+        className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto mb-4 sm:mb-0 sm:mr-2' // Changed from mr-2 to mr-4
+    >
+        <FontAwesomeIcon icon={faPlus} className="mr-2" />
+        Ajouter
+    </button>
+    <a
+        href={route('export-pdf')}
+        download
+        className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto mb-2 sm:mb-0 sm:mr-2"
+    >
+        <FontAwesomeIcon icon={faFilePdf} className="mr-2" />
+        PDF
+    </a>
+    <a
+        href={route('export-excel')}
+        className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
+    >
+        <FontAwesomeIcon icon={faFileExcel} className="mr-2" />
+        Excel
+    </a>
+</div>
+
                             </div>
 
                             <div className="overflow-x-auto">
@@ -238,7 +237,6 @@ function Index({ auth, categories, magasins,queryParams = null, success }) {
                                                 </td>
                                             </tr>
                                         ))}
-
                                     </tbody>
                                 </table>
                             </div>
@@ -269,27 +267,26 @@ function Index({ auth, categories, magasins,queryParams = null, success }) {
                             </div>
 
                             <div className='mt-4'>
-                <InputLabel htmlFor='id_magasin' value='Magasin' />
-                <SelectInput
-                  name='id_magasin'
-                  id='id_magasin'
-                  className='mt-1 block w-full'
-                  value={data.type}
-                  onChange={(e) => setData('id_magasin', e.target.value)}
-                >
-                  <option value=''>Sélectionnez une option</option>
-                  {magasins.map((magasin) => (
-                    <option key={magasin.id} value={magasin.id}>
-                      {magasin.nomMagasin}
-                    </option>
-                  ))}
-                </SelectInput>
-                {validationErrors.type && (
-                  <div className='text-red-500 mt-2'>{validationErrors.id_magasin}</div>
-                )}
-                <InputError message={errors.id_magasin} className='mt-2' />
-              </div>
-
+                                <InputLabel htmlFor='id_magasin' value='Magasin' />
+                                <SelectInput
+                                  name='id_magasin'
+                                  id='id_magasin'
+                                  className='mt-1 block w-full'
+                                  value={data.id_magasin}
+                                  onChange={(e) => setData('id_magasin', e.target.value)}
+                                >
+                                  <option value=''>Sélectionnez une option</option>
+                                  {magasins.map((magasin) => (
+                                    <option key={magasin.id} value={magasin.id}>
+                                      {magasin.nomMagasin}
+                                    </option>
+                                  ))}
+                                </SelectInput>
+                                {validationErrors.id_magasin && (
+                                  <div className='text-red-500 mt-2'>{validationErrors.id_magasin}</div>
+                                )}
+                                <InputError message={errors.id_magasin} className='mt-2' />
+                              </div>
 
                             <div className='mt-4 text-right'>
                                 <button
