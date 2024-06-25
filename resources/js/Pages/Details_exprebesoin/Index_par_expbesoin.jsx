@@ -158,7 +158,7 @@ function Index_par_expbesoin({
       header={
         <div className='flex justify-between items-center'>
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
-            Expression des Besoins 
+            Expression des Besoins
           </h2>
         </div>
       }
@@ -331,7 +331,7 @@ function Index_par_expbesoin({
                 <InputError message={errors.quantite} className='mt-2' />
               </div>
 
-              <div className='mt-4 text-right'>
+              <div className='mt-4 text-right flex flex-row'>
                 <button
                   type='button'
                   onClick={closeModal}
@@ -341,7 +341,7 @@ function Index_par_expbesoin({
                 </button>
                 <button
                   type="submit"
-                  className="bg-emerald-500 py-1 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-30"
+                  className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
                 >
                   {modalMode === 'add' ? 'Ajouter' : 'Sauvegarder'}
                 </button>
