@@ -2,10 +2,7 @@
 
 namespace App\Exports;
 
-use App\Http\Resources\CategorieResource;
-use App\Models\CatalogueProduit;
-use App\Models\Categorie;
-use App\Models\CatelogueProduit;
+use App\Models\CatelogueProduit; // Correction du nom du modèle utilisé
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -17,28 +14,26 @@ class CatalogueProduitExport implements FromCollection, WithHeadings, WithMappin
     */
     public function collection()
     {
-        // Charger les produits avec les champs nécessaires
-        // return CatelogueProduit::with('stock')->get();
-        
-        return CatelogueProduit::with("typeCategorie")->get();
+        // Assurer que la méthode with() est appelée avec les relations correctes du modèle CatalogueProduit
+        return CatelogueProduit::with('typeCategorie')->get(); // Assurez-vous que 'categorie' est la relation correcte dans votre modèle
     }
 
     public function headings(): array
     {
         return [
-            
             'DESIGNATION',
-            "TYPE",
-            'STOCK',
+            'TYPE DE CATÉGORIE',
+            'QUANTITÉ EN STOCK',
         ];
     }
 
-    public function map($bulk): array
+    public function map($produit): array
     {
+        // Assurer que chaque champ est correctement mappé, surtout les relations
         return [
-            $bulk->designation,
-            $bulk->typeCategorie->type,
-            $bulk->stock,
+            $produit->designation,
+            $produit->typeCategorie->type, // Remplacez 'categorie' et 'type' par les noms corrects si nécessaire
+            $produit->stock,
         ];
     }
 }

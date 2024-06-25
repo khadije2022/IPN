@@ -11,4 +11,8 @@ class Magasin extends Model
     protected $fillable =[
         'nomMagasin',
     ];
+
+    public function categorie(){
+        return $this->hasMany(Categorie::class,'id_magasin');
+    }
 }

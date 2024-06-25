@@ -8,6 +8,9 @@ import Model from "@/Components/Model"; // Assume you have a Modal component
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import { PlusIcon } from '@heroicons/react/24/outline';
+import { faEdit, faTrashAlt, faFilePdf, faFileExcel, faPlus, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 
 export default function Index({ auth, users, queryParams = {}, success }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -85,7 +88,7 @@ export default function Index({ auth, users, queryParams = {}, success }) {
   };
 
   const deleteUser = (user) => {
-    if (window.confirm("Are you sure you want to delete the user?")) {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer cette utilisateur?")) {
       router.delete(route("user.destroy", user.id));
     }
   };
@@ -96,7 +99,7 @@ export default function Index({ auth, users, queryParams = {}, success }) {
       header={
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Users
+          Utilisateur
           </h2>
         </div>
       }
@@ -112,7 +115,23 @@ export default function Index({ auth, users, queryParams = {}, success }) {
           )}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
-              <div className="flex justify-end items-center mb-4">
+              <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
+                <div className="flex flex-col sm:flex-row items-center w-full sm:w-auto">
+                  <TextInput
+                    className="w-full sm:w-auto mr-2 mb-2 sm:mb-0"
+                    defaultValue={queryParams.name || ""}
+                    placeholder="User Name"
+                    onBlur={(e) => searchFieldChanged("name", e.target.value)}
+                    onKeyPress={(e) => onKeyPress("name", e)}
+                  />
+                  <TextInput
+                    className="w-full sm:w-auto mr-2 mb-2 sm:mb-0"
+                    defaultValue={queryParams.email || ""}
+                    placeholder="User Email"
+                    onBlur={(e) => searchFieldChanged("email", e.target.value)}
+                    onKeyPress={(e) => onKeyPress("email", e)}
+                  />
+                </div>
                 <button
                   onClick={() => openModal('add')}
                   className="bg-blue-500 py-2 px-4 flex items-center text-white rounded shadow transition-all hover:bg-blue-600 w-full sm:w-auto"
@@ -154,40 +173,10 @@ export default function Index({ auth, users, queryParams = {}, success }) {
                         sort_direction={queryParams.sort_direction || ""}
                         sortChanged={sortChanged}
                       >
-                        Create Date
+                        Date
                       </TableHeading>
                       <th className="px-3 py-3 text-right">Role</th>
                       <th className="px-3 py-3 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
-                    <tr className="text-nowrap">
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3">
-                        <TextInput
-                          className="w-full"
-                          defaultValue={queryParams.name || ""}
-                          placeholder="User Name"
-                          onBlur={(e) =>
-                            searchFieldChanged("name", e.target.value)
-                          }
-                          onKeyPress={(e) => onKeyPress("name", e)}
-                        />
-                      </th>
-                      <th className="px-3 py-3">
-                        <TextInput
-                          className="w-full"
-                          defaultValue={queryParams.email || ""}
-                          placeholder="User Email"
-                          onBlur={(e) =>
-                            searchFieldChanged("email", e.target.value)
-                          }
-                          onKeyPress={(e) => onKeyPress("email", e)}
-                        />
-                      </th>
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3"></th>
-                      <th className="px-3 py-3"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -212,13 +201,13 @@ export default function Index({ auth, users, queryParams = {}, success }) {
                             onClick={() => openModal('edit', user)}
                             className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1"
                           >
-                            Edit
+                              <FontAwesomeIcon icon={faEdit}/>
                           </button>
                           <button
                             onClick={() => deleteUser(user)}
                             className="font-medium text-red-600 dark:text-red-500 hover:underline mx-1"
                           >
-                            Delete
+                            <FontAwesomeIcon icon={faTrashAlt}/>
                           </button>
                         </td>
                       </tr>
@@ -283,7 +272,7 @@ export default function Index({ auth, users, queryParams = {}, success }) {
               >
                 <option value="">Select Role</option>
                 <option value="admin">Admin</option>
-                <option value="service">Services</option>
+                <option value="service">Service</option>
               </select>
               <InputError message={errors.role} className="mt-2" />
             </div>
@@ -293,10 +282,10 @@ export default function Index({ auth, users, queryParams = {}, success }) {
                 onClick={closeModal}
                 className="bg-gray-100 py-1 px-3 text-gray-800 rounded shadow transition-all hover:bg-gray-200 mr-2"
               >
-                Cancel
+                Annuler
               </button>
               <button className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
-                Submit
+                Create
               </button>
             </div>
           </form>

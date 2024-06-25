@@ -10,7 +10,8 @@ class DetailBonAchatExport implements FromCollection, WithHeadings, WithMapping
 {
     /**
      * Récupère la collection de détails de bon d'achat
-     * 
+
+     *
      * @return \Illuminate\Support\Collection
      */
     public function collection()
@@ -20,7 +21,8 @@ class DetailBonAchatExport implements FromCollection, WithHeadings, WithMapping
 
     /**
      * Définit les en-têtes du fichier Excel
-     * 
+
+     *
      * @return array
      */
     public function headings(): array
@@ -33,7 +35,8 @@ class DetailBonAchatExport implements FromCollection, WithHeadings, WithMapping
 
     /**
      * Mappe les données de chaque détail de bon d'achat
-     * 
+
+     *
      * @param mixed $detailBonAchat
      * @return array
      */

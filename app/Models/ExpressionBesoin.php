@@ -21,4 +21,8 @@ class ExpressionBesoin extends Model
     {
         return $this->belongsTo(Service::class, 'id_service');
     }
+
+    public function DetailStock(){
+        return $this->hasMany(Details_ExpBesoin::class,'id_expbesoin');
+    }
 }

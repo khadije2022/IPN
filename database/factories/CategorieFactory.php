@@ -18,6 +18,8 @@ class CategorieFactory extends Factory
     {
         return [
             'type' => fake()->randomElement(['A4',"Cartoche","Bic"]),
+            'id_magasin' => 1,
+
             'parent_id' => 1
         ];
     }

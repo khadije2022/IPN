@@ -12,28 +12,23 @@ class Details_ExpBesoin extends Model
     use HasFactory;
     protected $table = 'details_expbesoins';
     protected $fillable=[
-        'id_expbesoin',
-        'id_categorie',
-        'id_catproduit',
-        'quantite'
+        'produit',
+        'quantite',
+        'id_expbesoin'
     ];
-    
+
 
     // In ExpressionBesoin model
-public function service()
-{
-    return $this->belongsTo(Service::class, 'id_service');
-}
+// public function service()
+// {
+//     return $this->belongsTo(Service::class, 'id_service');
+// }
 
-// In DetailsExpBesoin model
-public function categorie()
-{
-    return $this->belongsTo(Categorie::class, 'id_categorie');
-}
 
-public function catalogueProduit()
+
+public function Produit()
 {
-    return $this->belongsTo(CatelogueProduit::class, 'id_catproduit');
+    return $this->belongsTo(CatelogueProduit::class, 'produit');
 }
 
 public function expressionBesoin()

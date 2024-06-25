@@ -1,58 +1,13 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import React, { useState } from 'react';
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import React, { useState, useEffect } from 'react';
+import { Head, router, useForm } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
+import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-
-const styles = {
-  statusValide: {
-    backgroundColor: '#2ecc71',
-    color: 'white',
-    padding: '3px 8px',
-    borderRadius: '5px',
-    textAlign: 'center',
-  },
-  statusNonValide: {
-    backgroundColor: '#e74c3c',
-    color: 'white',
-    padding: '3px 8px',
-    borderRadius: '5px',
-    textAlign: 'center',
-  },
-  modalOverlay: {
-    position: 'fixed',
-    inset: '0',
-    backgroundColor: 'rgba(96, 125, 139, 0.5)',
-    overflowY: 'auto',
-    height: '100%',
-    width: '100%',
-  },
-  modalContainer: {
-    position: 'relative',
-    top: '20%',
-    margin: 'auto',
-    padding: '20px',
-    border: '1px solid #ddd',
-    width: '90%',
-    maxWidth: '400px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    borderRadius: '8px',
-    backgroundColor: 'white',
-  },
-  searchInput: {
-    width: '100%',
-  },
-  tableRow: {
-    transition: 'background-color 0.3s',
-  },
-  tableRowHover: {
-    backgroundColor: '#d3d3d3',
-  },
-};
 
 function Index({ auth, expressionbesoins, services, success }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,7 +24,7 @@ function Index({ auth, expressionbesoins, services, success }) {
   const { data, setData, post, put, errors, reset } = useForm({
     id_service: '',
     description: '',
-    status: 'non validé',
+    status: 'non-validé',
   });
 
   const openModal = async (mode, expressionbesoin = null) => {
@@ -205,38 +160,69 @@ function Index({ auth, expressionbesoins, services, success }) {
           )}
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
-              <div className='flex flex-col sm:flex-row justify-between mb-4'>
+              <div className='mb-4'>
                 <div className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
-                  <div>C'est la liste des Expressions de Besoins</div>
-                  <div>Vous pouvez rechercher par services, statuts et entre des dates données</div>
-                </div>
-                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
-                  <div>
-                    <button
-                      onClick={() => openModal('add')}
-                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
-                    >
-                      <FontAwesomeIcon icon={faPlus} className="mr-2" />Ajouter
-                    </button>
-                  </div>
-                  <div>
-                    <a href={route('export-expressionbesoin')} className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center">
-                      <FontAwesomeIcon icon={faFileExcel} className="mr-2" />Excel</a>
-                  </div>
-                </div>
-              </div>
+                  <div>Liste des Expressions de Besoins</div>
 
-              <div className="mb-4">
+                </div>
+
+                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
+
+
+                </div>
+
+              </div>
+              <div className='flex flex-col sm:flex-row justify-between mb-4'>
                 <TextInput
                   type="text"
                   name="search"
                   id="search"
                   value={searchQuery}
-                  className="mt-1 block w-full"
+                  className="mt-1 block w-full sm:w-60 mb-2 sm:mb-0"
                   onChange={handleSearchChange}
-                  placeholder="Rechercher ID"
-                  style={styles.searchInput}
+                  placeholder="Rechercher..."
                 />
+                <select
+                  name="searchStatus"
+                  id="searchStatus"
+                  value={searchStatus}
+                  className="mt-1 block w-full sm:w-auto dark:bg-gray-700 dark:text-gray-300"
+                  onChange={(e) => setSearchStatus(e.target.value)}
+                >
+                  <option value="">Statut</option>
+                  <option value="validé">Validé</option>
+                  <option value="non-validé">Non Validé</option>
+                </select>
+                <select
+                  name="searchService"
+                  id="searchService"
+                  value={searchService}
+                  className="mt-1 block w-full sm:w-auto dark:bg-gray-700 dark:text-gray-300"
+                  onChange={(e) => setSearchService(e.target.value)}
+                >
+                  <option value="">Service</option>
+                  {services.map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.nom_responsabiliter}
+                    </option>
+                  ))}
+                </select>
+                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
+                  <button
+                    onClick={() => openModal('add')}
+                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center'
+                  >
+                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                    Ajouter
+                  </button>
+                  <a
+                    href={route('export-magasin')}
+                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center"
+                  >
+                    <FontAwesomeIcon icon={faFileExcel} className="mr-2" />
+                    Excel
+                  </a>
+                </div>
               </div>
 
               <div className="overflow-x-auto">
@@ -265,21 +251,19 @@ function Index({ auth, expressionbesoins, services, success }) {
                     {filteredExpressionBesoins.map((expressionbesoin) => (
                       <tr
                         key={expressionbesoin.id}
-                        className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer'
-                        style={styles.tableRow}
-                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = styles.tableRowHover.backgroundColor}
-                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
+                        className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-300 transition duration-300'
+                        onClick={() => handleRowClick(expressionbesoin.id)}
                       >
-                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}>{expressionbesoin.id}</td>
-                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}>{getServiceName(expressionbesoin.id_service)}</td>
-                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}>{expressionbesoin.description}</td>
-                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}>
-                          <span style={expressionbesoin.status === 'validé' ? styles.statusValide : styles.statusNonValide}>
+                        <td className='px-2 py-1'>{expressionbesoin.id}</td>
+                        <td className='px-2 py-1'>{getServiceName(expressionbesoin.id_service)}</td>
+                        <td className='px-2 py-1'>{expressionbesoin.description}</td>
+                        <td className='px-2 py-1'>
+                          <span className={`inline-block px-2 py-1 rounded text-white text-center ${expressionbesoin.status === 'validé' ? 'bg-green-500' : 'bg-red-500'}`}>
                             {expressionbesoin.status}
                           </span>
                         </td>
                         <td className='px-2 py-1'>{formatDate(expressionbesoin.created_at)}</td>
-                        <td className='px-2 py-1 text-nowrap'>
+                        <td className='px-2 py-1 text-right flex justify-end'>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -311,8 +295,8 @@ function Index({ auth, expressionbesoins, services, success }) {
       </div>
 
       {isModalOpen && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modalContainer}>
+        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center'>
+          <div className='relative mx-auto p-5 border w-full sm:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white dark:bg-gray-800'>
             <form onSubmit={handleFormSubmit} className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg'>
               <div className='mt-4'>
                 <InputLabel htmlFor='id_service' value='Service' />
@@ -320,7 +304,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                   name='id_service'
                   id='id_service'
                   value={data.id_service}
-                  className='mt-1 block w-full'
+                  className='mt-1 block w-full dark:bg-gray-700 dark:text-gray-300'
                   onChange={(e) => setData('id_service', e.target.value)}
                 >
                   <option value=''>Sélectionner un Service</option>
@@ -343,7 +327,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                   name='description'
                   id='description'
                   value={data.description}
-                  className='mt-1 block w-full'
+                  className='mt-1 block w-full dark:bg-gray-700 dark:text-gray-300'
                   onChange={(e) => setData('description', e.target.value)}
                 />
                 {validationErrors.description && (
@@ -359,11 +343,11 @@ function Index({ auth, expressionbesoins, services, success }) {
                     name='status'
                     id='status'
                     value={data.status}
-                    className='mt-1 block w-full'
+                    className='mt-1 block w-full dark:bg-gray-700 dark:text-gray-300'
                     onChange={(e) => setData('status', e.target.value)}
                   >
                     <option value='validé'>Validé</option>
-                    <option value='non validé'>Non Validé</option>
+                    <option value='non-validé'>Non Validé</option>
                   </select>
                   <InputError message={errors.status} className='mt-2' />
                 </div>
@@ -379,7 +363,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                 </button>
                 <button
                   type='submit'
-                  className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
+                  className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
                 >
                   {modalMode === 'add' ? 'Ajouter' : 'Enregistrer'}
                 </button>

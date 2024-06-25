@@ -38,7 +38,7 @@ class UpdateUserRequest extends FormRequest
             ],
             'password' => [
                 'nullable', // Password is optional during update
-                // 'confirmed',
+               
                 Password::min(8), // Password complexity rules
             ],
         ];

@@ -56,7 +56,7 @@ class UserController extends Controller
         User::create($data);
 
         return to_route('user.index')
-            ->with('success', 'User was created');
+            ->with('success', 'Utilisateur est cree');
     }
 
     /**
@@ -83,6 +83,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->validated();
+
         $password = $data['password'] ?? null;
         if ($password) {
             $data['password'] = bcrypt($password);
@@ -92,7 +93,7 @@ class UserController extends Controller
         $user->update($data);
 
         return to_route('user.index')
-            ->with('success', "User \"$user->name\" was updated");
+            ->with('success', "User \"$user->name\" est cree");
     }
 
     /**
@@ -103,6 +104,6 @@ class UserController extends Controller
         $name = $user->name;
         $user->delete();
         return to_route('user.index')
-            ->with('success', "User \"$name\" was deleted");
+            ->with('success', "User \"$name\" est supprimer");
     }
 }

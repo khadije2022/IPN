@@ -1,58 +1,19 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import React, { useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Head, Link, router, useForm } from '@inertiajs/react';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faPlus, faFileExcel, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-import TextInput from '@/Components/TextInput';  // Assuming TextInput is a custom component
+import TextInput from '@/Components/TextInput';
+import InputLabel from '@/Components/InputLabel';
+import InputError from '@/Components/InputError';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 const styles = {
-  statusValide: {
-    backgroundColor: '#2ecc71',
-    color: 'white',
-    padding: '3px 8px',
-    borderRadius: '5px',
-    textAlign: 'center',
-  },
-  statusNonValide: {
-    backgroundColor: '#e74c3c',
-    color: 'white',
-    padding: '3px 8px',
-    borderRadius: '5px',
-    textAlign: 'center',
-  },
-  modalOverlay: {
-    position: 'fixed',
-    inset: '0',
-    backgroundColor: 'rgba(96, 125, 139, 0.5)',
-    overflowY: 'auto',
-    height: '100%',
-    width: '100%',
-  },
-  modalContainer: {
-    position: 'relative',
-    top: '20%',
-    margin: 'auto',
-    padding: '20px',
-    border: '1px solid #ddd',
-    width: '90%',
-    maxWidth: '500px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
-    borderRadius: '8px',
-    backgroundColor: 'white',
-  },
-  searchInput: {
-    width: '100%', // Adjust the width as needed
-  },
-  tableRow: {
-    transition: 'background-color 0.3s',
-  },
-  tableRowHover: {
-    backgroundColor: '#d3d3d3',
-  },
+  statusValide: 'bg-green-500 text-white py-1 px-2 rounded text-center',
+  statusNonValide: 'bg-red-500 text-white py-1 px-2 rounded text-center',
 };
 
-function Index({ auth, bonSorties, success,valider }) {
+function Index({ auth, bonSorties, success, valider }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
   const [currentBonSortie, setCurrentBonSortie] = useState(null);
@@ -66,6 +27,12 @@ function Index({ auth, bonSorties, success,valider }) {
   const { data, setData, post, put, errors, reset } = useForm({
     description: '',
   });
+
+  useEffect(() => {
+    if (valider) {
+      toast.success(success);
+    }
+  }, [valider]);
 
   const openModal = async (mode, bonSortie = null) => {
     setModalMode(mode);
@@ -98,11 +65,7 @@ function Index({ auth, bonSorties, success,valider }) {
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
   };
-  useEffect(() => {
-    if (valider) {
-      toast.success(success);
-    }
-  }, [valider]);
+
   const handleFormSubmit = (event) => {
     event.preventDefault();
     if (!validateForm()) {
@@ -136,8 +99,6 @@ function Index({ auth, bonSorties, success,valider }) {
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
-
-  
 
   const handleSort = (key) => {
     let direction = 'asc';
@@ -197,21 +158,46 @@ function Index({ auth, bonSorties, success,valider }) {
           )}
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
-
-              <div className='flex justify-between'>
-
-                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
-                  <div>C'est la liste des Expressions de Besoin. Vous pouvez rechercher par services, statuts et dates données.</div>
+              <div className='mb-4'>
+                <div className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
+                  <div>Liste des Bons de Sortie</div>
                 </div>
-                <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+              </div>
+              <div className='flex flex-col sm:flex-row justify-between mb-4 space-y-2 sm:space-y-0'>
+                <TextInput
+                  type="text"
+                  name="search"
+                  id="search"
+                  value={searchQuery}
+                  className="mt-1 block w-full sm:w-60 dark:bg-gray-700 dark:text-gray-300"
+                  onChange={handleSearchChange}
+                  placeholder="Rechercher..."
+                />
+                <select
+                  name="searchStatus"
+                  id="searchStatus"
+                  value={searchStatus}
+                  className="mt-1 block w-full sm:w-auto dark:bg-gray-700 dark:text-gray-300"
+                  onChange={(e) => setSearchStatus(e.target.value)}
+                >
+                  <option value="">Statut</option>
+                  <option value="validé">Validé</option>
+                  <option value="non-validé">Non Validé</option>
+                </select>
+                <div className="flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
                   <button
                     onClick={() => openModal('add')}
-                    className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center"
+                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center"
                   >
                     <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                    Ajouter
                   </button>
-                  <a href={route('export-bonsortie')} className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center">
+                  <a
+                    href={route('export-bonsortie')}
+                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center"
+                  >
                     <FontAwesomeIcon icon={faFileExcel} className="mr-2" />
+                    Excel
                   </a>
                 </div>
               </div>
@@ -221,47 +207,27 @@ function Index({ auth, bonSorties, success,valider }) {
                   <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500">
                     <tr>
                       <th className="px-2 py-1"></th>
-                      <th className="px-6 py-6">
-                        <TextInput
-                          type="text"
-                          name="search"
-                          id="search"
-                          value={searchQuery}
-                          className="mt-1 block w-full"
-                          onChange={handleSearchChange}
-                          placeholder="Rechercher"
-                        />
-                      </th>
+                      <th className="px-2 py-1"></th>
+                      <th className="px-2 py-1"></th>
                       <th className="px-2 py-1">
-                        <select
-                          name="searchStatus"
-                          id="searchStatus"
-                          value={searchStatus}
-                          className="mt-1 block w-full"
-                          onChange={(e) => setSearchStatus(e.target.value)}
-                        >
-                          <option value="">Statut</option>
-                          <option value="validé">Validé</option>
-                          <option value="non validé">Non Validé</option>
-                        </select>
-                      </th>
-                      <th className="px-2 py-1">
-                        <TextInput
-                          type="date"
-                          name="searchDateStart"
-                          id="searchDateStart"
-                          value={searchDateStart}
-                          className="mt-1 block w-full"
-                          onChange={(e) => setSearchDateStart(e.target.value)}
-                        />
-                        <TextInput
-                          type="date"
-                          name="searchDateEnd"
-                          id="searchDateEnd"
-                          value={searchDateEnd}
-                          className="mt-1 block w-full"
-                          onChange={(e) => setSearchDateEnd(e.target.value)}
-                        />
+                        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                          <TextInput
+                            type="date"
+                            name="searchDateStart"
+                            id="searchDateStart"
+                            value={searchDateStart}
+                            className="mt-1 block w-full sm:w-auto h-10 dark:bg-gray-700 dark:text-gray-300"
+                            onChange={(e) => setSearchDateStart(e.target.value)}
+                          />
+                          <TextInput
+                            type="date"
+                            name="searchDateEnd"
+                            id="searchDateEnd"
+                            value={searchDateEnd}
+                            className="mt-1 block w-full sm:w-auto h-10 dark:bg-gray-700 dark:text-gray-300"
+                            onChange={(e) => setSearchDateEnd(e.target.value)}
+                          />
+                        </div>
                       </th>
                       <th className="px-2 py-1"></th>
                     </tr>
@@ -289,14 +255,13 @@ function Index({ auth, bonSorties, success,valider }) {
                     {filteredBonSorties.map((bonSortie) => (
                       <tr
                         key={bonSortie.id}
-                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
-                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#d3d3d3'}
-                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
+                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300"
+                        onClick={() => handleRowClick(bonSortie.id)}
                       >
-                        <td className="px-2 py-1" onClick={() => handleRowClick(bonSortie.id)}>{bonSortie.id}</td>
-                        <td className="px-2 py-1" onClick={() => handleRowClick(bonSortie.id)}>{bonSortie.description}</td>
-                        <td className="px-2 py-1" onClick={() => handleRowClick(bonSortie.id)}>
-                          <span style={bonSortie.status === 'validé' ? { backgroundColor: '#2ecc71', color: 'white', padding: '3px 8px', borderRadius: '5px', textAlign: 'center' } : { backgroundColor: '#e74c3c', color: 'white', padding: '3px 8px', borderRadius: '5px', textAlign: 'center' }}>
+                        <td className="px-2 py-1">{bonSortie.id}</td>
+                        <td className="px-2 py-1">{bonSortie.description}</td>
+                        <td className="px-2 py-1">
+                          <span className={`${bonSortie.status === 'validé' ? styles.statusValide : styles.statusNonValide}`}>
                             {bonSortie.status}
                           </span>
                         </td>
@@ -331,17 +296,17 @@ function Index({ auth, bonSorties, success,valider }) {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onClick={closeModal}>
-          <div className="relative top-20 mx-auto p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-xl mb-4">
+          <div className="relative top-20 mx-auto p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white dark:bg-gray-800" onClick={(e) => e.stopPropagation()}>
+            <h2 className="mt-1 block w-full dark:bg-gray-700 dark:text-gray-300">
               {modalMode === 'add' ? 'Ajouter Bon de Sortie' : 'Modifier Bon de Sortie'}
             </h2>
             <form onSubmit={handleFormSubmit}>
-              <InputLabel htmlFor="text" value="Description" />
+              <InputLabel htmlFor="description" value="Description" />
               <TextInput
                 id="description"
                 name="description"
                 value={data.description}
-                className="mt-1 block w-full"
+                className="mt-1 block w-full dark:bg-gray-700 dark:text-gray-300"
                 onChange={(e) => setData('description', e.target.value)}
                 required
               />

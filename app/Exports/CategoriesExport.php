@@ -3,36 +3,36 @@
 namespace App\Exports;
 
 use App\Models\Categorie;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class CategoriesExport implements FromCollection
+class CategoriesExport implements FromQuery, WithHeadings, WithMapping
 {
     /**
-    * @return \Illuminate\Support\Collection
+    * @return \Illuminate\Database\Query\Builder
     */
-    public function collection()
-    {
-        return Categorie::all([
-            'type' 
-        ]);
-    }
-    public function headings(): array
-    {
-        return [
-            
-            'TYPE'
-            
-        ];
-    }
     public function query()
     {
-        return Categorie::query();
+        return Categorie::query(); // Ici, il n'est pas nécessaire de spécifier les colonnes car `WithMapping` s'en chargera.
     }
-    public function map($bulk): array
+
+    /**
+     * @return array
+     */
+    public function headings(): array
+    {
+        return ['TYPE']; // En-têtes pour la feuille Excel
+    }
+
+    /**
+     * @param Categorie $categorie - instance de Categorie à mapper
+     * @return array
+     */
+    public function map($categorie): array
     {
         return [
-            $bulk->type,
-            
+            $categorie->type,
         ];
     }
 }
