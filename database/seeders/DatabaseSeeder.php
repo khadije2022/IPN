@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         ],
 
     );
-        Magasin::factory()->count(30)->create();
+        // Magasin::factory()->count(30)->create();
 
         // Categorie::factory()->count(30)->create();
 
