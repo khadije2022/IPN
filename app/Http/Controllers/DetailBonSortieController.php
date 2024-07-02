@@ -85,10 +85,9 @@ class DetailBonSortieController extends Controller
         return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $detailBonSortie->idBonDeSortie])->with('success', 'Le bon de sortie a été supprimé');
     }
 
-    public function exportExcel()
+    public function exportExcel($bonSortie)
     {
-        $categories = DetailBonSortie::get();
-        return Excel::download(new DetailBonSortie(), 'Details_BonSortie.xlsx');
+        return Excel::download(new DetailBonSortieExport($bonSortie), 'Details_BonSortie.xlsx');
     }
 
 

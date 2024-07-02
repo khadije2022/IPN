@@ -17,6 +17,7 @@ class BonAchatExport implements FromCollection, WithHeadings, WithMapping
         return BonAchat::all([
             'description',
             'status',
+            'created_at'
         ]);
     }
 
@@ -28,6 +29,7 @@ class BonAchatExport implements FromCollection, WithHeadings, WithMapping
         return [
             'DESCRIPTION',
             'STATUS',
+            'Date',
         ];
     }
 
@@ -40,6 +42,7 @@ class BonAchatExport implements FromCollection, WithHeadings, WithMapping
         return [
             $bonAchat->description,
             $bonAchat->status,
+            $bonAchat->created_at->format('Y-m-d'),
         ];
     }
 }

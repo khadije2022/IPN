@@ -12,7 +12,6 @@ use Mpdf\Mpdf;
 use App\Exports\DetailExpressionBesoinExport;
 use App\Http\Requests\StoreDetails_ExpBesoinRequest;
 use App\Http\Requests\UpdateDetails_ExpBesoinRequest;
-
 use App\Http\Resources\CategorieResource;
 use App\Http\Resources\CatelogueResource;
 use Maatwebsite\Excel\Facades\Excel;
@@ -118,9 +117,9 @@ class Details_ExpBesoinController extends Controller
      }
 
 
-     public function exportExcel()
-    {
-        $details_expbesoins = Details_ExpBesoin::get();
-        return Excel::download(new DetailExpressionBesoinExport(), 'detailexpbesoin.xlsx');
-    }
+     public function exportExcel($id_expbesoin)
+{
+    return Excel::download(new DetailExpressionBesoinExport($id_expbesoin), 'Detaile_Expbesoin.xlsx');
+}
+
 }

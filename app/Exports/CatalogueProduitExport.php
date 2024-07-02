@@ -23,7 +23,8 @@ class CatalogueProduitExport implements FromCollection, WithHeadings, WithMappin
         return [
             'DESIGNATION',
             'TYPE DE CATÉGORIE',
-            'QUANTITÉ EN STOCK',
+            'STOCK',
+            'Date',
         ];
     }
 
@@ -34,6 +35,7 @@ class CatalogueProduitExport implements FromCollection, WithHeadings, WithMappin
             $produit->designation,
             $produit->typeCategorie->type, // Remplacez 'categorie' et 'type' par les noms corrects si nécessaire
             $produit->stock,
+            $produit->created_at->format('Y-m-d'),
         ];
     }
 }

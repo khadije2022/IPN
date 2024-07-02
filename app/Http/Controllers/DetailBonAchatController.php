@@ -13,7 +13,7 @@ use App\Models\Categorie;
 use App\Models\CatelogueProduit;
 
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\DetailBonSortieExport;
+use App\Exports\DetailBonAchatExport;
 class DetailBonAchatController extends Controller
 {
     /**
@@ -137,10 +137,9 @@ class DetailBonAchatController extends Controller
     }
 
 
-    public function exportExcel()
+    public function exportExcel($bonAchat)
     {
-        $categories = DetailBonAchat::get();
-        return Excel::download(new DetailBonAchat(), 'Details_BonAchat.xlsx');
+        return Excel::download(new DetailBonAchatExport($bonAchat), 'Details_BonAchat.xlsx');
     }
 
 }

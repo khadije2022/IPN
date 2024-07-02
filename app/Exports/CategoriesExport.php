@@ -14,7 +14,7 @@ class CategoriesExport implements FromQuery, WithHeadings, WithMapping
     */
     public function query()
     {
-        return Categorie::query(); // Ici, il n'est pas nécessaire de spécifier les colonnes car `WithMapping` s'en chargera.
+        return Categorie::query(); // Ici, nous n'avons pas besoin d'utiliser `->get()` car `FromQuery` s'en charge.
     }
 
     /**
@@ -22,7 +22,7 @@ class CategoriesExport implements FromQuery, WithHeadings, WithMapping
      */
     public function headings(): array
     {
-        return ['TYPE']; // En-têtes pour la feuille Excel
+        return ['Type de Catégorie', 'Nom du Magasin']; // En-têtes pour la feuille Excel
     }
 
     /**
@@ -33,6 +33,7 @@ class CategoriesExport implements FromQuery, WithHeadings, WithMapping
     {
         return [
             $categorie->type,
+            $categorie->magasin->nomMagasin, // Assurez-vous que `magasin` est une relation définie dans le modèle `Categorie`
         ];
     }
 }

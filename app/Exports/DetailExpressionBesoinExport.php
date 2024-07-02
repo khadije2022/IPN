@@ -3,40 +3,41 @@
 namespace App\Exports;
 
 use App\Models\Details_ExpBesoin;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class DetailExpressionBesoinExport implements FromCollection
+class DetailExpressionBesoinExport implements FromQuery, WithHeadings, WithMapping
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+    protected $id_expbesoin;
+
+    public function __construct($id_expbesoin)
     {
-     
-        return Details_ExpBesoin::all([
-            'id_expbesoin' ,'id_categorie', 'id_catproduit'  
-        ]);
+        $this->id_expbesoin = $id_expbesoin;
     }
+
+    public function query()
+    {
+        return Details_ExpBesoin::with('Produit')
+            ->where('id_expbesoin', $this->id_expbesoin);
+    }
+
     public function headings(): array
     {
         return [
-            'id_expbesoin',
-            'id_categorie',
-            'id_catproduit'
+            'Catégorie',
+            'Produit',
+            'Quantité'
         ];
     }
-    public function query()
-    {
-        return Details_ExpBesoin::query();
-    }
-    public function map($bulk): array
+
+    public function map($detail): array
     {
         return [
-            $bulk->id_expbesoin,
-            $bulk->id_categorie,
-            $bulk->id_catproduit,
+            $detail->Produit->typeCategorie->type ?? 'N/A',
+            $detail->Produit->designation ?? 'N/A',
+            $detail->quantite,
         ];
     }
-        
-    }
+}
 
