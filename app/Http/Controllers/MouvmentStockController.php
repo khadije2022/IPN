@@ -41,38 +41,41 @@ class MouvmentStockController extends Controller
         $validatedBonAchat = BonAchat::where('status', 'validé')->count();
         $nonValidatedBonAchat = BonAchat::where('status', 'non-validé')->count();
 
-        $percentageValidatedBonAchat = $totalBonAchat > 0 ? ($validatedBonAchat / $totalBonAchat) * 100 : 0;
-        $percentageNonValidatedBonAchat = $totalBonAchat > 0 ? ($nonValidatedBonAchat / $totalBonAchat) * 100 : 0;
+        // $percentageValidatedBonAchat = $totalBonAchat > 0 ? ($validatedBonAchat / $totalBonAchat) * 100 : 0;
+        // $percentageNonValidatedBonAchat = $totalBonAchat > 0 ? ($nonValidatedBonAchat / $totalBonAchat) * 100 : 0;
 
         // Calculate percentages for BonSortie
         $totalBonSortie = BonSortie::count();
         $validatedBonSortie = BonSortie::where('status', 'validé')->count();
         $nonValidatedBonSortie = BonSortie::where('status', 'non-validé')->count();
 
-        $percentageValidatedBonSortie = $totalBonSortie > 0 ? ($validatedBonSortie / $totalBonSortie) * 100 : 0;
-        $percentageNonValidatedBonSortie = $totalBonSortie > 0 ? ($nonValidatedBonSortie / $totalBonSortie) * 100 : 0;
+        // $percentageValidatedBonSortie = $totalBonSortie > 0 ? ($validatedBonSortie / $totalBonSortie) * 100 : 0;
+        // $percentageNonValidatedBonSortie = $totalBonSortie > 0 ? ($nonValidatedBonSortie / $totalBonSortie) * 100 : 0;
 
         // Calculate percentages for ExpressionBesoin
         $totalExpressionBesoin = ExpressionBesoin::count();
         $validatedExpressionBesoin = ExpressionBesoin::where('status', 'validé')->count();
         $nonValidatedExpressionBesoin = ExpressionBesoin::where('status', 'non-validé')->count();
 
-        $percentageValidatedExpressionBesoin = $totalExpressionBesoin > 0 ? ($validatedExpressionBesoin / $totalExpressionBesoin) * 100 : 0;
-        $percentageNonValidatedExpressionBesoin = $totalExpressionBesoin > 0 ? ($nonValidatedExpressionBesoin / $totalExpressionBesoin) * 100 : 0;
-
+        // $percentageValidatedExpressionBesoin = $totalExpressionBesoin > 0 ? ($validatedExpressionBesoin / $totalExpressionBesoin) * 100 : 0;
+        // $percentageNonValidatedExpressionBesoin = $totalExpressionBesoin > 0 ? ($nonValidatedExpressionBesoin / $totalExpressionBesoin) * 100 : 0;
+        // dd($totalBonAchat);
         return inertia('Accueil', [
             'percentages' => [
                 'BonAchat' => [
-                    'validated' => $percentageValidatedBonAchat,
-                    'nonValidated' => $percentageNonValidatedBonAchat,
+                    'validated' => $validatedBonAchat,
+                    'nonValidated' => $nonValidatedBonAchat,
+                    'total' => $totalBonAchat
                 ],
                 'BonSortie' => [
-                    'validated' => $percentageValidatedBonSortie,
-                    'nonValidated' => $percentageNonValidatedBonSortie,
+                    'validated' => $validatedBonSortie,
+                    'nonValidated' => $nonValidatedBonSortie,
+                    'total' => $totalBonSortie
                 ],
                 'ExpressionBesoin' => [
-                    'validated' => $percentageValidatedExpressionBesoin,
-                    'nonValidated' => $percentageNonValidatedExpressionBesoin,
+                    'validated' => $validatedExpressionBesoin,
+                    'nonValidated' => $nonValidatedExpressionBesoin,
+                    'total' => $totalExpressionBesoin
                 ],
             ],
             'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),

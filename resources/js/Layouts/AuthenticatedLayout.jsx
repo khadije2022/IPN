@@ -94,19 +94,19 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         <NavLink href={route('expressionbesoin.index')} active={route().current('expressionbesoin.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <ClipboardDocumentIcon className="h-5 w-5 mr-2 text-gray-500" />
-                                Expression Besoin
+                                Expression du Besoin
                             </div>
                         </NavLink>
-                        <NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
+                        { user.role === "admin" && (<NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <ShoppingCartIcon className="h-5 w-5 mr-2 text-gray-500" />
-                                Bon Achat
+                                Bon d'Achat
                             </div>
-                        </NavLink>
+                        </NavLink>)}
                         <NavLink href={route('bonSortie.index')} active={route().current('bonSortie.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <DocumentTextIcon className="h-5 w-5 mr-2 text-gray-500" />
-                                Bon Sortie
+                                Bon de Sortie
                             </div>
                         </NavLink>
 

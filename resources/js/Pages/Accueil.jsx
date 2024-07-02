@@ -10,9 +10,10 @@ import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 
 import { ArrowTrendingDownIcon, ArrowTrendingUpIcon } from '@heroicons/react/24/outline';
 
-const CircleProgress = ({ percentage, color }) => {
+const CircleProgress = ({ value, color, total }) => {
   const radius = 50;
   const circumference = 2 * Math.PI * radius;
+  const percentage = (value / total) * 100;
   const offset = circumference - (percentage / 100) * circumference;
 
   return (
@@ -28,15 +29,16 @@ const CircleProgress = ({ percentage, color }) => {
         cy="60"
       />
       <text x="50%" y="50%" textAnchor="middle" dy=".3em" fontSize="20" fill={color}>
-        {percentage.toFixed(2)}%
+        {value} / {total}
       </text>
     </svg>
   );
 };
 
 CircleProgress.propTypes = {
-  percentage: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
   color: PropTypes.string.isRequired,
+  total: PropTypes.number.isRequired,
 };
 
 export default function Dashboard({ auth, percentages, productQuantities = [], selectedDate, mouvmentStocks, produits }) {
@@ -65,12 +67,12 @@ export default function Dashboard({ auth, percentages, productQuantities = [], s
               <div className="text-lg font-semibold mb-4 dark:text-gray-200">{key}</div>
               <div className="flex justify-around items-center">
                 <div className="text-center">
-                  <CircleProgress percentage={item.validated} color="green" />
-                  <div className="text-sm text-gray-500 dark:text-gray-400 mt-2">Validé</div>
+                  <CircleProgress value={item.validated} color="green" total={item.total} />
+                  <div className="text-sm text-green-500 dark:text-gray-400 mt-2 ">Validé</div>
                 </div>
                 <div className="text-center">
-                  <CircleProgress percentage={item.nonValidated} color="red" />
-                  <div className="text-sm text-gray-500 dark:text-gray-400 mt-2">Non Validé</div>
+                  <CircleProgress value={item.nonValidated} color="red" total={item.total} />
+                  <div className="text-sm text-red-500 dark:text-gray-400 mt-2">Non Validé</div>
                 </div>
               </div>
             </div>
@@ -82,8 +84,7 @@ export default function Dashboard({ auth, percentages, productQuantities = [], s
         <div className="p-6 text-gray-900 dark:text-gray-100">
           <div className="flex flex-col sm:flex-row justify-between mb-4">
             <div className="font-semibold">
-              <h1 > Liste de mouvement stock</h1>
-
+              <h1>Liste de mouvement stock</h1>
             </div>
           </div>
 
