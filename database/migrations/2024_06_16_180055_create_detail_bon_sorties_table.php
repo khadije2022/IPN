@@ -17,14 +17,21 @@ return new class extends Migration
             $table->foreignId('produit')->constrained('catelogue_produits')->onDelete('cascade');
             $table->foreignId('idBonDeSortie')->constrained('bon_sorties')->onDelete('cascade');
             $table->timestamps();
+            
+            $table->unique(['produit', 'idBonDeSortie']);
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
+        Schema::table('detail_bon_sorties', function (Blueprint $table) {
+            // Supprimer la contrainte d'unicité avant de supprimer la table
+            $table->dropUnique(['produit', 'idBonDeSortie']);
+        });
+
         Schema::dropIfExists('detail_bon_sorties');
     }
 };

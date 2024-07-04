@@ -136,7 +136,7 @@ function Index({ auth, bonAchats, success }) {
       header={
         <div className="flex justify-between items-center flex-wrap">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Bons d'Achat
+            Bon d'Achat
           </h2>
         </div>
       }
@@ -154,7 +154,7 @@ function Index({ auth, bonAchats, success }) {
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <div className="mb-4">
                 <div className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                  <div>Liste des Bons d'Achat</div>
+                  <div>Liste des Bon d'Achat</div>
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row justify-between mb-4 space-y-2 sm:space-y-0">

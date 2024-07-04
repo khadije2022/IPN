@@ -20,7 +20,8 @@ function Index_par_expbesoin({
   success,
   valider,
   categories,
-  produits
+  produits,
+  error
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
@@ -46,6 +47,12 @@ function Index_par_expbesoin({
       toast.success(valider);
     }
   }, [valider]);
+
+  useEffect(() => {
+    if (error) {
+      toast.warning(error);
+    }
+  }, [error]);
 
   useEffect(() => {
     if (selectedCategory && produits?.data) {
@@ -187,7 +194,7 @@ function Index_par_expbesoin({
                   <h1>Description: {BonAchat.description}</h1>
                 </div>
                 <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                  <a href={route('export-Details_bonAchat',{bonAchat: bonAchat})}
+                  <a href={route('export-Details_bonAchat',{bonAchat: BonAchat.id})}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
                   ><FontAwesomeIcon icon={faFileExcel} /> Excel
                   </a>
@@ -201,10 +208,10 @@ function Index_par_expbesoin({
                         <FontAwesomeIcon icon={faPlus} /> Ajouter
                       </button>)
 }
-                  <a href={route('export-Details_bonAchat')}
+                  {/* <a href={route('export-Details_bonAchat')}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
                   ><FontAwesomeIcon icon={faFileExcel} /> Excel
-                  </a>
+                  </a> */}
                      { Status === 'non-validé' && auth.user.role === 'admin' &&( <a
                         href={route('bonAchat.valider', { bonAchat: bonAchat })}
                         className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'

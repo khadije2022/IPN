@@ -64,6 +64,7 @@ class Details_ExpBesoinController extends Controller
              'produits' => CatelogueResource::collection($catelogue_produits),
              'success' => session('success'),
              'valider' => session('valider'),
+             'error' => session('error')
 
          ]);
      }
@@ -82,10 +83,23 @@ class Details_ExpBesoinController extends Controller
 
      public function store(StoreDetails_ExpBesoinRequest $request)
      {
-         $data = $request->all();
-         $detailsexpresionbesoin = Details_ExpBesoin::create($data);
+         $data = $request->validated();
 
-         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $detailsexpresionbesoin->id_expbesoin])->with('success', 'Detailsexpresionbesoin Bien créer');
+         // Vérifier si le produit existe déjà pour ce besoin d'expression
+         $exists = Details_ExpBesoin::where('produit', $data['produit'])
+                                    ->where('id_expbesoin', $data['id_expbesoin'])
+                                    ->exists();
+
+         if ($exists) {
+             return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $data['id_expbesoin']])
+                              ->with(['error' => 'Le produit existe déjà pour ce besoin d\'expression.']);
+         }
+
+         // Créer un nouveau détail besoin d'expression
+         Details_ExpBesoin::create($data);
+
+         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $data['id_expbesoin']])
+                          ->with('success', 'Détail besoin d\'expression créé avec succès.');
      }
 
      public function show(Details_ExpBesoin $detailsexpresionbesoin)

@@ -185,13 +185,13 @@ function Index({ auth, bonSorties, success, valider }) {
                   <option value="non-validé">Non Validé</option>
                 </select>
                 <div className="flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                  <button
+                  {auth.user.role ==='service' &&(<button
                     onClick={() => openModal('add')}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center"
                   >
                     <FontAwesomeIcon icon={faPlus} className="mr-2" />
                     Ajouter
-                  </button>
+                  </button>)}
                   <a
                     href={route('export-bonsortie')}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center"
@@ -248,7 +248,7 @@ function Index({ auth, bonSorties, success, valider }) {
                         Date
                         {sortConfig.key === 'created_at' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
                       </th>
-                      <th className="px-2 py-2 text-right">Action</th>
+                      {auth.user.role ==='service' && (<th className="px-2 py-2 text-right">Action</th>)}
                     </tr>
                   </thead>
                   <tbody>
@@ -266,7 +266,7 @@ function Index({ auth, bonSorties, success, valider }) {
                           </span>
                         </td>
                         <td className="px-2 py-1">{formatDate(bonSortie.created_at)}</td>
-                        <td className="px-2 py-1 text-right">
+                       { auth.user.role ==='service' && ( <td className="px-2 py-1 text-right">
                           <button
                             onClick={() => openModal('edit', bonSortie)}
                             className="text-blue-600 dark:text-blue-500 mx-1"
@@ -282,7 +282,7 @@ function Index({ auth, bonSorties, success, valider }) {
                           >
                             <FontAwesomeIcon icon={faTrashAlt} />
                           </button>
-                        </td>
+                        </td>)}
                       </tr>
                     ))}
                   </tbody>

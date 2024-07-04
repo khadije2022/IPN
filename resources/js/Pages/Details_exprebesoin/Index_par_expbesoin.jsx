@@ -20,6 +20,7 @@ function Index_par_expbesoin({
   valider,
   categories ,
   produits ,
+  error,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
@@ -51,6 +52,12 @@ function Index_par_expbesoin({
       toast.success(valider);
     }
   }, [valider]);
+
+  useEffect(() => {
+    if (error) {
+      toast.warning(error);
+    }
+  }, [error]);
 
   const openModal = (mode, detail = null) => {
     setModalMode(mode);
@@ -158,7 +165,7 @@ function Index_par_expbesoin({
       header={
         <div className='flex justify-between items-center'>
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
-            Expression des Besoins
+           details expression des besoins
           </h2>
         </div>
       }
@@ -181,7 +188,7 @@ function Index_par_expbesoin({
                   <h1>Description: {expressionbesoin.description}</h1>
                 </div>
                 <div className='mt-7 mb-6  flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto'>
-                  {expressionbesoin.status !== 'validé' && (
+                  {expressionbesoin.status !== 'validé' &&  auth.user.role ==='service' && (
                     <button
                       onClick={() => openModal('add')}
                       className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center'
@@ -191,7 +198,7 @@ function Index_par_expbesoin({
                   )}
                   <a
                     href={route('export-detailexpbesoin',{id_expbesoin: id_expbesoin})}
-                    
+
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
                   >
                     <FontAwesomeIcon icon={faFileExcel} /> Excel
@@ -229,7 +236,7 @@ function Index_par_expbesoin({
                       <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('quantite')}>
                         Quantité <FontAwesomeIcon icon={faSort} />
                       </th>
-                      <th className='px-3 py-3 text-right'>Action</th>
+                      { expressionbesoin.status !== 'validé' &&  auth.user.role ==='service' && (<th className='px-3 py-3 text-right'>Action</th>)}
                     </tr>
                   </thead>
                   <tbody>
@@ -239,7 +246,7 @@ function Index_par_expbesoin({
                         <td className='px-3 py-2'>{detailsexpresionbesoin.produit.type.type}</td>
                         <td className='px-3 py-2'>{detailsexpresionbesoin.produit.designation}</td>
                         <td className='px-3 py-2'>{detailsexpresionbesoin.quantite}</td>
-                        <td className='px-3 py-2 text-nowrap'>
+                        {expressionbesoin.status !== 'validé' &&  auth.user.role ==='service' && (<td className='px-3 py-2 text-nowrap'>
                           <button
                             onClick={() => openModal('edit', detailsexpresionbesoin)}
                             className='text-blue-600 dark:text-blue-500 mx-1'
@@ -252,7 +259,7 @@ function Index_par_expbesoin({
                           >
                             <FontAwesomeIcon icon={faTrashAlt} />
                           </button>
-                        </td>
+                        </td>)}
                       </tr>
 
                     ))}

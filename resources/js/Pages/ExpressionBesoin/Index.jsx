@@ -208,13 +208,13 @@ function Index({ auth, expressionbesoins, services, success }) {
                   ))}
                 </select>
                 <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                  <button
+                  {auth.user.role ==='service' && (<button
                     onClick={() => openModal('add')}
                     className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center'
                   >
                     <FontAwesomeIcon icon={faPlus} className="mr-2" />
                     Ajouter
-                  </button>
+                  </button>)}
                   <a
                     href={route('export-expressionbesoin')}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center"
@@ -244,7 +244,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                       <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('created_at')}>
                         Date <FontAwesomeIcon icon={sortConfig.key === 'created_at' ? (sortConfig.direction === 'ascending' ? faSortUp : faSortDown) : ''} />
                       </th>
-                      <th className='px-2 py-2 text-right'>Action</th>
+                     { auth.user.role ==='service' && ( <th className='px-2 py-2 text-right'>Action</th>)}
                     </tr>
                   </thead>
                   <tbody>
@@ -263,7 +263,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                           </span>
                         </td>
                         <td className='px-2 py-1'>{formatDate(expressionbesoin.created_at)}</td>
-                        <td className='px-2 py-1 text-right flex justify-end'>
+                        {auth.user.role ==='service' && (<td className='px-2 py-1 text-right flex justify-end'>
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -282,7 +282,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                           >
                             <FontAwesomeIcon icon={faTrashAlt} />
                           </button>
-                        </td>
+                        </td>)}
                       </tr>
                     ))}
                   </tbody>
