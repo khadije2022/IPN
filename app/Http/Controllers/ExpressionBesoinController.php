@@ -115,7 +115,24 @@ public function store(StoreExpressionBesoinRequest $request)
         return $pdf->download('Expressionbesoin.pdf');
     }
 
-
+    public function nonvaliderExpbesoin()
+    {
+        // Récupérer tous les services nécessaires
+        $services = Service::all();
+    
+        // Construire la requête pour les expressions de besoin non validées
+        $query = ExpressionBesoin::with('service')->where('status', 'non-validé');
+    
+        // Exécuter la requête avec la pagination
+        $expressionbesoins = $query->paginate(10);
+    
+        // Retourner la vue avec les données paginées des expressions de besoin et les services
+        return inertia('ExpressionBesoin/Index', [
+            'expressionbesoins' => ExpressionBesoinResource::collection($expressionbesoins),
+            'services' => $services,
+        ]);
+    }
+    
 
 
     public function valider($id_expbesoin)

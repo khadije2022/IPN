@@ -190,4 +190,18 @@ class BonSortieController extends Controller
         return Excel::download(new BonSortieExport, 'BonSortie.xlsx');
   }
 
+
+
+
+  public function nonvaliderbonsortie()
+  {
+      $query = BonSortie::where('status', 'non-validé');
+      $bonSorties = $query->paginate(10); // Exécutez la requête avec la pagination
+  
+      // Retourner la vue avec les données des bons de sortie
+      return inertia('BonSortieAchat/Index', [
+          'bonSorties' => BonSortieResource::collection($bonSorties),
+      ]);
+  }
+  
 }

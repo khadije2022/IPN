@@ -153,6 +153,20 @@ class BonAchatController extends Controller
 
 
 
+    public function nonvaliderbonAchat()
+
+        {
+            $query = BonAchat::where('status', 'non-validé');
+            $bonAchats = $query->paginate(10); // Exécutez la requête avec la pagination
+        
+            // Retourner la vue avec les données des bons de sortie
+            return inertia('BonAchat/Index', [
+                'bonAchats' => BonAchatResource::collection($bonAchats),
+            ]);
+        }
+
+
+
     public function exportPdf($bonAchat)
 {
     $BonAchat = BonAchat::findOrFail($bonAchat);
