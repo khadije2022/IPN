@@ -208,7 +208,7 @@ function Index_par_expbesoin({
                         <FontAwesomeIcon icon={faPlus} /> Ajouter
                       </button>)
 }
-                  <a href={route('export-Details_bonAchat')}
+                  <a href={route('export-Details_bonAchat',{ bonAchat: bonAchat })}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
                   ><FontAwesomeIcon icon={faFileExcel} /> Excel
                   </a>
