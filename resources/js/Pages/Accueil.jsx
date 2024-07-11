@@ -12,7 +12,7 @@ import { json } from 'react-router-dom';
 import {
   Stock_STATUS_CLASS_MAP,
   Stock_STATUS_TEXT_MAP,
-} from "../constants.jsx";
+} from "@/constants.jsx";
 import TextInput from '@/Components/TextInput';
 import SelectInput from '@/Components/SelectInput';
 
