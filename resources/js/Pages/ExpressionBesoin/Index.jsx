@@ -13,7 +13,7 @@ import {
   Bon_STATUS_CLASS_MAP,
   Bon_STATUS_TEXT_MAP,
 
-} from "../../constants.jsx";
+} from "@/constants.jsx";
 
 function Index({ auth, expressionbesoins, services, success }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
