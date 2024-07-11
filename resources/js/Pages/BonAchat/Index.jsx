@@ -8,11 +8,11 @@ import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import {
-  
+
   Bon_STATUS_CLASS_MAP,
   Bon_STATUS_TEXT_MAP,
 
-} from "@/constants.jsx";
+} from "../../constants.jsx";
 
 
 function Index({ auth, bonAchats, success }) {
