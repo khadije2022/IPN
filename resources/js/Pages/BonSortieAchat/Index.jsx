@@ -8,10 +8,12 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-const styles = {
-  statusValide: 'bg-green-500 text-white py-1 px-2 rounded text-center',
-  statusNonValide: 'bg-red-500 text-white py-1 px-2 rounded text-center',
-};
+// import {
+
+//   Bon_STATUS_CLASS_MAP,
+//   Bon_STATUS_TEXT_MAP,
+
+// } from "@/constants.jsx";
 
 function Index({ auth, bonSorties, success, valider }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -185,13 +187,13 @@ function Index({ auth, bonSorties, success, valider }) {
                   <option value="non-validé">Non Validé</option>
                 </select>
                 <div className="flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                  <button
+                  {auth.user.role ==='service' &&(<button
                     onClick={() => openModal('add')}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center"
                   >
                     <FontAwesomeIcon icon={faPlus} className="mr-2" />
                     Ajouter
-                  </button>
+                  </button>)}
                   <a
                     href={route('export-bonsortie')}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center"
@@ -230,6 +232,7 @@ function Index({ auth, bonSorties, success, valider }) {
                         </div>
                       </th>
                       <th className="px-2 py-1"></th>
+                      <th className="px-2 py-1"></th>
                     </tr>
                     <tr>
                       <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('id')}>
@@ -248,7 +251,11 @@ function Index({ auth, bonSorties, success, valider }) {
                         Date
                         {sortConfig.key === 'created_at' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
                       </th>
-                      <th className="px-2 py-2 text-right">Action</th>
+                      <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('created_by')}>
+                        Créé par
+                        {sortConfig.key === 'created_by' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                      </th>
+                      {auth.user.role ==='service' && (<th className="px-2 py-2 text-right">Action</th>)}
                     </tr>
                   </thead>
                   <tbody>
@@ -256,17 +263,28 @@ function Index({ auth, bonSorties, success, valider }) {
                       <tr
                         key={bonSortie.id}
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300"
-                        onClick={() => handleRowClick(bonSortie.id)}
+                        // onClick={() => handleRowClick(bonSortie.id)}
                       >
                         <td className="px-2 py-1">{bonSortie.id}</td>
-                        <td className="px-2 py-1">{bonSortie.description}</td>
+
+                        <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
+                          <Link href={route("detailBonSortie.index_par_bonSortie",bonSortie.id)}>
+                          {bonSortie.description}
+                          </Link>
+                        </th>
                         <td className="px-2 py-1">
-                          <span className={`${bonSortie.status === 'validé' ? styles.statusValide : styles.statusNonValide}`}>
-                            {bonSortie.status}
-                          </span>
+                        <span
+          className={
+            "px-2 py-1 rounded text-white " +
+            (bonSortie.status === 'validé' ? 'bg-green-500' : 'bg-red-500')
+          }
+        >
+          {bonSortie.status === 'validé' ? 'Valide' : 'Non Valide'}
+        </span>
                         </td>
-                        <td className="px-2 py-1">{formatDate(bonSortie.created_at)}</td>
-                        <td className="px-2 py-1 text-right">
+                        <td className="px-2 py-1">{bonSortie.created_at}</td>
+                        <td className="px-2 py-1">{bonSortie.createdBy.email}</td>
+                       { auth.user.role ==='service' && ( <td className="px-2 py-1 text-right">
                           <button
                             onClick={() => openModal('edit', bonSortie)}
                             className="text-blue-600 dark:text-blue-500 mx-1"
@@ -282,7 +300,7 @@ function Index({ auth, bonSorties, success, valider }) {
                           >
                             <FontAwesomeIcon icon={faTrashAlt} />
                           </button>
-                        </td>
+                        </td>)}
                       </tr>
                     ))}
                   </tbody>

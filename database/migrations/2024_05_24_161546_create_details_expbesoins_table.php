@@ -17,14 +17,22 @@ return new class extends Migration
             $table->foreignId('produit')->constrained('catelogue_produits')->onDelete('cascade'); // Add onDelete for referential integrity
             $table->integer('quantite');
             $table->timestamps();
+
+               // Ajouter la contrainte d'unicité
+               $table->unique(['id_expbesoin', 'produit']);
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
+        Schema::table('details_expbesoins', function (Blueprint $table) {
+            // Supprimer la contrainte d'unicité avant de supprimer la table
+            $table->dropUnique(['id_expbesoin', 'produit']);
+        });
+
         Schema::dropIfExists('details_expbesoins');
     }
 };

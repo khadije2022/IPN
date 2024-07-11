@@ -22,7 +22,9 @@ class StoreDetails_ExpBesoinRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'id_expbesoin' => 'required|exists:expression_besoins,id',
+            'produit' => 'required|exists:catelogue_produits,id',  // Assurez-vous que la table et la clé sont correctes
+            'quantite' => 'required|integer|min:1',
         ];
     }
 }

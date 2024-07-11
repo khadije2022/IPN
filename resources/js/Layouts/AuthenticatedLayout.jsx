@@ -20,6 +20,23 @@ import {
     SunIcon,
     BellIcon,
     UsersIcon,
+  DocumentTextIcon,
+  CubeIcon,
+  UserCircleIcon,
+  ArrowLeftOnRectangleIcon,
+  UserIcon,
+  TagIcon,
+  Squares2X2Icon,
+  BuildingOffice2Icon,
+  ClipboardDocumentIcon,
+  ShoppingCartIcon,
+  CubeTransparentIcon,
+  Bars3BottomRightIcon,
+  ArrowLeftIcon,
+  SunIcon,
+  BellIcon,
+  UsersIcon,
+  NewspaperIcon
 } from '@heroicons/react/24/outline';
 
 import { Inertia } from '@inertiajs/inertia';
@@ -80,7 +97,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
             <nav className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 border-r border-gray-100 dark:border-gray-700 p-4 overflow-y-auto flex flex-col justify-between ${menuOpen ? 'block' : 'hidden md:block'}`}>
                 <div>
                     <div className="flex items-center justify-between h-16">
-                        <Link href={route('dashboard')}>
+                        <Link href={route('mouvmentStock.Accueil')}>
                             <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                         </Link>
                         <button
@@ -119,19 +136,25 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         <NavLink href={route('expressionbesoin.index')} active={route().current('expressionbesoin.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <ClipboardDocumentIcon className="h-5 w-5 mr-2 text-gray-500" />
-                                Expression Besoin
+                                Expression du Besoin
                             </div>
                         </NavLink>
-                        <NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
+                        { user.role === "admin" && (<NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <ShoppingCartIcon className="h-5 w-5 mr-2 text-gray-500" />
-                                Bon Achat
+                                Bon d'Achat
                             </div>
-                        </NavLink>
+                        </NavLink>)}
                         <NavLink href={route('bonSortie.index')} active={route().current('bonSortie.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <DocumentTextIcon className="h-5 w-5 mr-2 text-gray-500" />
-                                Bon Sortie
+                                Bon de Sortie
+                            </div>
+                        </NavLink>
+                        <NavLink href={route('correctionStock.index')} active={route().current('correctionStock.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <NewspaperIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Correction du Stock
                             </div>
                         </NavLink>
                         {user.role === "admin" && (

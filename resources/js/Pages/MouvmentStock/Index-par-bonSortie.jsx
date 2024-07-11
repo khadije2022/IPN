@@ -43,11 +43,17 @@ function index_par_bonSortie({
   }, [error]);
 
   useEffect(() => {
-    
+
     if (valider) {
       toast.success(valider);
     }
   }, [valider]);
+
+  useEffect(() => {
+    if (error) {
+      toast.warning(error);
+    }
+  }, [error]);
 
   useEffect(() => {
     if (selectedCategory && produits?.data) {
@@ -136,7 +142,7 @@ function index_par_bonSortie({
   };
 
   const deleteDetailsexpresionbesoin = (detailBonSortie) => {
-    if (!confirm("Êtes-vous sûr de vouloir supprimer cette ligne?")) {
+    if (!confirm("Êtes-vous sûr de vouloir supprimer cette detail ?")) {
       return;
     }
     router.delete(route("detailBonSortie.destroy", detailBonSortie.id));
@@ -214,11 +220,11 @@ function index_par_bonSortie({
             </div>
           )}
 
-          {errorMessage && (
+          {/* {errorMessage && (
             <div className='bg-red-400 py-2 px-4 rounded mb-4'>
               {errorMessage}
             </div>
-          )}
+          )} */}
           <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <div className='flex flex-col sm:flex-row justify-between mb-4'>
@@ -228,7 +234,7 @@ function index_par_bonSortie({
 
                 </div>
                 <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                {Status === "non-validé" &&  (
+                {Status === "non-validé" &&   auth.user.role ==='service' &&(
                     <button
                       onClick={() => openModal("add")}
                       className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
@@ -258,14 +264,14 @@ function index_par_bonSortie({
 
 
 
-                  {Status === 'validé' && (
+                  {/* {Status === 'validé' &&  auth.user.role ==='service' && (
                     <Link
                       href={route("bonSortie.modify", { bonSortie: bonSortie })}
                       className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center justify-center"
                     >
                       Modifier
                     </Link>
-                  )}
+                  )} */}
                 </div>
               </div>
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -276,7 +282,7 @@ function index_par_bonSortie({
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('produit.type.type')}>Catégorie <FontAwesomeIcon icon={faSort} /></th>
                     <th className="px-3 py-3 cursor-pointer" onClick={() => requestSort('quantite')}>Qté <FontAwesomeIcon icon={faSort} /></th>
 
-                    {Status === "non-validé" && (
+                    {Status === "non-validé" &&   auth.user.role ==='service' &&(
                       <th className="px-3 py-3 text-right">Action</th>
                     )}
                   </tr>
@@ -291,7 +297,7 @@ function index_par_bonSortie({
                       <td className="px-3 py-2">{detailBonSortie.produit.designation}</td>
                       <td className="px-3 py-2">{detailBonSortie.produit.type.type}</td>
                       <td className="px-3 py-2">{detailBonSortie.quantite}</td>
-                      {Status === "non-validé" && (
+                      {Status === "non-validé" &&  auth.user.role ==='service' && (
                         <td className="px-3 py-2 text-nowrap">
                           <button
                             onClick={() => openModal("edit", detailBonSortie)}

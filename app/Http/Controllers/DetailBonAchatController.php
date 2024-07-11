@@ -11,9 +11,9 @@ use App\Http\Resources\DetailBonAchatResource;
 use App\Models\BonAchat;
 use App\Models\Categorie;
 use App\Models\CatelogueProduit;
-
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\DetailBonAchatExport;
+
 class DetailBonAchatController extends Controller
 {
     /**
@@ -25,15 +25,12 @@ class DetailBonAchatController extends Controller
 
          // Execute the query with pagination
          $detailsexpresionbesoins = $query->paginate(10);
-         $d=DetailBonAchatResource::collection($detailsexpresionbesoins);
-
 
          return inertia('detailBonAchat/Index', [
              'detailBonAchats' => DetailBonAchatResource::collection($detailsexpresionbesoins),
              'success' => session('success'),
          ]);
     }
-
 
     public function index_par_bonAchat($bonAchat)
     {
@@ -51,6 +48,7 @@ class DetailBonAchatController extends Controller
             'Status' => $BonAchat->status,
             'success' => session('success'),
             'valider' => session('valider'),
+            'error' => session('error'),
             'categories' => CategorieResource::collection($categories),
             'produits' => CatelogueResource::collection($catelogue_produits)
         ]);
@@ -63,7 +61,6 @@ class DetailBonAchatController extends Controller
     {
         $categorie = Categorie::all();
         $produits = CatelogueProduit::all();
-
 
         return inertia('detailBonAchat/Create',[
             'categories' => CategorieResource::collection($categorie),
@@ -81,12 +78,24 @@ class DetailBonAchatController extends Controller
             'quantite' => 'required|integer',
             'produit' => 'required|integer',
             'idBonAchat' => 'required|integer|exists:bon_achats,id',
+            'prix' => 'numeric',
         ]);
 
+        // Vérifier si le produit existe déjà pour ce bon d'achat
+        $exists = DetailBonAchat::where('produit', $data['produit'])
+                                ->where('idBonAchat', $data['idBonAchat'])
+                                ->exists();
+
+        if ($exists) {
+            return redirect()->route('detailBonAchat.index-par-bonAchat', ['bonAchat' => $data['idBonAchat']])
+                             ->with(['error' => 'Le produit existe déjà pour ce bon d\'achat.']);
+        }
+
+        // Créer un nouveau détail bon achat
         DetailBonAchat::create($data);
 
         return redirect()->route('detailBonAchat.index-par-bonAchat', ['bonAchat' => $data['idBonAchat']])
-            ->with('success', 'Bien créer');
+                         ->with('success', 'Détail bon achat créé avec succès.');
     }
 
 
@@ -106,8 +115,7 @@ class DetailBonAchatController extends Controller
         $categorie = Categorie::all();
         $produits = CatelogueProduit::all();
 
-        return inertia('detailBonAchat/Edit',
-        [
+        return inertia('detailBonAchat/Edit', [
            'detailBonAchat' => $detailBonAchat,
            'categories' => CategorieResource::collection($categorie),
             'produits' => CatelogueResource::collection($produits),
@@ -123,8 +131,7 @@ class DetailBonAchatController extends Controller
 
         $detailBonAchat->update($data);
 
-        return to_route('detailBonAchat.index-par-bonAchat',['bonAchat' => $data['idBonAchat']])->with('success','Bien modifier');
-
+        return to_route('detailBonAchat.index-par-bonAchat',['bonAchat' => $data['idBonAchat']])->with('success','Bien modifié');
     }
 
     /**
@@ -133,13 +140,11 @@ class DetailBonAchatController extends Controller
     public function destroy(DetailBonAchat $detailBonAchat)
     {
         $detailBonAchat->delete();
-        return to_route('detailBonAchat.index-par-bonAchat',['bonAchat' => $detailBonAchat['idBonAchat']])->with('success','Bien supprimer');
+        return to_route('detailBonAchat.index-par-bonAchat',['bonAchat' => $detailBonAchat['idBonAchat']])->with('success','Bien supprimé');
     }
-
 
     public function exportExcel($bonAchat)
     {
         return Excel::download(new DetailBonAchatExport($bonAchat), 'Details_BonAchat.xlsx');
     }
-
 }

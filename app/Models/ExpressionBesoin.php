@@ -14,7 +14,8 @@ class ExpressionBesoin extends Model
     protected $fillable=[
         'id_service',
         'description',
-        'status'
+        'status',
+        'created_by'
     ];
 
     public function service()
@@ -24,5 +25,10 @@ class ExpressionBesoin extends Model
 
     public function DetailStock(){
         return $this->hasMany(Details_ExpBesoin::class,'id_expbesoin');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

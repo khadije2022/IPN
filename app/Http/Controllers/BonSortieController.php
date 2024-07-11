@@ -14,6 +14,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Models\MouvmentStock;
 use Illuminate\Support\Facades\View; // Correctly import the View facade
 use App\Exports\BonSortieExport;
+use App\Models\Stock;
+use Illuminate\Support\Facades\Auth;
 use Mpdf\Mpdf;
 
 
@@ -51,6 +53,8 @@ class BonSortieController extends Controller
     public function store(StoreBonSortieRequest $request)
     {
         $data = $request->all();
+        $data['created_by'] = Auth::id();
+        // dd($data);
         $bonSortie = BonSortie::create($data);
         return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie->id]);
     }
@@ -70,7 +74,6 @@ class BonSortieController extends Controller
     {
         return inertia('BonSortieAchat/Edit',[
             'bonSortie' => $bonSortie,
-
         ]);
     }
 
@@ -102,24 +105,30 @@ class BonSortieController extends Controller
         }
 
         // Sum the quantities for the given idBonDeSortie
-        $totalQuantity = DetailBonSortie::where('idBonDeSortie', $bonSortie)->sum('quantite');
+        $details = DetailBonSortie::where('idBonDeSortie', $bonSortie)->get();
 
         // Create a new MouvmentStock record
-        $mouvment = new MouvmentStock();
-        $mouvment->idBonDeSortie = $BonSortie->id;
-        $mouvment->idBonAchat = null; // Set to null or the appropriate value if available
-        $mouvment->typeMouvments = 'Sortie'; // or any type that you need to define
-        $mouvment->stock = $totalQuantity;
-        $mouvment->save();
+        foreach ($details as $detail) {
+            // Créer un nouvel enregistrement de MouvmentStock pour chaque détail
+            $mouvment = new Stock();
+            $mouvment->product = $detail->produit;
+            $mouvment->typeMouvments = 'Sortie';
+            $mouvment->quantity = $detail->quantite;
+            $mouvment->date = $BonSortie->created_at;
+            $mouvment->save();
+        }
 
-        $mv = MouvmentStock::query();
+        // $mv = MouvmentStock::query();
         $BonSortie->status = 'validé';
         $BonSortie->save();
 
         DB::table('catelogue_produits AS cp')
-        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+        ->join('product_stocks AS ps', 'cp.id', '=', 'ps.product_id')
      ->where('cp.id', '=', DB::raw('ps.product_id'))
-        ->update(['cp.stock' => DB::raw('ps.stock')]);
+        ->update(['cp.stock' => DB::raw('ps.stock'),
+        'cp.entre' => DB::raw('ps.entre'),
+        'cp.sortie' => DB::raw('ps.sortie'),
+    ]);
 
         // Execute the query with pagination
         // $mouvmentStock = $mv->paginate(10);

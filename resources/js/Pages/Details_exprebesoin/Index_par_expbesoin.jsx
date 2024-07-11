@@ -82,7 +82,6 @@ export default function AuthenticatedLayout({ user, header, children }) {
     } else if (type === 'expressionBesoins') {
       history.push('/expressionbesoin/index');
     }
-    setShowNotifications(false); // Ferme le menu de notification
   };
 
   return (

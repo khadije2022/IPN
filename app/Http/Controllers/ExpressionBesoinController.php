@@ -13,6 +13,7 @@ use App\Http\Requests\UpdateExpressionBesoinRequest;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExpressionBesoinExport;
 use App\Models\MouvmentStock;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ExpressionBesoinController extends Controller
@@ -51,6 +52,7 @@ class ExpressionBesoinController extends Controller
 public function store(StoreExpressionBesoinRequest $request)
 {
     $data = $request->all();
+    $data['created_by'] = Auth::id();
     $expressionBesoin = ExpressionBesoin::create($data);
 
     // Redirection vers la page de création de détails d'expression de besoin en passant l'id_expbesoin
@@ -176,9 +178,12 @@ public function store(StoreExpressionBesoinRequest $request)
         $bonAchat->save();
 
         DB::table('catelogue_produits AS cp')
-        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+        ->join('product_stocks AS ps', 'cp.id', '=', 'ps.product_id')
      ->where('cp.id', '=', DB::raw('ps.product_id'))
-        ->update(['cp.stock' => DB::raw('ps.stock')]);
+        ->update(['cp.stock' => DB::raw('ps.stock'),
+        'cp.entre' => DB::raw('ps.entre'),
+        'cp.sortie' => DB::raw('ps.sortie'),
+    ]);
 
         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $id_expbesoin])->with('valider', 'Details Expresionbesoin Bien validé');
     }

@@ -58,18 +58,43 @@ class DetailBonSortieController extends Controller
     {
         $data = $request->validated();
 
-        $produit = CatelogueProduit::find($data['produit']);
+        // Vérifier si le produit existe déjà pour ce bon de sortie
+        $exists = DetailBonSortie::where('produit', $data['produit'])
+                                ->where('idBonDeSortie', $data['idBonDeSortie'])
+                                ->exists();
 
-        // dd($data['quantite'] >  $produit['stock'] );
-
-        if ($produit['stock'] < $data['quantite']) {
-            return redirect()->back()->with('error', 'Quantité demandée supérieure à la quantité disponible.');
+        if ($exists) {
+            return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $data['idBonDeSortie']])
+                             ->with(['error' => 'Le produit existe déjà pour ce bon de sortie.']);
         }
-        else
-      {  $bonSortie = DetailBonSortie::create($data);
-        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie->idBonDeSortie])->with('success', 'Bon de sortie créé avec succès.');}
+
+        // Vérifier si la quantité demandée est disponible
+        $produit = CatelogueProduit::find($data['produit']);
+        if ($produit['stock'] < $data['quantite']) {
+            return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $data['idBonDeSortie']])
+                             ->with(['error' => 'Quantité demandée supérieure à la quantité disponible.']);
+        }
+
+        // Créer un nouveau détail bon sortie
+        DetailBonSortie::create($data);
+
+        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $data['idBonDeSortie']])
+                         ->with('success', 'Bon de sortie créé avec succès.');
     }
 
+
+
+    // public function edit(DetailBonSortie $detailBonSortie)
+    // {
+    //     $categorie = Categorie::all();
+    //     $produits = CatelogueProduit::all();
+
+    //     return inertia('detailBonAchat/Edit', [
+    //        'detailBonAchat' => $detailBonAchat,
+    //        'categories' => CategorieResource::collection($categorie),
+    //         'produits' => CatelogueResource::collection($produits),
+    //     ]);
+    // }
 
 
     public function update(UpdateDetailBonSortieRequest $request, DetailBonSortie $detailBonSortie)
@@ -89,6 +114,7 @@ class DetailBonSortieController extends Controller
     {
         return Excel::download(new DetailBonSortieExport($bonSortie), 'Details_BonSortie.xlsx');
     }
+
 
 
 

@@ -9,6 +9,7 @@ use App\Models\MouvmentStock;
 use App\Http\Requests\StoreMouvmentStockRequest;
 use App\Http\Requests\UpdateMouvmentStockRequest;
 use App\Http\Resources\MouvmentStockResource;
+use Illuminate\Support\Facades\DB;
 
 class MouvmentStockController extends Controller
 {
@@ -41,110 +42,63 @@ class MouvmentStockController extends Controller
         $validatedBonAchat = BonAchat::where('status', 'validé')->count();
         $nonValidatedBonAchat = BonAchat::where('status', 'non-validé')->count();
 
-        $percentageValidatedBonAchat = $totalBonAchat > 0 ? ($validatedBonAchat / $totalBonAchat) * 100 : 0;
-        $percentageNonValidatedBonAchat = $totalBonAchat > 0 ? ($nonValidatedBonAchat / $totalBonAchat) * 100 : 0;
+        // $percentageValidatedBonAchat = $totalBonAchat > 0 ? ($validatedBonAchat / $totalBonAchat) * 100 : 0;
+        // $percentageNonValidatedBonAchat = $totalBonAchat > 0 ? ($nonValidatedBonAchat / $totalBonAchat) * 100 : 0;
 
         // Calculate percentages for BonSortie
         $totalBonSortie = BonSortie::count();
         $validatedBonSortie = BonSortie::where('status', 'validé')->count();
         $nonValidatedBonSortie = BonSortie::where('status', 'non-validé')->count();
 
-        $percentageValidatedBonSortie = $totalBonSortie > 0 ? ($validatedBonSortie / $totalBonSortie) * 100 : 0;
-        $percentageNonValidatedBonSortie = $totalBonSortie > 0 ? ($nonValidatedBonSortie / $totalBonSortie) * 100 : 0;
+        // $percentageValidatedBonSortie = $totalBonSortie > 0 ? ($validatedBonSortie / $totalBonSortie) * 100 : 0;
+        // $percentageNonValidatedBonSortie = $totalBonSortie > 0 ? ($nonValidatedBonSortie / $totalBonSortie) * 100 : 0;
 
         // Calculate percentages for ExpressionBesoin
         $totalExpressionBesoin = ExpressionBesoin::count();
         $validatedExpressionBesoin = ExpressionBesoin::where('status', 'validé')->count();
         $nonValidatedExpressionBesoin = ExpressionBesoin::where('status', 'non-validé')->count();
 
-        $percentageValidatedExpressionBesoin = $totalExpressionBesoin > 0 ? ($validatedExpressionBesoin / $totalExpressionBesoin) * 100 : 0;
-        $percentageNonValidatedExpressionBesoin = $totalExpressionBesoin > 0 ? ($nonValidatedExpressionBesoin / $totalExpressionBesoin) * 100 : 0;
+        $query = DB::table('stocks')
+        ->join('catelogue_produits', 'stocks.product', '=', 'catelogue_produits.id')
+        ->join('categories', 'catelogue_produits.type', '=', 'categories.id')
+        ->select('stocks.*', 'catelogue_produits.designation as product_name', 'categories.type as category_name');
 
+    if (request()->has('product_name')) {
+        $query->where('catelogue_produits.designation', 'like', '%' . request('product_name') . '%');
+    }
+    if (request()->has('typeMouvments')) {
+        $query->where('stocks.typeMouvments', request('typeMouvments'));
+    }
+    // dd(request()->query());
+
+    $stocks = $query->paginate(10);
         return inertia('Accueil', [
             'percentages' => [
                 'BonAchat' => [
-                    'validated' => $percentageValidatedBonAchat,
-                    'nonValidated' => $percentageNonValidatedBonAchat,
+                    'validated' => $validatedBonAchat,
+                    'nonValidated' => $nonValidatedBonAchat,
+                    'total' => $totalBonAchat
                 ],
                 'BonSortie' => [
-                    'validated' => $percentageValidatedBonSortie,
-                    'nonValidated' => $percentageNonValidatedBonSortie,
+                    'validated' => $validatedBonSortie,
+                    'nonValidated' => $nonValidatedBonSortie,
+                    'total' => $totalBonSortie
                 ],
                 'ExpressionBesoin' => [
-                    'validated' => $percentageValidatedExpressionBesoin,
-                    'nonValidated' => $percentageNonValidatedExpressionBesoin,
+                    'validated' => $validatedExpressionBesoin,
+                    'nonValidated' => $nonValidatedExpressionBesoin,
+                    'total' => $totalExpressionBesoin
                 ],
             ],
-            'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
+            'mouvmentStocks' => $stocks,
+
+            'queryParams' => request()->query() ?: null,
         ]);
     }
 
 
 
-//     public function Mouvement(Request $request)
-// {
-//     $date = $request->input('date', now()->format('Y-m'));
-//     $year = substr($date, 0, 4);
-//     $month = substr($date, 5, 2);
 
-//     // Calculate percentages for BonAchat
-//     $totalBonAchat = BonAchat::count();
-//     $validatedBonAchat = BonAchat::where('status', 'validé')->count();
-//     $nonValidatedBonAchat = BonAchat::where('status', 'non-validé')->count();
-
-//     $percentageValidatedBonAchat = $totalBonAchat > 0 ? ($validatedBonAchat / $totalBonAchat) * 100 : 0;
-//     $percentageNonValidatedBonAchat = $totalBonAchat > 0 ? ($nonValidatedBonAchat / $totalBonAchat) * 100 : 0;
-
-//     // Calculate percentages for BonSortie
-//     $totalBonSortie = BonSortie::count();
-//     $validatedBonSortie = BonSortie::where('status', 'validé')->count();
-//     $nonValidatedBonSortie = BonSortie::where('status', 'non-validé')->count();
-
-//     $percentageValidatedBonSortie = $totalBonSortie > 0 ? ($validatedBonSortie / $totalBonSortie) * 100 : 0;
-//     $percentageNonValidatedBonSortie = $totalBonSortie > 0 ? ($nonValidatedBonSortie / $totalBonSortie) * 100 : 0;
-
-//     // Calculate percentages for ExpressionBesoin
-//     $totalExpressionBesoin = ExpressionBesoin::count();
-//     $validatedExpressionBesoin = ExpressionBesoin::where('status', 'validé')->count();
-//     $nonValidatedExpressionBesoin = ExpressionBesoin::where('status', 'non-validé')->count();
-
-//     $percentageValidatedExpressionBesoin = $totalExpressionBesoin > 0 ? ($validatedExpressionBesoin / $totalExpressionBesoin) * 100 : 0;
-//     $percentageNonValidatedExpressionBesoin = $totalExpressionBesoin > 0 ? ($nonValidatedExpressionBesoin / $totalExpressionBesoin) * 100 : 0;
-
-//     // Fetch product quantities based on the selected date
-//     $products = CatelogueProduit::with(['detailsBonAchats' => function ($query) use ($year, $month) {
-//         $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
-//     }, 'detailsBonSorties' => function ($query) use ($year, $month) {
-//         $query->whereYear('created_at', $year)->whereMonth('created_at', $month);
-//     }])->get();
-
-//     $productQuantities = $products->map(function ($product) {
-//         return [
-//             'designation' => $product->designation,
-//             'quantite_entree' => $product->detailsBonAchats->sum('quantite'),
-//             'quantite_sortie' => $product->detailsBonSorties->sum('quantite'),
-//         ];
-//     });
-
-//     return inertia('Accueil', [
-//         'percentages' => [
-//             'BonAchat' => [
-//                 'validated' => $percentageValidatedBonAchat,
-//                 'nonValidated' => $percentageNonValidatedBonAchat,
-//             ],
-//             'BonSortie' => [
-//                 'validated' => $percentageValidatedBonSortie,
-//                 'nonValidated' => $percentageNonValidatedBonSortie,
-//             ],
-//             'ExpressionBesoin' => [
-//                 'validated' => $percentageValidatedExpressionBesoin,
-//                 'nonValidated' => $percentageNonValidatedExpressionBesoin,
-//             ],
-//         ],
-//         'productQuantities' => $productQuantities,
-//         'selectedDate' => $date,
-//     ]);
-// }
 
     /**
      * Show the form for creating a new resource.
