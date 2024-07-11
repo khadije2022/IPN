@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BonSortieResource extends JsonResource
+class CorrectionStockResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,7 @@ class BonSortieResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'description' => $this->description,
+            'motif' => $this->motif,
             'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
             'status' => $this->status,
             'createdBy' => new UserResource($this->createdBy),

@@ -6,8 +6,11 @@ use App\Models\CorrectionStock;
 use App\Http\Requests\StoreCorrectionStockRequest;
 use App\Http\Requests\UpdateCorrectionStockRequest;
 use App\Http\Resources\CorrectionResource;
+use App\Http\Resources\CorrectionStockResource;
+use App\Http\Resources\DetailCorrectionStockResource;
 use App\Models\DetailCorrectionStock;
 use App\Models\Stock;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class CorrectionStockController extends Controller
@@ -24,7 +27,7 @@ class CorrectionStockController extends Controller
 
         // Return the Inertia.js response with the expressionbesoins data and any success message from the session
         return inertia('CorrectionStock/Index', [
-            'correctionStocks' => CorrectionResource::collection($correctionStock),
+            'correctionStocks' => CorrectionStockResource::collection($correctionStock),
             'success' => session('success'),
             'valider' => session('valider'),
         ]);
@@ -44,6 +47,7 @@ class CorrectionStockController extends Controller
     public function store(StoreCorrectionStockRequest $request)
     {
         $data = $request->all();
+        $data['created_by'] = Auth::id();
         $correctionStock = CorrectionStock::create($data);
         return redirect()->route('detailCorrectionStock.correctionStock', ['idCorrection' => $correctionStock->id]);
     }
@@ -116,10 +120,15 @@ class CorrectionStockController extends Controller
         $CorrectionStock->save();
 
         // Mettre à jour les stocks des produits dans la table catalogue_produits
+
         DB::table('catelogue_produits AS cp')
-            ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
-            ->where('cp.id', '=', DB::raw('ps.product_id'))
-            ->update(['cp.stock' => DB::raw('ps.stock')]);
+        ->join('product_stocks AS ps', 'cp.id', '=', 'ps.product_id')
+     ->where('cp.id', '=', DB::raw('ps.product_id'))
+        ->update(['cp.stock' => DB::raw('ps.stock'),
+        'cp.entre' => DB::raw('ps.entre'),
+        'cp.sortie' => DB::raw('ps.sortie'),
+    ]);
+
 
         return redirect()->route('detailCorrectionStock.correctionStock', ['idCorrection' => $idCorrection])
                          ->with('valider', 'Bon de sortie bien validé avec succès.');

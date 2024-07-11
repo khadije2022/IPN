@@ -15,6 +15,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Mpdf\Mpdf;
 use App\Exports\BonAchatExport;
 use App\Models\Stock;
+use Illuminate\Support\Facades\Auth;
 
 class BonAchatController extends Controller
 {
@@ -49,6 +50,7 @@ class BonAchatController extends Controller
     public function store(StoreBonAchatRequest $request)
     {
         $data = $request->all();
+        $data['created_by'] = Auth::id();
         $bonAchat = BonAchat::create($data);
         return redirect()->route('detailBonAchat.index-par-bonAchat',
          ['bonAchat' => $bonAchat->id],

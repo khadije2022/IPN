@@ -136,7 +136,7 @@ function Index_par_expbesoin({
   };
 
   const deleteDetailsexpresionbesoin = (detailCorrectionStock) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer ce projet?')) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce detail?')) {
       return;
     }
     router.delete(route('detailCorrectionStock.destroy', detailCorrectionStock.id));
@@ -213,14 +213,14 @@ function Index_par_expbesoin({
                       )}
                     </>
                   )}
-                          <div className='flex item-center space-x-2'>
+
                             <button
                               onClick={printTable}
                               className='bg-blue-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-blue-600 w-full sm:w-auto ml-2'
                             >
-                              <PrinterIcon className="h-5 w-5" /> Imprimer
+                              <PrinterIcon className="h-6 w-6" />
                             </button>
-                          </div>
+
                 </div>
               </div>
 

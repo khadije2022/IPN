@@ -12,15 +12,16 @@ class CorrectionStock extends Model
     protected $fillable = [
         'motif',
         'created_at',
-        'status'
+        'status',
+        'created_by'
     ];
 
     public function DetailStock(){
         return $this->hasMany(DetailCorrectionStock::class,'idCorrectionStock');
     }
 
-    // public function mouvments()
-    // {
-    //     return $this->hasMany(MouvmentStock::class, 'idBonAchat');
-    // }
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

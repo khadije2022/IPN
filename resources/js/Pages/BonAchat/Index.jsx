@@ -226,6 +226,7 @@ function Index({ auth, bonAchats, success }) {
                         </div>
                       </th>
                       <th className="px-2 py-1"></th>
+                      <th className="px-2 py-1"></th>
                     </tr>
                     <tr>
                       <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('id')}>
@@ -243,6 +244,9 @@ function Index({ auth, bonAchats, success }) {
                       <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('created_at')}>
                         Date
                         {sortConfig.key === 'created_at' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                      </th>
+                      <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('created_at')}>
+                        Cree par <FontAwesomeIcon icon={sortConfig.key === 'created_by' ? (sortConfig.direction === 'ascending' ? faSortUp : faSortDown) : ''} />
                       </th>
                       <th className="px-2 py-2 text-right">Action</th>
                     </tr>
@@ -266,7 +270,8 @@ function Index({ auth, bonAchats, success }) {
           {bonAchat.status === 'validé' ? 'Valide' : 'Non Valide'}
         </span>
                         </td>
-                        <td className="px-2 py-1">{formatDate(bonAchat.created_at)}</td>
+                        <td className="px-2 py-1">{bonAchat.created_at}</td>
+                        <td className="px-2 py-1">{bonAchat.createdBy.email}</td>
                         <td className="px-2 py-1 text-right">
                           <button
                             onClick={() => openModal('edit', bonAchat)}

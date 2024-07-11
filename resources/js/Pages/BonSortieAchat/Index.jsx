@@ -232,6 +232,7 @@ function Index({ auth, bonSorties, success, valider }) {
                         </div>
                       </th>
                       <th className="px-2 py-1"></th>
+                      <th className="px-2 py-1"></th>
                     </tr>
                     <tr>
                       <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('id')}>
@@ -250,6 +251,10 @@ function Index({ auth, bonSorties, success, valider }) {
                         Date
                         {sortConfig.key === 'created_at' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
                       </th>
+                      <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('created_by')}>
+                        Créé par
+                        {sortConfig.key === 'created_by' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                      </th>
                       {auth.user.role ==='service' && (<th className="px-2 py-2 text-right">Action</th>)}
                     </tr>
                   </thead>
@@ -261,6 +266,7 @@ function Index({ auth, bonSorties, success, valider }) {
                         onClick={() => handleRowClick(bonSortie.id)}
                       >
                         <td className="px-2 py-1">{bonSortie.id}</td>
+
                         <td className="px-2 py-1">{bonSortie.description}</td>
                         <td className="px-2 py-1">
                         <span
@@ -272,7 +278,8 @@ function Index({ auth, bonSorties, success, valider }) {
           {bonSortie.status === 'validé' ? 'Valide' : 'Non Valide'}
         </span>
                         </td>
-                        <td className="px-2 py-1">{formatDate(bonSortie.created_at)}</td>
+                        <td className="px-2 py-1">{bonSortie.created_at}</td>
+                        <td className="px-2 py-1">{bonSortie.createdBy.email}</td>
                        { auth.user.role ==='service' && ( <td className="px-2 py-1 text-right">
                           <button
                             onClick={() => openModal('edit', bonSortie)}

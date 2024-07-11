@@ -250,6 +250,9 @@ function Index({ auth, expressionbesoins, services, success }) {
                       <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('created_at')}>
                         Date <FontAwesomeIcon icon={sortConfig.key === 'created_at' ? (sortConfig.direction === 'ascending' ? faSortUp : faSortDown) : ''} />
                       </th>
+                      <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('created_at')}>
+                        Cree par <FontAwesomeIcon icon={sortConfig.key === 'created_by' ? (sortConfig.direction === 'ascending' ? faSortUp : faSortDown) : ''} />
+                      </th>
                      { auth.user.role ==='service' && ( <th className='px-2 py-2 text-right'>Action</th>)}
                     </tr>
                   </thead>
@@ -261,7 +264,7 @@ function Index({ auth, expressionbesoins, services, success }) {
                         onClick={() => handleRowClick(expressionbesoin.id)}
                       >
                         <td className='px-2 py-1'>{expressionbesoin.id}</td>
-                        <td className='px-2 py-1'>{getServiceName(expressionbesoin.id_service)}</td>
+                        <td className='px-2 py-1'>{expressionbesoin.id_service.nom_responsabiliter}</td>
                         <td className='px-2 py-1'>{expressionbesoin.description}</td>
                         <td className='px-2 py-1'>
                         <span
@@ -273,7 +276,8 @@ function Index({ auth, expressionbesoins, services, success }) {
           {expressionbesoin.status === 'validé' ? 'Valide' : 'Non Valide'}
         </span>
                         </td>
-                        <td className='px-2 py-1'>{formatDate(expressionbesoin.created_at)}</td>
+                        <td className='px-2 py-1'>{expressionbesoin.created_at}</td>
+                        <td className='px-2 py-1'>{expressionbesoin.createdBy.email}</td>
                         {auth.user.role ==='service' && (<td className='px-2 py-1 text-right flex justify-end'>
                           <button
                             onClick={(e) => {

@@ -131,15 +131,7 @@ function Index_par_expbesoin({
     router.delete(route('detailsexpresionbesoin.destroy', detailsexpresionbesoin.id));
   };
 
-  // const getProduitname = (id) => {
-  //   const produit = produits.data.find((produit) => produit.id === id);
-  //   return produit ? produit.designation : 'N/A';
-  // };
 
-  // const getcategoriename = (id) => {
-  //   const categorie = categories.find((categorie) => categorie.id === id);
-  //   return categorie ? categorie.type : 'N/A';
-  // };
 
   const requestSort = (key) => {
     let direction = 'ascending';

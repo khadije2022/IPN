@@ -11,7 +11,8 @@ class BonAchat extends Model
     protected $fillable = [
         'description',
         'created_at',
-        'status'
+        'status',
+        "created_by"
     ];
 
     public function DetailStock(){
@@ -21,5 +22,10 @@ class BonAchat extends Model
     public function mouvments()
     {
         return $this->hasMany(MouvmentStock::class, 'idBonAchat');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

@@ -13,6 +13,7 @@ use App\Http\Requests\UpdateExpressionBesoinRequest;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ExpressionBesoinExport;
 use App\Models\MouvmentStock;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ExpressionBesoinController extends Controller
@@ -51,6 +52,7 @@ class ExpressionBesoinController extends Controller
 public function store(StoreExpressionBesoinRequest $request)
 {
     $data = $request->all();
+    $data['created_by'] = Auth::id();
     $expressionBesoin = ExpressionBesoin::create($data);
 
     // Redirection vers la page de création de détails d'expression de besoin en passant l'id_expbesoin

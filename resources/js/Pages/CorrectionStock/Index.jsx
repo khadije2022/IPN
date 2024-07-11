@@ -86,7 +86,7 @@ function Index({ auth, correctionStocks, success }) {
   };
 
   const deletecorrectionStock = (correctionStock) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer ce bon achat?')) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette correction de stock?')) {
       return;
     }
     router.delete(route('correctionStock.destroy', correctionStock.id));
@@ -125,12 +125,13 @@ function Index({ auth, correctionStocks, success }) {
   }, [correctionStocks.data, sortConfig]);
 
   const filteredCorrectionStock = sortedBonAchats.filter((correctionStock) =>
-    (correctionStock.motif.toLowerCase().includes(searchQuery.toLowerCase()) ||
-  correctionStock.status.toLowerCase().includes(searchQuery.toLowerCase())) &&
+    (correctionStock.motif?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+     correctionStock.status?.toLowerCase().includes(searchQuery.toLowerCase())) &&
     (searchStatus === '' || correctionStock.status === searchStatus) &&
     (searchDateStart === '' || new Date(correctionStock.created_at) >= new Date(searchDateStart)) &&
     (searchDateEnd === '' || new Date(correctionStock.created_at) <= new Date(searchDateEnd))
   );
+
 
   return (
     <AuthenticatedLayout
@@ -226,6 +227,7 @@ function Index({ auth, correctionStocks, success }) {
                         </div>
                       </th>
                       <th className="px-2 py-1"></th>
+                      <th className="px-2 py-1"></th>
                     </tr>
                     <tr>
                       <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('id')}>
@@ -243,6 +245,10 @@ function Index({ auth, correctionStocks, success }) {
                       <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('created_at')}>
                         Date
                         {sortConfig.key === 'created_at' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                      </th>
+                      <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('created_by')}>
+                        Cree par
+                        {sortConfig.key === 'created_by' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
                       </th>
                       <th className="px-2 py-2 text-right">Action</th>
                     </tr>
@@ -266,7 +272,8 @@ function Index({ auth, correctionStocks, success }) {
           {correctionStock.status === 'validé' ? 'Valide' : 'Non Valide'}
         </span>
                         </td>
-                        <td className="px-2 py-1">{formatDate(correctionStock.created_at)}</td>
+                        <td className="px-2 py-1">{correctionStock.created_at}</td>
+                        <td className="px-2 py-1">{correctionStock.createdBy.email}</td>
                         <td className="px-2 py-1 text-right">
                           <button
                             onClick={() => openModal('edit', correctionStock)}
@@ -299,7 +306,7 @@ function Index({ auth, correctionStocks, success }) {
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" onClick={closeModal}>
           <div className="relative top-20 mx-auto p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white dark:bg-gray-800" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-xl mb-4 mt-1 block w-full dark:bg-gray-700 dark:text-gray-300">
-              {modalMode === 'add' ? 'Ajouter Bon d\'Achat' : 'Modifier Bon d\'Achat'}
+              {modalMode === 'add' ? 'Ajouter une correction stock' : 'Modifier le stock'}
             </h2>
             <form onSubmit={handleFormSubmit}>
               <InputLabel htmlFor="motif" value="motif" />

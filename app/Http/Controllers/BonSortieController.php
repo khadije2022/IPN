@@ -15,6 +15,7 @@ use App\Models\MouvmentStock;
 use Illuminate\Support\Facades\View; // Correctly import the View facade
 use App\Exports\BonSortieExport;
 use App\Models\Stock;
+use Illuminate\Support\Facades\Auth;
 use Mpdf\Mpdf;
 
 
@@ -52,6 +53,8 @@ class BonSortieController extends Controller
     public function store(StoreBonSortieRequest $request)
     {
         $data = $request->all();
+        $data['created_by'] = Auth::id();
+        // dd($data);
         $bonSortie = BonSortie::create($data);
         return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $bonSortie->id]);
     }

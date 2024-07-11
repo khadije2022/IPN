@@ -140,7 +140,7 @@ function Index_par_expbesoin({
   };
 
   const deleteDetailsexpresionbesoin = (detailBonAchat) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer ce projet?')) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette detail?')) {
       return;
     }
     router.delete(route('detailBonAchat.destroy', detailBonAchat.id));
@@ -208,10 +208,10 @@ function Index_par_expbesoin({
                         <FontAwesomeIcon icon={faPlus} /> Ajouter
                       </button>)
 }
-                  {/* <a href={route('export-Details_bonAchat')}
+                  <a href={route('export-Details_bonAchat')}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
                   ><FontAwesomeIcon icon={faFileExcel} /> Excel
-                  </a> */}
+                  </a>
                      { Status === 'non-validé' && auth.user.role === 'admin' &&( <a
                         href={route('bonAchat.valider', { bonAchat: bonAchat })}
                         className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
@@ -220,14 +220,14 @@ function Index_par_expbesoin({
                       </a>)}
 
 
-                  {Status === 'validé' && (
+                  {/* {Status === 'validé' && (
                     <a
                       href={route('bonAchat.modify', { bonAchat: bonAchat })}
                       className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
                     >
                       Modifier
                     </a>
-                  )}
+                  )} */}
                   <a
                     href={route('pdf-DetailsBonAchat', { bonAchat: bonAchat })}
                     className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
