@@ -8,12 +8,12 @@ import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 
-import {
+// import {
 
-  Bon_STATUS_CLASS_MAP,
-  Bon_STATUS_TEXT_MAP,
+//   Bon_STATUS_CLASS_MAP,
+//   Bon_STATUS_TEXT_MAP,
 
-} from "@/constants.jsx";
+// } from "@/constants.jsx";
 
 function Index({ auth, correctionStocks, success }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -258,13 +258,13 @@ function Index({ auth, correctionStocks, success }) {
                         <td className="px-2 py-1">{correctionStock.motif}</td>
                         <td className="px-2 py-1">
                         <span
-                            className={
-                              "px-2 py-1 rounded text-white " +
-                              Bon_STATUS_CLASS_MAP[correctionStock.status]
-                            }
-                          >
-                            {Bon_STATUS_TEXT_MAP[correctionStock.status]}
-                          </span>
+          className={
+            "px-2 py-1 rounded text-white " +
+            (correctionStock.status === 'validé' ? 'bg-green-500' : 'bg-red-500')
+          }
+        >
+          {correctionStock.status === 'validé' ? 'Valide' : 'Non Valide'}
+        </span>
                         </td>
                         <td className="px-2 py-1">{formatDate(correctionStock.created_at)}</td>
                         <td className="px-2 py-1 text-right">
