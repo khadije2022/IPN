@@ -8,6 +8,12 @@ import Pagination from '@/Components/Pagination';
 import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import {
+
+  Bon_STATUS_CLASS_MAP,
+  Bon_STATUS_TEXT_MAP,
+
+} from "@/constants.jsx";
 
 function Index({ auth, expressionbesoins, services, success }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -258,8 +264,13 @@ function Index({ auth, expressionbesoins, services, success }) {
                         <td className='px-2 py-1'>{getServiceName(expressionbesoin.id_service)}</td>
                         <td className='px-2 py-1'>{expressionbesoin.description}</td>
                         <td className='px-2 py-1'>
-                          <span className={`inline-block px-2 py-1 rounded text-white text-center ${expressionbesoin.status === 'validé' ? 'bg-green-500' : 'bg-red-500'}`}>
-                            {expressionbesoin.status}
+                        <span
+                            className={
+                              "px-2 py-1 rounded text-white " +
+                              Bon_STATUS_CLASS_MAP[expressionbesoin.status]
+                            }
+                          >
+                            {Bon_STATUS_TEXT_MAP[expressionbesoin.status]}
                           </span>
                         </td>
                         <td className='px-2 py-1'>{formatDate(expressionbesoin.created_at)}</td>

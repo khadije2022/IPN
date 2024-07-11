@@ -48,7 +48,7 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="password" value="Password" />
+                    <InputLabel htmlFor="password" value="Mot de passe" />
                     <TextInput
                         id="password"
                         type="password"
@@ -68,7 +68,7 @@ export default function Login({ status, canResetPassword }) {
                         onChange={(e) => setData('remember', e.target.checked)}
                         className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                     />
-                    <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
+                    <span className="ml-2 text-sm text-gray-600 dark:text-gray-400">Se souvenir de moi</span>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -77,11 +77,11 @@ export default function Login({ status, canResetPassword }) {
                             href={route('password.request')}
                             className="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
                         >
-                            Forgot your password?
+                            Mot de passe oublié ?
                         </Link>
                     )}
                     <PrimaryButton className="ml-4" disabled={processing}>
-                        Log in
+                    Se connecter
                     </PrimaryButton>
                 </div>
             </form>

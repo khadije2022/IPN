@@ -1,22 +1,22 @@
-export const PROJECT_STATUS_CLASS_MAP = {
-  pending: "bg-amber-500",
-  in_progress: "bg-blue-500 ",
+export const Stock_STATUS_CLASS_MAP = {
+  Correction: "bg-amber-500",
+  Sortie: "bg-blue-500 ",
+  Achat: "bg-green-500",
+};
+export const Stock_STATUS_TEXT_MAP = {
+  Correction: "Correction",
+  Sortie: "Sortie",
+  Achat: "Achat",
+};
+export const Bon_STATUS_CLASS_MAP = {
+  validé: "bg-green-500",
+  'non-validé': "bg-red-500",
   completed: "bg-green-500",
 };
-export const PROJECT_STATUS_TEXT_MAP = {
-  pending: "Pending",
-  in_progress: "In Progress",
-  completed: "Completed",
-};
-export const TASK_STATUS_CLASS_MAP = {
-  pending: "bg-amber-500",
-  in_progress: "bg-blue-500",
-  completed: "bg-green-500",
-};
-export const TASK_STATUS_TEXT_MAP = {
-  pending: "Pending",
-  in_progress: "In Progress",
-  completed: "Completed",
+export const Bon_STATUS_TEXT_MAP = {
+  'non-validé' : "Non-Validé",
+  validé: "Validé",
+
 };
 export const TASK_PRIORITY_CLASS_MAP = {
   low: "bg-gray-600",

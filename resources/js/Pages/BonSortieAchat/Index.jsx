@@ -8,10 +8,12 @@ import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-const styles = {
-  statusValide: 'bg-green-500 text-white py-1 px-2 rounded text-center',
-  statusNonValide: 'bg-red-500 text-white py-1 px-2 rounded text-center',
-};
+import {
+
+  Bon_STATUS_CLASS_MAP,
+  Bon_STATUS_TEXT_MAP,
+
+} from "@/constants.jsx";
 
 function Index({ auth, bonSorties, success, valider }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -261,8 +263,13 @@ function Index({ auth, bonSorties, success, valider }) {
                         <td className="px-2 py-1">{bonSortie.id}</td>
                         <td className="px-2 py-1">{bonSortie.description}</td>
                         <td className="px-2 py-1">
-                          <span className={`${bonSortie.status === 'validé' ? styles.statusValide : styles.statusNonValide}`}>
-                            {bonSortie.status}
+                        <span
+                            className={
+                              "px-2 py-1 rounded text-white " +
+                              Bon_STATUS_CLASS_MAP[bonSortie.status]
+                            }
+                          >
+                            {Bon_STATUS_TEXT_MAP[bonSortie.status]}
                           </span>
                         </td>
                         <td className="px-2 py-1">{formatDate(bonSortie.created_at)}</td>

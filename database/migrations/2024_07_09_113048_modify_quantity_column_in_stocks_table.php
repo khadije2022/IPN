@@ -8,20 +8,25 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     *
+     * @return void
      */
     public function up(): void
     {
-        Schema::create('stocks', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('stocks', function (Blueprint $table) {
+            $table->bigInteger('quantity')->change();
         });
     }
 
     /**
      * Reverse the migrations.
+     *
+     * @return void
      */
     public function down(): void
     {
-        Schema::dropIfExists('stocks');
+        Schema::table('stocks', function (Blueprint $table) {
+            $table->integer('quantity')->change(); // Revenir au type précédent si nécessaire
+        });
     }
 };

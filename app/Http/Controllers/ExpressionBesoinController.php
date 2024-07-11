@@ -159,9 +159,12 @@ public function store(StoreExpressionBesoinRequest $request)
         $bonAchat->save();
 
         DB::table('catelogue_produits AS cp')
-        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+        ->join('product_stocks AS ps', 'cp.id', '=', 'ps.product_id')
      ->where('cp.id', '=', DB::raw('ps.product_id'))
-        ->update(['cp.stock' => DB::raw('ps.stock')]);
+        ->update(['cp.stock' => DB::raw('ps.stock'),
+        'cp.entre' => DB::raw('ps.entre'),
+        'cp.sortie' => DB::raw('ps.sortie'),
+    ]);
 
         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $id_expbesoin])->with('valider', 'Details Expresionbesoin Bien validé');
     }

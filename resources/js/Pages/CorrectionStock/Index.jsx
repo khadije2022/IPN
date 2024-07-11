@@ -7,15 +7,15 @@ import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+
 import {
-  
+
   Bon_STATUS_CLASS_MAP,
   Bon_STATUS_TEXT_MAP,
 
 } from "@/constants.jsx";
 
-
-function Index({ auth, bonAchats, success }) {
+function Index({ auth, correctionStocks, success }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
   const [currentBonAchat, setCurrentBonAchat] = useState(null);
@@ -27,20 +27,20 @@ function Index({ auth, bonAchats, success }) {
   const [validationErrors, setValidationErrors] = useState({});
 
   const { data, setData, post, put, errors, reset } = useForm({
-    description: '',
+    motif: '',
   });
 
-  const openModal = async (mode, bonAchat = null) => {
+  const openModal = async (mode, correctionStock = null) => {
     setModalMode(mode);
-    setCurrentBonAchat(bonAchat);
+    setCurrentBonAchat(correctionStock);
 
-    if (mode === 'edit' && bonAchat) {
+    if (mode === 'edit' && correctionStock) {
       setData({
-        description: bonAchat.description,
+        motif: correctionStock.motif,
       });
     } else {
       setData({
-        description: '',
+        motif: '',
       });
     }
     setValidationErrors({});
@@ -55,8 +55,8 @@ function Index({ auth, bonAchats, success }) {
 
   const validateForm = () => {
     const errors = {};
-    if (!data.description) {
-      errors.description = 'Le champ "Description" est obligatoire.';
+    if (!data.motif) {
+      errors.motif = 'Le champ "motif" est obligatoire.';
     }
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -67,14 +67,14 @@ function Index({ auth, bonAchats, success }) {
     if (!validateForm()) {
       return;
     }
-    const routeName = modalMode === 'add' ? 'bonAchat.store' : 'bonAchat.update';
+    const routeName = modalMode === 'add' ? 'correctionStock.store' : 'correctionStock.update';
     const action = modalMode === 'add' ? post : put;
 
     action(route(routeName, currentBonAchat ? currentBonAchat.id : null), {
       onSuccess: () => {
         closeModal();
         setData({
-          description: '',
+          motif: '',
         });
       },
     });
@@ -85,11 +85,11 @@ function Index({ auth, bonAchats, success }) {
     return new Date(dateString).toLocaleDateString('fr-CA', options);
   };
 
-  const deleteBonAchat = (bonAchat) => {
+  const deletecorrectionStock = (correctionStock) => {
     if (!confirm('Êtes-vous sûr de vouloir supprimer ce bon achat?')) {
       return;
     }
-    router.delete(route('bonAchat.destroy', bonAchat.id));
+    router.delete(route('correctionStock.destroy', correctionStock.id));
   };
 
   const handleSearchChange = (e) => {
@@ -97,7 +97,7 @@ function Index({ auth, bonAchats, success }) {
   };
 
   const handleRowClick = (id) => {
-    router.visit(route('detailBonAchat.index-par-bonAchat', { bonAchat: id }));
+    router.visit(route('detailCorrectionStock.correctionStock', { idCorrection: id }));
   };
 
   const handleSort = (key) => {
@@ -109,7 +109,7 @@ function Index({ auth, bonAchats, success }) {
   };
 
   const sortedBonAchats = React.useMemo(() => {
-    let sortableBonAchats = [...bonAchats.data];
+    let sortableBonAchats = [...correctionStocks.data];
     if (sortConfig.key !== null) {
       sortableBonAchats.sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -122,14 +122,14 @@ function Index({ auth, bonAchats, success }) {
       });
     }
     return sortableBonAchats;
-  }, [bonAchats.data, sortConfig]);
+  }, [correctionStocks.data, sortConfig]);
 
-  const filteredBonAchats = sortedBonAchats.filter((bonAchat) =>
-    (bonAchat.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      bonAchat.status.toLowerCase().includes(searchQuery.toLowerCase())) &&
-    (searchStatus === '' || bonAchat.status === searchStatus) &&
-    (searchDateStart === '' || new Date(bonAchat.created_at) >= new Date(searchDateStart)) &&
-    (searchDateEnd === '' || new Date(bonAchat.created_at) <= new Date(searchDateEnd))
+  const filteredCorrectionStock = sortedBonAchats.filter((correctionStock) =>
+    (correctionStock.motif.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  correctionStock.status.toLowerCase().includes(searchQuery.toLowerCase())) &&
+    (searchStatus === '' || correctionStock.status === searchStatus) &&
+    (searchDateStart === '' || new Date(correctionStock.created_at) >= new Date(searchDateStart)) &&
+    (searchDateEnd === '' || new Date(correctionStock.created_at) <= new Date(searchDateEnd))
   );
 
   return (
@@ -138,7 +138,7 @@ function Index({ auth, bonAchats, success }) {
       header={
         <div className="flex justify-between items-center flex-wrap">
           <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            Bon d'Achat
+          correction de stock
           </h2>
         </div>
       }
@@ -156,7 +156,7 @@ function Index({ auth, bonAchats, success }) {
             <div className="p-6 text-gray-900 dark:text-gray-100">
               <div className="mb-4">
                 <div className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                  <div>Liste des Bon d'Achat</div>
+                  <div>Liste des correction stock</div>
                 </div>
               </div>
               <div className="flex flex-col sm:flex-row justify-between mb-4 space-y-2 sm:space-y-0">
@@ -232,9 +232,9 @@ function Index({ auth, bonAchats, success }) {
                         ID
                         {sortConfig.key === 'id' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
                       </th>
-                      <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('description')}>
-                        Description
-                        {sortConfig.key === 'description' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
+                      <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('motif')}>
+                        motif
+                        {sortConfig.key === 'motif' && (sortConfig.direction === 'asc' ? <FontAwesomeIcon icon={faSortUp} /> : <FontAwesomeIcon icon={faSortDown} />)}
                       </th>
                       <th className="px-2 py-2 cursor-pointer" onClick={() => handleSort('status')}>
                         Statut
@@ -248,28 +248,28 @@ function Index({ auth, bonAchats, success }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredBonAchats.map((bonAchat) => (
+                    {filteredCorrectionStock.map((correctionStock) => (
                       <tr
-                        key={bonAchat.id}
+                        key={correctionStock.id}
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300"
-                        onClick={() => handleRowClick(bonAchat.id)}
+                        onClick={() => handleRowClick(correctionStock.id)}
                       >
-                        <td className="px-2 py-1">{bonAchat.id}</td>
-                        <td className="px-2 py-1">{bonAchat.description}</td>
+                        <td className="px-2 py-1">{correctionStock.id}</td>
+                        <td className="px-2 py-1">{correctionStock.motif}</td>
                         <td className="px-2 py-1">
                         <span
                             className={
                               "px-2 py-1 rounded text-white " +
-                              Bon_STATUS_CLASS_MAP[bonAchat.status]
+                              Bon_STATUS_CLASS_MAP[correctionStock.status]
                             }
                           >
-                            {Bon_STATUS_TEXT_MAP[bonAchat.status]}
+                            {Bon_STATUS_TEXT_MAP[correctionStock.status]}
                           </span>
                         </td>
-                        <td className="px-2 py-1">{formatDate(bonAchat.created_at)}</td>
+                        <td className="px-2 py-1">{formatDate(correctionStock.created_at)}</td>
                         <td className="px-2 py-1 text-right">
                           <button
-                            onClick={() => openModal('edit', bonAchat)}
+                            onClick={() => openModal('edit', correctionStock)}
                             className="text-blue-600 dark:text-blue-500 mx-1"
                           >
                             <FontAwesomeIcon icon={faEdit} />
@@ -277,7 +277,7 @@ function Index({ auth, bonAchats, success }) {
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              deleteBonAchat(bonAchat);
+                              deletecorrectionStock(correctionStock);
                             }}
                             className="text-red-600 dark:text-red-500 mx-1"
                           >
@@ -289,7 +289,7 @@ function Index({ auth, bonAchats, success }) {
                   </tbody>
                 </table>
               </div>
-              <Pagination links={bonAchats.meta.links} />
+              <Pagination links={correctionStocks.meta.links} />
             </div>
           </div>
         </div>
@@ -302,19 +302,19 @@ function Index({ auth, bonAchats, success }) {
               {modalMode === 'add' ? 'Ajouter Bon d\'Achat' : 'Modifier Bon d\'Achat'}
             </h2>
             <form onSubmit={handleFormSubmit}>
-              <InputLabel htmlFor="description" value="description" />
+              <InputLabel htmlFor="motif" value="motif" />
               <TextInput
-                id="description"
-                name="description"
-                value={data.description}
+                id="motif"
+                name="motif"
+                value={data.motif}
                 className="mt-1 block w-full dark:bg-gray-700 dark:text-gray-300"
-                onChange={(e) => setData('description', e.target.value)}
+                onChange={(e) => setData('motif', e.target.value)}
                 required
               />
-              {validationErrors.description && (
-                <div className='text-red-500 mt-2'>{validationErrors.description}</div>
+              {validationErrors.motif && (
+                <div className='text-red-500 mt-2'>{validationErrors.motif}</div>
               )}
-              <InputError message={errors.description} className="mt-2" />
+              <InputError message={errors.motif} className="mt-2" />
 
               <div className="mt-6 flex justify-end">
                 <button

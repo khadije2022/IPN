@@ -19,7 +19,8 @@ import {
   ArrowLeftIcon,
   SunIcon,
   BellIcon,
-  UsersIcon
+  UsersIcon,
+  NewspaperIcon
 } from '@heroicons/react/24/outline';
 
 export default function AuthenticatedLayout({ user, header, children }) {
@@ -55,7 +56,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
             <nav className={`fixed top-0 left-0 h-full w-64 bg-white dark:bg-gray-800 border-r border-gray-100 dark:border-gray-700 p-4 overflow-y-auto flex flex-col justify-between ${menuOpen ? 'block' : 'hidden md:block'}`}>
                 <div>
                     <div className="flex items-center justify-between h-16">
-                        <Link href={route('dashboard')}>
+                        <Link href={route('mouvmentStock.Accueil')}>
                             <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                         </Link>
                         <button
@@ -107,6 +108,12 @@ export default function AuthenticatedLayout({ user, header, children }) {
                             <div className='flex flex-row space-x-2'>
                                 <DocumentTextIcon className="h-5 w-5 mr-2 text-gray-500" />
                                 Bon de Sortie
+                            </div>
+                        </NavLink>
+                        <NavLink href={route('correctionStock.index')} active={route().current('correctionStock.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <NewspaperIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Correction du Stock
                             </div>
                         </NavLink>
 

@@ -174,9 +174,9 @@ function Index({ auth, categories, magasins, queryParams = null, success }) {
         <FontAwesomeIcon icon={faPlus} className="mr-2" />
         Ajouter
     </button>
-  
+
     <a
-        href={route('export-excel')}
+        href={route('export-categories')}
         className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
     >
         <FontAwesomeIcon icon={faFileExcel} className="mr-2" />

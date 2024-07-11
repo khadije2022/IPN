@@ -84,6 +84,19 @@ class DetailBonSortieController extends Controller
 
 
 
+    // public function edit(DetailBonSortie $detailBonSortie)
+    // {
+    //     $categorie = Categorie::all();
+    //     $produits = CatelogueProduit::all();
+
+    //     return inertia('detailBonAchat/Edit', [
+    //        'detailBonAchat' => $detailBonAchat,
+    //        'categories' => CategorieResource::collection($categorie),
+    //         'produits' => CatelogueResource::collection($produits),
+    //     ]);
+    // }
+
+
     public function update(UpdateDetailBonSortieRequest $request, DetailBonSortie $detailBonSortie)
     {
         $data = $request->validated();
@@ -101,6 +114,7 @@ class DetailBonSortieController extends Controller
     {
         return Excel::download(new DetailBonSortieExport($bonSortie), 'Details_BonSortie.xlsx');
     }
+
 
 
 

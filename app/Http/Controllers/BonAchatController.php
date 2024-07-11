@@ -14,11 +14,7 @@ use Illuminate\Support\Facades\View; // Correctly import the View facade
 use Maatwebsite\Excel\Facades\Excel;
 use Mpdf\Mpdf;
 use App\Exports\BonAchatExport;
-
-
-
-
-
+use App\Models\Stock;
 
 class BonAchatController extends Controller
 {
@@ -100,26 +96,34 @@ class BonAchatController extends Controller
     public function valider($bonAchat){
 
         $BonAchat = BonAchat::find($bonAchat);
-        $totalQuantity = DetailBonAchat::where('idBonAchat', $bonAchat)->sum('quantite');
+        $details = DetailBonAchat::where('idBonAchat', $bonAchat)->get();
+
         // Create a new MouvmentStock record
-        $mouvment = new MouvmentStock();
-        $mouvment->idBonDeSortie = null;
-        $mouvment->idBonAchat = $BonAchat->id; // Set to null or the appropriate value if available
-        $mouvment->typeMouvments = 'Achat'; // or any type that you need to define
-        $mouvment->stock = $totalQuantity;
-        $mouvment->save();
-        $mv = MouvmentStock::query();
+        foreach ($details as $detail) {
+            // Créer un nouvel enregistrement de MouvmentStock pour chaque détail
+            $mouvment = new Stock();
+            $mouvment->product = $detail->produit;
+            $mouvment->typeMouvments = 'Achat';
+            $mouvment->quantity = $detail->quantite;
+            $mouvment->date = $BonAchat->created_at;
+            $mouvment->save();
+        }
+
+        // $mv = MouvmentStock::query();
         $BonAchat->status = 'validé';
         $BonAchat->save();
 
         DB::table('catelogue_produits AS cp')
-        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+        ->join('product_stocks AS ps', 'cp.id', '=', 'ps.product_id')
      ->where('cp.id', '=', DB::raw('ps.product_id'))
-        ->update(['cp.stock' => DB::raw('ps.stock')]);
+        ->update(['cp.stock' => DB::raw('ps.stock'),
+        'cp.entre' => DB::raw('ps.entre'),
+        'cp.sortie' => DB::raw('ps.sortie'),
+    ]);
 
 
-        // Execute the query with pagination
-        $mouvmentStock = $mv->paginate(10);
+
+
 
         return redirect()->route('detailBonAchat.index-par-bonAchat', ['bonAchat' => $bonAchat])
         ->with('valider', 'Bon de Achat bien validé avec succès');

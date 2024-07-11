@@ -125,9 +125,21 @@ function Index({ auth, produits, categories, success, stock }) {
                           <FontAwesomeIcon icon={sortConfig.direction === 'ascending' ? faSortUp : faSortDown} />
                         )}
                       </th>
+                      <th className='px-3 py-3 cursor-pointer' onClick={() => handleSort('entre')}>
+                        Entre
+                        {sortConfig.key === 'entre' && (
+                          <FontAwesomeIcon icon={sortConfig.direction === 'ascending' ? faSortUp : faSortDown} />
+                        )}
+                      </th>
                       <th className='px-3 py-3 cursor-pointer' onClick={() => handleSort('stock')}>
                         Stock
                         {sortConfig.key === 'stock' && (
+                          <FontAwesomeIcon icon={sortConfig.direction === 'ascending' ? faSortUp : faSortDown} />
+                        )}
+                      </th>
+                      <th className='px-3 py-3 cursor-pointer' onClick={() => handleSort('sortie')}>
+                      Sortie
+                        {sortConfig.key === 'sortie' && (
                           <FontAwesomeIcon icon={sortConfig.direction === 'ascending' ? faSortUp : faSortDown} />
                         )}
                       </th>
@@ -146,7 +158,9 @@ function Index({ auth, produits, categories, success, stock }) {
                         <td className='px-3 py-2'>{produit.id}</td>
                         <td className='px-3 py-2'>{produit.designation}</td>
                         <td className='px-3 py-2'>{produit.type.type}</td>
+                        <td className='px-3 py-2'>{produit.entre}</td>
                         <td className='px-3 py-2'>{produit.stock}</td>
+                        <td className='px-3 py-2'>{produit.sortie}</td>
                         <td className='px-3 py-2'>{produit.created_at}</td>
                         <td className='px-3 py-2 text-right flex justify-end'>
                           <button
@@ -164,6 +178,7 @@ function Index({ auth, produits, categories, success, stock }) {
                         </td>
                       </tr>
                     ))}
+                    {/* {JSON.stringify(produits)} */}
                   </tbody>
                 </table>
               </div>
