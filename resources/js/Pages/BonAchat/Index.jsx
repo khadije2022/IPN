@@ -7,12 +7,12 @@ import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-import {
+// import {
 
-  Bon_STATUS_CLASS_MAP,
-  Bon_STATUS_TEXT_MAP,
+//   Bon_STATUS_CLASS_MAP,
+//   Bon_STATUS_TEXT_MAP,
 
-} from "@/constants.jsx";
+// } from "@/constants.jsx";
 
 
 function Index({ auth, bonAchats, success }) {
@@ -258,13 +258,13 @@ function Index({ auth, bonAchats, success }) {
                         <td className="px-2 py-1">{bonAchat.description}</td>
                         <td className="px-2 py-1">
                         <span
-                            className={
-                              "px-2 py-1 rounded text-white " +
-                              Bon_STATUS_CLASS_MAP[bonAchat.status]
-                            }
-                          >
-                            {Bon_STATUS_TEXT_MAP[bonAchat.status]}
-                          </span>
+          className={
+            "px-2 py-1 rounded text-white " +
+            (bonAchat.status === 'validé' ? 'bg-green-500' : 'bg-red-500')
+          }
+        >
+          {bonAchat.status === 'validé' ? 'Valide' : 'Non Valide'}
+        </span>
                         </td>
                         <td className="px-2 py-1">{formatDate(bonAchat.created_at)}</td>
                         <td className="px-2 py-1 text-right">
