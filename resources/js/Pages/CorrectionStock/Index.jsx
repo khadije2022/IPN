@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import React, { useState } from 'react';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
@@ -261,7 +261,11 @@ function Index({ auth, correctionStocks, success }) {
                         onClick={() => handleRowClick(correctionStock.id)}
                       >
                         <td className="px-2 py-1">{correctionStock.id}</td>
-                        <td className="px-2 py-1">{correctionStock.motif}</td>
+                        <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
+                          <Link href={route("detailCorrectionStock.correctionStock",correctionStock.id)}>
+                          {correctionStock.motif}
+                          </Link>
+                        </th>
                         <td className="px-2 py-1">
                         <span
           className={

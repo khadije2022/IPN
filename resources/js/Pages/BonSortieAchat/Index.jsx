@@ -263,11 +263,15 @@ function Index({ auth, bonSorties, success, valider }) {
                       <tr
                         key={bonSortie.id}
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300"
-                        onClick={() => handleRowClick(bonSortie.id)}
+                        // onClick={() => handleRowClick(bonSortie.id)}
                       >
                         <td className="px-2 py-1">{bonSortie.id}</td>
 
-                        <td className="px-2 py-1">{bonSortie.description}</td>
+                        <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
+                          <Link href={route("detailBonSortie.index_par_bonSortie",bonSortie.id)}>
+                          {bonSortie.description}
+                          </Link>
+                        </th>
                         <td className="px-2 py-1">
                         <span
           className={
