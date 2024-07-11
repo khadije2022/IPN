@@ -9,10 +9,7 @@ import Pagination from '@/Components/Pagination';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { ArrowTrendingDownIcon, ArrowTrendingUpIcon ,ArrowPathIcon } from '@heroicons/react/24/outline';
 import { json } from 'react-router-dom';
-import {
-  Stock_STATUS_CLASS_MAP,
-  Stock_STATUS_TEXT_MAP,
-} from "../constants.jsx";
+
 import TextInput from '@/Components/TextInput';
 import SelectInput from '@/Components/SelectInput';
 
@@ -168,14 +165,22 @@ export default function Dashboard({ auth, percentages, productQuantities = [], s
                     <td className="px-3 py-2">{mouvmentStock.product_name}</td>
                     <td className="px-3 py-2">{mouvmentStock.category_name}</td>
                     <td className="px-3 py-2">
-                      <span
-                        className={
-                          "px-2 py-1 rounded text-white " +
-                          Stock_STATUS_CLASS_MAP[mouvmentStock.typeMouvments]
-                        }
-                      >
-                        {Stock_STATUS_TEXT_MAP[mouvmentStock.typeMouvments]}
-                      </span>
+                    <span
+          className={
+            "px-2 py-1 rounded text-white " +
+            (mouvmentStock.typeMouvments === 'Correction'
+              ? 'bg-amber-500'
+              : mouvmentStock.typeMouvments === 'Sortie'
+              ? 'bg-blue-500'
+              : 'bg-green-500')
+          }
+        >
+          {mouvmentStock.typeMouvments === 'Correction'
+            ? 'Correction'
+            : mouvmentStock.typeMouvments === 'Sortie'
+            ? 'Sortie'
+            : 'Achat'}
+        </span>
                     </td>
                     <td className="px-3 py-2">{mouvmentStock.date}</td>
                     <td className="px-3 py-2">{mouvmentStock.quantity<0 ? -mouvmentStock.quantity<0 : mouvmentStock.quantity<0}</td>
