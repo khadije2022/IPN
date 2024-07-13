@@ -74,17 +74,17 @@ class MouvmentStockController extends Controller
     $stocks = $query->paginate(10);
         return inertia('Accueil', [
             'percentages' => [
-                'BonAchat' => [
+                'Bon d\'achat' => [
                     'validated' => $validatedBonAchat,
                     'nonValidated' => $nonValidatedBonAchat,
                     'total' => $totalBonAchat
                 ],
-                'BonSortie' => [
+                'Bon de sortie' => [
                     'validated' => $validatedBonSortie,
                     'nonValidated' => $nonValidatedBonSortie,
                     'total' => $totalBonSortie
                 ],
-                'ExpressionBesoin' => [
+                'Expression du besoin' => [
                     'validated' => $validatedExpressionBesoin,
                     'nonValidated' => $nonValidatedExpressionBesoin,
                     'total' => $totalExpressionBesoin

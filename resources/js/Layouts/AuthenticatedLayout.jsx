@@ -6,26 +6,11 @@ import NavLink from '@/Components/NavLink';
 import { Link } from '@inertiajs/react';
 import {
     DocumentTextIcon,
-    CubeIcon,
-    UserCircleIcon,
-    ArrowLeftOnRectangleIcon,
-    UserIcon,
     TagIcon,
-    Squares2X2Icon,
-    BuildingOffice2Icon,
-    ClipboardDocumentIcon,
-    ShoppingCartIcon,
-    Bars3BottomRightIcon,
-    ArrowLeftIcon,
-    SunIcon,
-    BellIcon,
-    UsersIcon,
-  DocumentTextIcon,
   CubeIcon,
   UserCircleIcon,
-  ArrowLeftOnRectangleIcon,
   UserIcon,
-  TagIcon,
+
   Squares2X2Icon,
   BuildingOffice2Icon,
   ClipboardDocumentIcon,
@@ -38,8 +23,9 @@ import {
   UsersIcon,
   NewspaperIcon
 } from '@heroicons/react/24/outline';
+import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/16/solid';
 
-import { Inertia } from '@inertiajs/inertia';
+// import { Inertia } from '@inertiajs/inertia';
 
 export default function AuthenticatedLayout({ user, header, children }) {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -142,7 +128,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                         { user.role === "admin" && (<NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <ShoppingCartIcon className="h-5 w-5 mr-2 text-gray-500" />
-                                Bon d'Achat
+                                Bon d'achat
                             </div>
                         </NavLink>)}
                         <NavLink href={route('bonSortie.index')} active={route().current('bonSortie.index')}>
@@ -249,12 +235,12 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                         <Dropdown.Link href={route('profile.edit')}>
                                             <div className='flex flex-row'>
                                                 <UserIcon className='h-5 w-5 text-gray-500' />
-                                                Profil
+                                                Profile
                                             </div>
                                         </Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             <div className='flex flex-row'>
-                                                <ArrowLeftOnRectangleIcon className='h-5 w-5 text-gray-500' />
+                                                <ArrowLeftEndOnRectangleIcon className='h-5 w-5 text-gray-500' />
                                                 Déconnexion
                                             </div>
                                         </Dropdown.Link>

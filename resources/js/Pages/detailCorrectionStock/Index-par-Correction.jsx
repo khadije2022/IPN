@@ -201,7 +201,7 @@ function Index_par_expbesoin({
                       >
                         <FontAwesomeIcon icon={faPlus} /> Ajouter
                       </button>
-                      {auth.user === 'admin' && (
+                      {auth.user.role === 'admin' && (
                         <>
                           <a
                             href={route('correctionStock.valider', { idCorrection: correctionStock })}
