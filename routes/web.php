@@ -85,7 +85,8 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/non-valider-expbesoin', [ExpressionBesoinController::class, 'nonvaliderExpbesoin']);
     Route::get('/non-valider-bonAchat', [BonAchatController::class, 'nonvaliderbonAchat']);
     Route::get('/non-valider-bonsortie', [BonSortieController::class, 'nonvaliderbonsortie']);
-    
+    Route::get('/non-valider-correctionstock', [CorrectionStockController::class, 'nonvalidercorrectionstock']);
+
 
     Route::get('/export-detailexpbesoin/{id_expbesoin}', [Details_ExpBesoinController::class, 'exportExcel'])->name('export-detailexpbesoin');
     Route::get('/export-Details_bonAchat/{bonAchat}', [DetailBonAchatController::class, 'exportExcel'])->name('export-Details_bonAchat');

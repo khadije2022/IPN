@@ -39,7 +39,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
         console.log('Navigating to:', route);
         // Redirigez vers la route en utilisant, par exemple, React Router
         window.location.href = route;
-    
+
         setNotificationMenuOpen(false);
     };
 
@@ -72,7 +72,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
         }
     };
 
-    const totalNotifications = (notifications.bonSorties || 0) + (notifications.bonAchats || 0) + (notifications.expressionBesoins || 0);
+    const totalNotifications = (notifications.bonSorties || 0) +(notifications.correctionstocks || 0)+ (notifications.bonAchats || 0) + (notifications.expressionBesoins || 0);
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col md:flex-row">
@@ -124,7 +124,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 Expression du Besoin
                             </div>
                         </NavLink>
-                        { user.role === "admin" && (<NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
+                        {user.role === "admin" && (<NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <ShoppingCartIcon className="h-5 w-5 mr-2 text-gray-500" />
                                 Bon d'achat
@@ -193,22 +193,28 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                     </div>
                                                     <div className="border-t border-gray-200 dark:border-gray-600"></div>
                                                     {notifications.bonSorties > 0 && (
-    <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-bonsortie')}>
-        Bons de Sortie non validés: {notifications.bonSorties}
-    </div>
-)}
+                                                        <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-bonsortie')}>
+                                                            Bons de Sortie non validés: {notifications.bonSorties}
+                                                        </div>
+                                                    )}
 
-{notifications.bonAchats > 0 && (
-    <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-bonAchat')}>
-        Bons d'Achat non validés: {notifications.bonAchats}
-    </div>
-)}
+                                                    {notifications.bonAchats > 0 && (
+                                                        <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-bonAchat')}>
+                                                            Bons d'Achat non validés: {notifications.bonAchats}
+                                                        </div>
+                                                    )}
 
-{notifications.expressionBesoins > 0 && (
-    <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-expbesoin')}>
-        Expressions de Besoin non validées: {notifications.expressionBesoins}
-    </div>
-)}
+                                                    {notifications.correctionstocks > 0 && (
+                                                        <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-bonAchat')}>
+                                                            correctionstocks non validés: {notifications.correctionstocks}
+                                                        </div>
+                                                    )}
+
+                                                    {notifications.expressionBesoins > 0 && (
+                                                        <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-expbesoin')}>
+                                                            Expressions de Besoin non validées: {notifications.expressionBesoins}
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         )}
