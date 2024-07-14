@@ -261,11 +261,12 @@ function Index({ auth, expressionbesoins, services, success }) {
                       <tr
                         key={expressionbesoin.id}
                         className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-300 transition duration-300'
-                        onClick={() => handleRowClick(expressionbesoin.id)}
+                        // onClick={() => handleRowClick(expressionbesoin.id)}
                       >
-                        <td className='px-2 py-1'>{expressionbesoin.id}</td>
-                        <td className='px-2 py-1'>{expressionbesoin.id_service.nom_responsabiliter}</td>
-                        <td className='px-2 py-1'>{expressionbesoin.description}</td>
+                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}
+                        >{expressionbesoin.id}</td>
+                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}>{expressionbesoin.id_service.nom_responsabiliter}</td>
+                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}>{expressionbesoin.description}</td>
                         <td className='px-2 py-1'>
                         <span
           className={
@@ -276,8 +277,8 @@ function Index({ auth, expressionbesoins, services, success }) {
           {expressionbesoin.status === 'validé' ? 'Valide' : 'Non Valide'}
         </span>
                         </td>
-                        <td className='px-2 py-1'>{expressionbesoin.created_at}</td>
-                        <td className='px-2 py-1'>{expressionbesoin.createdBy.email}</td>
+                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}>{expressionbesoin.created_at}</td>
+                        <td className='px-2 py-1' onClick={() => handleRowClick(expressionbesoin.id)}>{expressionbesoin.createdBy.email}</td>
                         {auth.user.role ==='service' && (<td className='px-2 py-1 text-right flex justify-end'>
                           <button
                             onClick={(e) => {

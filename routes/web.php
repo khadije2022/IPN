@@ -35,9 +35,6 @@ Route::redirect('/', '/Accueil');
 Route::middleware(['auth'])->group(function() {
     Route::get('/Accueil', [MouvmentStockController::class, 'Mouvement'])->name('mouvmentStock.Accueil');
 
-    // Suppression de la route du tableau de bord
-    // Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
-
     Route::resource('user', UserController::class);
     Route::resource('magasin', MagasinController::class);
     Route::resource('catelogueProduit', CatelogueProduitController::class);
@@ -88,7 +85,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/non-valider-expbesoin', [ExpressionBesoinController::class, 'nonvaliderExpbesoin']);
     Route::get('/non-valider-bonAchat', [BonAchatController::class, 'nonvaliderbonAchat']);
     Route::get('/non-valider-bonsortie', [BonSortieController::class, 'nonvaliderbonsortie']);
-
+    
 
     Route::get('/export-detailexpbesoin/{id_expbesoin}', [Details_ExpBesoinController::class, 'exportExcel'])->name('export-detailexpbesoin');
     Route::get('/export-Details_bonAchat/{bonAchat}', [DetailBonAchatController::class, 'exportExcel'])->name('export-Details_bonAchat');

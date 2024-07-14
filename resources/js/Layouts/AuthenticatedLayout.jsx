@@ -4,28 +4,25 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import { Link } from '@inertiajs/react';
+import { Inertia } from '@inertiajs/inertia';
 import {
     DocumentTextIcon,
     TagIcon,
-  CubeIcon,
-  UserCircleIcon,
-  UserIcon,
-
-  Squares2X2Icon,
-  BuildingOffice2Icon,
-  ClipboardDocumentIcon,
-  ShoppingCartIcon,
-  CubeTransparentIcon,
-  Bars3BottomRightIcon,
-  ArrowLeftIcon,
-  SunIcon,
-  BellIcon,
-  UsersIcon,
-  NewspaperIcon
+    CubeIcon,
+    UserCircleIcon,
+    UserIcon,
+    Squares2X2Icon,
+    BuildingOffice2Icon,
+    ClipboardDocumentIcon,
+    ShoppingCartIcon,
+    Bars3BottomRightIcon,
+    SunIcon,
+    BellIcon,
+    UsersIcon,
+    NewspaperIcon,
+    ArrowLeftIcon
 } from '@heroicons/react/24/outline';
 import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/16/solid';
-
-// import { Inertia } from '@inertiajs/inertia';
 
 export default function AuthenticatedLayout({ user, header, children }) {
     const [menuOpen, setMenuOpen] = useState(false);
@@ -38,10 +35,12 @@ export default function AuthenticatedLayout({ user, header, children }) {
         document.documentElement.classList.toggle('dark');
     };
 
-    const handleNotificationClick = (path) => {
-        console.log('Navigating to:', path); // Log the path to ensure it's correct
-        Inertia.get(path); // Use Inertia.get to navigate
-        setNotificationMenuOpen(false); // Close the notification menu
+    const handleNotificationClick = (route) => {
+        console.log('Navigating to:', route);
+        // Redirigez vers la route en utilisant, par exemple, React Router
+        window.location.href = route;
+    
+        setNotificationMenuOpen(false);
     };
 
     useEffect(() => {
@@ -194,23 +193,22 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                     </div>
                                                     <div className="border-t border-gray-200 dark:border-gray-600"></div>
                                                     {notifications.bonSorties > 0 && (
-                                                        <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-bonsortie')}>
-                                                            Bons de Sortie non validés: {notifications.bonSorties}
-                                                        </div>
-                                                    )}
+    <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-bonsortie')}>
+        Bons de Sortie non validés: {notifications.bonSorties}
+    </div>
+)}
 
-                                                    {notifications.bonAchats > 0 && (
-                                                        <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-bonAchat')}>
-                                                            Bons d'Achat non validés: {notifications.bonAchats}
-                                                        </div>
-                                                    )}
+{notifications.bonAchats > 0 && (
+    <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-bonAchat')}>
+        Bons d'Achat non validés: {notifications.bonAchats}
+    </div>
+)}
 
-                                                    {notifications.expressionBesoins > 0 && (
-                                                        <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-expbesoin')}>
-                                                            Expressions de Besoin non validées: {notifications.expressionBesoins}
-                                                        </div>
-                                                    )}
-
+{notifications.expressionBesoins > 0 && (
+    <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-expbesoin')}>
+        Expressions de Besoin non validées: {notifications.expressionBesoins}
+    </div>
+)}
                                                 </div>
                                             </div>
                                         )}
