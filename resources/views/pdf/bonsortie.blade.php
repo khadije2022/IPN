@@ -95,7 +95,7 @@
         <table class="surmeme_ligne">
             <tr>
                 <td class="left"><h4>Institut pédagogique National IPN</h4></td>
-                <td><img src="../../images/logoipn.jpg alt="Logo IPN"></td>
+                <td><img src="../../images/logoipn.jpg" alt="Logo IPN"></td>
                 <td class="right">
                     <h3 class="rtl">المعهد التربوي الوطني</h3>
                 </td>
