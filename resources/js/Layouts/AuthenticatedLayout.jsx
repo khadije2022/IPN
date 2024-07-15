@@ -10,7 +10,6 @@ import {
   CubeIcon,
   UserCircleIcon,
   UserIcon,
-
   Squares2X2Icon,
   BuildingOffice2Icon,
   ClipboardDocumentIcon,

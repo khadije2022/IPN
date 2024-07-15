@@ -286,6 +286,7 @@ function Index_par_expbesoin({
                     setSelectedCategory(e.target.value);
                     setData('produit', ''); // Reset produit when category changes
                   }}
+                  value={selectedCategory}
                 >
                   <option value=''>Sélectionner une option</option>
                   {categories && categories.data && categories.data.map((categorie) => (
@@ -305,22 +306,10 @@ function Index_par_expbesoin({
                 >
                   <option value=''>Sélectionner un produit</option>
                   {filteredProducts.map((product) => (
-                    <option key={product.id} value={product.id} >{product.designation}</option>
+                    <option key={product.id} value={product.id}>{product.designation}</option>
                   ))}
                 </SelectInput>
                 <InputError message={validationErrors.produit || errors.produit} className='mt-2' />
-              </div>
-              <div className='mt-4'>
-                <InputLabel htmlFor='quantite' value='Quantité' />
-                <TextInput
-                  type="number"
-                  name="quantite"
-                  id="quantite"
-                  value={data.quantite}
-                  className="mt-1 block w-full"
-                  onChange={handleQuantityChange}
-                />
-                <InputError message={validationErrors.quantite || errors.quantite} className='mt-2' />
               </div>
               <div className='mt-4'>
                 <InputLabel htmlFor='typeMouvment' value='Mouvement' />
@@ -336,6 +325,19 @@ function Index_par_expbesoin({
                   <option value='sortie'>Sortie</option>
                 </SelectInput>
                 <InputError message={errors.typeMouvment} className='mt-2' />
+              </div>
+
+              <div className='mt-4'>
+                <InputLabel htmlFor='quantite' value='Quantité' />
+                <TextInput
+                  type="number"
+                  name="quantite"
+                  id="quantite"
+                  value={data.quantite}
+                  className="mt-1 block w-full"
+                  onChange={handleQuantityChange}
+                />
+                <InputError message={validationErrors.quantite || errors.quantite} className='mt-2' />
               </div>
 
               <div className='mt-4 text-right'>

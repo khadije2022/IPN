@@ -121,20 +121,20 @@ public function store(StoreExpressionBesoinRequest $request)
     {
         // Récupérer tous les services nécessaires
         $services = Service::all();
-    
+
         // Construire la requête pour les expressions de besoin non validées
         $query = ExpressionBesoin::with('service')->where('status', 'non-validé');
-    
+
         // Exécuter la requête avec la pagination
         $expressionbesoins = $query->paginate(10);
-    
+
         // Retourner la vue avec les données paginées des expressions de besoin et les services
         return inertia('ExpressionBesoin/Index', [
             'expressionbesoins' => ExpressionBesoinResource::collection($expressionbesoins),
             'services' => $services,
         ]);
     }
-    
+
 
 
     public function valider($id_expbesoin)
@@ -152,7 +152,8 @@ public function store(StoreExpressionBesoinRequest $request)
         // Create a purchase order with the same description
         $bonAchat = BonAchat::create([
             'description' => $expressionbesoin->description,
-            'status' => 'non-validé'
+            'status' => 'non-validé',
+            'created_by' => $expressionbesoin->created_by
         ]);
 
         // Create purchase order details for each need expression detail
@@ -177,13 +178,13 @@ public function store(StoreExpressionBesoinRequest $request)
         $bonAchat->status = 'validé';
         $bonAchat->save();
 
-        DB::table('catelogue_produits AS cp')
-        ->join('product_stocks AS ps', 'cp.id', '=', 'ps.product_id')
-     ->where('cp.id', '=', DB::raw('ps.product_id'))
-        ->update(['cp.stock' => DB::raw('ps.stock'),
-        'cp.entre' => DB::raw('ps.entre'),
-        'cp.sortie' => DB::raw('ps.sortie'),
-    ]);
+    //     DB::table('catelogue_produits AS cp')
+    //     ->join('product_stocks AS ps', 'cp.id', '=', 'ps.product_id')
+    //  ->where('cp.id', '=', DB::raw('ps.product_id'))
+    //     ->update(['cp.stock' => DB::raw('ps.stock'),
+    //     'cp.entre' => DB::raw('ps.entre'),
+    //     'cp.sortie' => DB::raw('ps.sortie'),
+    // ]);
 
         return redirect()->route('detailsexpresionbesoin.index_par_expbesoin', ['id_expbesoin' => $id_expbesoin])->with('valider', 'Details Expresionbesoin Bien validé');
     }

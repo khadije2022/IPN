@@ -121,13 +121,13 @@ class CorrectionStockController extends Controller
 
         // Mettre à jour les stocks des produits dans la table catalogue_produits
 
-        DB::table('catelogue_produits AS cp')
-        ->join('product_stocks AS ps', 'cp.id', '=', 'ps.product_id')
-     ->where('cp.id', '=', DB::raw('ps.product_id'))
-        ->update(['cp.stock' => DB::raw('ps.stock'),
-        'cp.entre' => DB::raw('ps.entre'),
-        'cp.sortie' => DB::raw('ps.sortie'),
-    ]);
+    //     DB::table('catelogue_produits AS cp')
+    //     ->join('product_stocks AS ps', 'cp.id', '=', 'ps.product_id')
+    //  ->where('cp.id', '=', DB::raw('ps.product_id'))
+    //     ->update(['cp.stock' => DB::raw('ps.stock'),
+    //     'cp.entre' => DB::raw('ps.entre'),
+    //     'cp.sortie' => DB::raw('ps.sortie'),
+    // ]);
 
 
         return redirect()->route('detailCorrectionStock.correctionStock', ['idCorrection' => $idCorrection])

@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import React, { useState, useEffect } from 'react';
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, Link, router, useForm } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
@@ -8,12 +8,7 @@ import Pagination from '@/Components/Pagination';
 import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
-// import {
 
-//   Bon_STATUS_CLASS_MAP,
-//   Bon_STATUS_TEXT_MAP,
-
-// } from "@/constants.jsx";
 
 function Index({ auth, expressionbesoins, services, success }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -47,7 +42,7 @@ function Index({ auth, expressionbesoins, services, success }) {
       setData({
         id_service: '',
         description: '',
-        status: 'non validé',
+        status: 'non-validé',
       });
     }
     setValidationErrors({});
@@ -261,11 +256,15 @@ function Index({ auth, expressionbesoins, services, success }) {
                       <tr
                         key={expressionbesoin.id}
                         className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-300 transition duration-300'
-                        onClick={() => handleRowClick(expressionbesoin.id)}
+                        // onClick={() => handleRowClick(expressionbesoin.id)}
                       >
                         <td className='px-2 py-1'>{expressionbesoin.id}</td>
+                        <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
+                          <Link href={route("detailsexpresionbesoin.index_par_expbesoin",expressionbesoin.id)}>
+                          {expressionbesoin.description}
+                          </Link>
+                        </th>
                         <td className='px-2 py-1'>{expressionbesoin.id_service.nom_responsabiliter}</td>
-                        <td className='px-2 py-1'>{expressionbesoin.description}</td>
                         <td className='px-2 py-1'>
                         <span
           className={

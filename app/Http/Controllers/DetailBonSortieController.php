@@ -99,15 +99,16 @@ class DetailBonSortieController extends Controller
 
     public function update(UpdateDetailBonSortieRequest $request, DetailBonSortie $detailBonSortie)
     {
-        $data = $request->validated();
+        $data = $request->all();
+        // dd($data);
         $detailBonSortie->update($data);
-        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $detailBonSortie->idBonDeSortie])->with('success', 'Le bon de sortie a été mis à jour');
+        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $detailBonSortie->idBonDeSortie])->with('success', 'Le detail a été mis à jour');
     }
 
     public function destroy(DetailBonSortie $detailBonSortie)
     {
         $detailBonSortie->delete();
-        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $detailBonSortie->idBonDeSortie])->with('success', 'Le bon de sortie a été supprimé');
+        return redirect()->route('detailBonSortie.index_par_bonSortie', ['bonSortie' => $detailBonSortie->idBonDeSortie])->with('success', 'Le detail a été supprimé');
     }
 
     public function exportExcel($bonSortie)

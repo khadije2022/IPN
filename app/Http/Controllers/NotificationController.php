@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\BonSortie;
 use App\Models\BonAchat;
 use App\Models\ExpressionBesoin;
-use Log;
+
 
 class NotificationController extends Controller
 {
@@ -16,9 +16,7 @@ class NotificationController extends Controller
         $bonAchats = BonAchat::where('status', 'non-validé')->count();
         $expressionBesoins = ExpressionBesoin::where('status', 'non-validé')->count();
 
-        Log::info('Bon Sorties: ' . $bonSorties);
-        Log::info('Bon Achats: ' . $bonAchats);
-        Log::info('Expression Besoins: ' . $expressionBesoins);
+
 
         return response()->json([
             'bonSorties' => $bonSorties,

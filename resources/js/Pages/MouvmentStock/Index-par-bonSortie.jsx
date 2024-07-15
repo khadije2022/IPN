@@ -57,9 +57,7 @@ function index_par_bonSortie({
 
   useEffect(() => {
     if (selectedCategory && produits?.data) {
-      const filtered = produits.data.filter(
-        (product) => product.type.id === parseInt(selectedCategory)
-      );
+      const filtered = produits.data.filter(product => product.type.id === parseInt(selectedCategory));
       setFilteredProducts(filtered);
     } else {
       setFilteredProducts([]);
@@ -71,18 +69,17 @@ function index_par_bonSortie({
     produit: "",
     idBonDeSortie: bonSortie || "",  // Assurez-vous que bonSortie est présent
   });
-
+// console.log(bonSortie)
   const openModal = (mode, detail = null) => {
     setModalMode(mode);
     setCurrentDetail(detail);
     if (mode === "edit" && detail) {
       setData({
-        type: detail.produit.type.id || "",
         produit: detail.produit.id || "",
-        idBonDeSortie: detail.idBonDeSortie || "",
+        idBonDeSortie: detail.idBonDeSortie.id || "",
         quantite: detail.quantite || "",
       });
-      setSelectedCategory(detail.produit.type);
+      setSelectedCategory(detail.produit.type.id);
     } else {
       setData({
         quantite: "",
@@ -122,7 +119,7 @@ function index_par_bonSortie({
     const action = modalMode === "add" ? post : put;
 
     try {
-      await action(
+      action(
         route(routeName, currentDetail ? currentDetail.id : null),
         data
       );
@@ -214,9 +211,9 @@ function index_par_bonSortie({
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <ToastContainer />
-          {successMessage && (
+          {success && (
             <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
-              {successMessage}
+              {success}
             </div>
           )}
 
@@ -315,6 +312,7 @@ function index_par_bonSortie({
                       )}
                     </tr>
                   ))}
+                  {/* {JSON.stringify(detailBonSorties)} */}
                 </tbody>
               </table>
             </div>
@@ -323,55 +321,46 @@ function index_par_bonSortie({
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center">
-          <div className="relative mx-auto p-5 border w-full sm:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
-            <form
-              onSubmit={handleFormSubmit}
-              className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
-            >
-              <div className="mt-4">
-                <InputLabel htmlFor="type" value="Catégorie Type" />
+        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full' onClick={closeModal}>
+          <div className='relative top-20 mx-auto p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white dark:bg-gray-800' onClick={(e) => e.stopPropagation()}>
+            <form onSubmit={handleFormSubmit} className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg'>
+              <div className='mt-4'>
+                <InputLabel htmlFor='type' value='Catégorie Type' />
                 <SelectInput
                   name="type"
                   id="type"
                   className="mt-1 block w-full"
-                  value={selectedCategory}
                   onChange={(e) => {
                     setSelectedCategory(e.target.value);
-                    setData("produit", ""); // Reset produit when category changes
+                    setData('produit', ''); // Reset produit when category changes
                   }}
+                  value={selectedCategory}
                 >
-                  <option value="">Sélectionner une option</option>
-                  {categories &&
-                    categories.data &&
-                    categories.data.map((categorie) => (
-                      <option key={categorie.id} value={categorie.id}>
-                        {categorie.type}
-                      </option>
-                    ))}
+                  <option value=''>Sélectionner une option</option>
+                  {categories && categories.data && categories.data.map((categorie) => (
+                    <option key={categorie.id} value={categorie.id}>{categorie.type}</option>
+                  ))}
                 </SelectInput>
-                <InputError message={errors.type} className="mt-2" />
+                <InputError message={errors.type} className='mt-2' />
               </div>
-              <div className="mt-4">
-                <InputLabel htmlFor="produit" value="Produit" />
+              <div className='mt-4'>
+                <InputLabel htmlFor='produit' value='Produit' />
                 <SelectInput
                   name="produit"
                   id="produit"
                   value={data.produit}
                   className="mt-1 block w-full"
-                  onChange={(e) => setData("produit", e.target.value)}
+                  onChange={(e) => setData('produit', e.target.value)}
                 >
-                  <option value="">Sélectionner un produit</option>
+                  <option value=''>Sélectionner un produit</option>
                   {filteredProducts.map((product) => (
-                    <option key={product.id} value={product.id}>
-                      {product.designation}
-                    </option>
+                    <option key={product.id} value={product.id}>{product.designation}</option>
                   ))}
                 </SelectInput>
-                <InputError message={validationErrors.produit || errors.produit} className="mt-2" />
+                <InputError message={validationErrors.produit || errors.produit} className='mt-2' />
               </div>
-              <div className="mt-4">
-                <InputLabel htmlFor="quantite" value="Quantité" />
+              <div className='mt-4'>
+                <InputLabel htmlFor='quantite' value='Quantité' />
                 <TextInput
                   type="number"
                   name="quantite"
@@ -380,16 +369,14 @@ function index_par_bonSortie({
                   className="mt-1 block w-full"
                   onChange={handel}
                 />
-                <InputError message={validationErrors.quantite || errors.quantite} className="mt-2" />
-                {errors.quantite && (
-                  <div className="text-red-600">{errors.quantite}</div>
-                )}
+                <InputError message={validationErrors.quantite || errors.quantite} className='mt-2' />
               </div>
-              <div className="mt-4 text-right">
+
+              <div className='mt-4 text-right'>
                 <button
-                  type="button"
+                  type='button'
                   onClick={closeModal}
-                  className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2"
+                  className='bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2'
                 >
                   Annuler
                 </button>
@@ -397,7 +384,7 @@ function index_par_bonSortie({
                   type="submit"
                   className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600"
                 >
-                  {modalMode === "add" ? "Ajouter" : "Enregistrer"}
+                  {modalMode === 'add' ? 'Ajouter' : 'Enregistrer'}
                 </button>
               </div>
             </form>

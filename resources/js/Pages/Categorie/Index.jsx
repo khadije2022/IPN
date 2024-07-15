@@ -45,7 +45,7 @@ function Index({ auth, categories, magasins, queryParams = null, success }) {
         if (mode === 'edit' && categorie) {
             setData({
                 type: categorie.type,
-                id_magasin: categorie.id_magasin,
+                id_magasin: categorie.id_magasin.id,
             });
         } else {
             setData({
@@ -127,10 +127,11 @@ function Index({ auth, categories, magasins, queryParams = null, success }) {
     });
 
     const filteredCategories = sortedCategories.filter((categorie) =>
-        categorie.id.toString().includes(searchQuery) ||
-        categorie.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        categorie.id_magasin.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+      categorie.id.toString().includes(searchQuery) ||
+      categorie.type.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      categorie.id_magasin.toString().toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
 
     return (
         <AuthenticatedLayout

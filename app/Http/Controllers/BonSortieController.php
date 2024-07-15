@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BonSortie;
 use App\Models\DetailBonSortie;
 use Illuminate\Support\Facades\DB;
-use Barryvdh\DomPDF\Facade\Pdf;
+// use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Requests\StoreBonSortieRequest;
 use App\Http\Requests\UpdateBonSortieRequest;
 use App\Http\Resources\BonSortieResource;
@@ -154,10 +154,10 @@ class BonSortieController extends Controller
         $BonSortie->status = 'non-validé';
         $BonSortie->save();
 
-        DB::table('catelogue_produits AS cp')
-        ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
-     ->where('cp.id', '=', DB::raw('ps.product_id'))
-        ->update(['cp.stock' => DB::raw('ps.stock')]);
+    //     DB::table('catelogue_produits AS cp')
+    //     ->join('product_stock AS ps', 'cp.id', '=', 'ps.product_id')
+    //  ->where('cp.id', '=', DB::raw('ps.product_id'))
+    //     ->update(['cp.stock' => DB::raw('ps.stock')]);
 
         $mv = MouvmentStock::query();
 
@@ -184,7 +184,7 @@ class BonSortieController extends Controller
         ])->render();
 
         try {
-            $mpdf = new \Mpdf\Mpdf();
+            $mpdf = new Mpdf();
             $mpdf->autoScriptToLang = true;
             $mpdf->autoLangToFont = true;
             $mpdf->WriteHTML($html);
@@ -193,6 +193,7 @@ class BonSortieController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
     public function exportExcel()
     {
         $categories = BonSortie::get();
@@ -206,11 +207,11 @@ class BonSortieController extends Controller
   {
       $query = BonSortie::where('status', 'non-validé');
       $bonSorties = $query->paginate(10); // Exécutez la requête avec la pagination
-  
+
       // Retourner la vue avec les données des bons de sortie
       return inertia('BonSortieAchat/Index', [
           'bonSorties' => BonSortieResource::collection($bonSorties),
       ]);
   }
-  
+
 }
