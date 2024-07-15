@@ -65,7 +65,7 @@
             border-bottom: 1px solid black; /* Set the bottom border color to black */
         }
         .invoice-box table tr:nth-child(even) {
-            background: #f9f9f9;
+            
         }
         .center p {
             margin: 0;
@@ -95,7 +95,7 @@
         <table class="surmeme_ligne">
             <tr>
                 <td class="left"><h4>Institut pédagogique National IPN</h4></td>
-                <td><img src="../../images/logoipn.jpg" alt="Logo IPN"></td>
+                <td><img src="path/to/logoipn.jpg" alt="Logo IPN"></td>
                 <td class="right">
                     <h3 class="rtl">المعهد التربوي الوطني</h3>
                 </td>
@@ -125,12 +125,17 @@
                     </tr>
                 </thead>
                 <tbody>
+                  <?php $firstRow = true; ?>
                     @foreach($details_BonAchats as $detail)
-                    <tr>
-                        <td>{{ $detail->produits->designation }}</td>
-                        <td>{{ $detail->quantite }}</td>
-                        <td>{{ $BonAchat->description }}</td>
-                    </tr>
+                        <tr>
+                            <td>{{ $detail->produits->designation }}</td>
+                            <td>{{ $detail->quantite }}</td>
+                            <!-- Display description only in the first row -->
+                            @if($firstRow)
+                                <td rowspan="{{ count($details_BonAchats) }}">{{ $BonAchat->description }}</td>
+                                <?php $firstRow = false; ?>
+                            @endif
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -147,11 +152,11 @@
         </table>
     </div>
 
-    <div class="center" style="margin-top: 80px;">
+    <div class="center" style="margin-top: 100px;">
         <p>استلم مطابقا للمواصفات من طرف</p>
         <p>Reçu conforme par</p>
     </div>
-                  <div class="center" style="margin-top: 80px;">
+                  <div class="center" style="margin-top: 100px;">
         
     </div>
 </body>
