@@ -42,7 +42,6 @@
             display: inline-block;
         }
         .invoice-box {
-            border: 1px solid #eee;
             padding: 20px;
             margin-top: 20px;
         }
@@ -51,10 +50,11 @@
             line-height: inherit;
             text-align: left;
             border-collapse: collapse;
+            border: 1px solid black; /* Set the border color to black */
         }
         .invoice-box table th,
         .invoice-box table td {
-            border: 1px solid #ddd;
+            border: 1px solid ;
             padding: 10px;
             text-align: center;
         }
@@ -62,7 +62,7 @@
             background-color: #f2f2f2;
         }
         .invoice-box table tr:last-child td {
-            border-bottom: none;
+            border-bottom: 1px solid black; /* Set the bottom border color to black */
         }
         .invoice-box table tr:nth-child(even) {
             background: #f9f9f9;
@@ -151,8 +151,8 @@
         <p>استلم مطابقا للمواصفات من طرف</p>
         <p>Reçu conforme par</p>
     </div>
-     <div class="center" style="margin-top: 80px;">
+                  <div class="center" style="margin-top: 80px;">
         
-    </div>            
+    </div>
 </body>
 </html>
