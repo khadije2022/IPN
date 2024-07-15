@@ -125,13 +125,18 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <?php $firstRow = true; ?>
                     @foreach($details_BonSorties as $detail)
-                <tr>
-                    <td>{{ $detail->produits->designation }}</td>
-                    <td>{{ $detail->quantite }}</td>
-                    <td>{{$BonSortie->description }}</td>
-                </tr>
-                @endforeach
+                        <tr>
+                            <td>{{ $detail->produits->designation }}</td>
+                            <td>{{ $detail->quantite }}</td>
+                            <!-- Display description only in the first row -->
+                            @if($firstRow)
+                                <td rowspan="{{ count($details_BonSorties) }}">{{ $BonSortie->description }}</td>
+                                <?php $firstRow = false; ?>
+                            @endif
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -147,11 +152,11 @@
         </table>
     </div>
 
-    <div class="center" style="margin-top: 80px;">
+    <div class="center" style="margin-top: 100px;">
         <p>استلم مطابقا للمواصفات من طرف</p>
         <p>Reçu conforme par</p>
     </div>
-                  <div class="center" style="margin-top: 80px;">
+    <div class="center" style="margin-top: 100px;">
         
     </div>
 </body>
