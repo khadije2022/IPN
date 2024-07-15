@@ -205,7 +205,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                     )}
 
                                                     {notifications.correctionstocks > 0 && (
-                                                        <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-bonAchat')}>
+                                                        <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-correctionstock')}>
                                                             correctionstocks non validés: {notifications.correctionstocks}
                                                         </div>
                                                     )}
