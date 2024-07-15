@@ -29,19 +29,19 @@ import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/16/solid';
 export default function AuthenticatedLayout({ user, header, children }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
-    const [notifications, setNotifications] = useState({});
-    const [notificationMenuOpen, setNotificationMenuOpen] = useState(false);
+    // const [notifications, setNotifications] = useState({});
+    // const [notificationMenuOpen, setNotificationMenuOpen] = useState(false);
 
     const toggleDarkMode = () => {
         setDarkMode(!darkMode);
         document.documentElement.classList.toggle('dark');
     };
 
-    const handleNotificationClick = (path) => {
-        console.log('Navigating to:', path); // Log the path to ensure it's correct
-        Inertia.get(path); // Use Inertia.get to navigate
-        setNotificationMenuOpen(false); // Close the notification menu
-    };
+    // const handleNotificationClick = (path) => {
+    //     console.log('Navigating to:', path); // Log the path to ensure it's correct
+    //     Inertia.get(path); // Use Inertia.get to navigate
+    //     setNotificationMenuOpen(false); // Close the notification menu
+    // };
 
     useEffect(() => {
         const handleTouchOutside = (e) => {
@@ -57,22 +57,22 @@ export default function AuthenticatedLayout({ user, header, children }) {
         };
     }, [menuOpen]);
 
-    useEffect(() => {
-        if (user.role === 'admin') {
-            fetchNotifications();
-        }
-    }, [user]);
+    // useEffect(() => {
+    //     if (user.role === 'admin') {
+    //         fetchNotifications();
+    //     }
+    // }, [user]);
 
-    const fetchNotifications = async () => {
-        try {
-            const response = await axios.get('/api/notifications');
-            setNotifications(response.data);
-        } catch (error) {
-            console.error('Error fetching notifications:', error);
-        }
-    };
+    // const fetchNotifications = async () => {
+    //     try {
+    //         const response = await axios.get('/api/notifications');
+    //         setNotifications(response.data);
+    //     } catch (error) {
+    //         console.error('Error fetching notifications:', error);
+    //     }
+    // };
 
-    const totalNotifications = (notifications.bonSorties || 0) + (notifications.bonAchats || 0) + (notifications.expressionBesoins || 0);
+    // const totalNotifications = (notifications.bonSorties || 0) + (notifications.bonAchats || 0) + (notifications.expressionBesoins || 0);
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col md:flex-row">
@@ -172,7 +172,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 >
                                     <SunIcon className='h-5 w-5 text-gray-500' />
                                 </button>
-                                {user.role === 'admin' && (
+                                {/* {user.role === 'admin' && (
                                     <div className="relative">
                                         <button
                                             className="relative flex items-center justify-center p-2 rounded-full bg-gray-100 dark:bg-gray-700"
@@ -214,7 +214,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                             </div>
                                         )}
                                     </div>
-                                )}
+                                )} */}
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md w-full">
