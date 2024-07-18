@@ -7,15 +7,16 @@ import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 
-function Index({ auth, produits, categories, success, ent, queryParams }) {
+function Index({ auth, produits, categories, success, ent, queryParams = null }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
   const [currentProduit, setCurrentProduit] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(queryParams?.product_name || '');
+  const [searchQuery, setSearchQuery] = useState('');
   const [startDate, setStartDate] = useState(queryParams?.start_date || '');
   const [endDate, setEndDate] = useState(queryParams?.end_date || '');
+  const [filteredProduits, setFilteredProduits] = useState(ent.data);
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [successMessage, setSuccessMessage] = useState(success);
   const [validationErrors, setValidationErrors] = useState({});
@@ -35,6 +36,20 @@ function Index({ auth, produits, categories, success, ent, queryParams }) {
       return () => clearTimeout(timer);
     }
   }, [success]);
+
+  useEffect(() => {
+    let filtered = ent.data;
+
+    if (searchQuery) {
+      filtered = filtered.filter(produit =>
+        produit.product_name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    setFilteredProduits(filtered);
+  }, [searchQuery, ent.data]);
+
+  const handleSearchChange = (e) => setSearchQuery(e.target.value);
 
   const deleteProduit = (produit) => {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette catégorie?')) {
@@ -66,7 +81,6 @@ function Index({ auth, produits, categories, success, ent, queryParams }) {
   const closeModal = () => {
     setIsModalOpen(false);
     reset();
-    createInertiaApp.reload();
   };
 
   const validateForm = () => {
@@ -91,25 +105,20 @@ function Index({ auth, produits, categories, success, ent, queryParams }) {
     );
   };
 
-  const handleSearchChange = (e) => setSearchQuery(e.target.value);
-
   const handleDateChange = (setter) => (e) => setter(e.target.value);
+
+  const handleFilterByDate = () => {
+    router.get(route('catelogueProduit.index'), {
+      start_date: startDate,
+      end_date: endDate,
+    });
+  };
 
   const handleSort = (key) =>
     setSortConfig({
       key,
       direction: sortConfig.key === key && sortConfig.direction === 'ascending' ? 'descending' : 'ascending',
     });
-
-  const filteredProduits = ent.data;
-
-  const handleSearch = () => {
-    router.get(route('catelogueProduit.index'), {
-      product_name: searchQuery,
-      start_date: startDate,
-      end_date: endDate,
-    });
-  };
 
   return (
     <AuthenticatedLayout
@@ -162,10 +171,16 @@ function Index({ auth, produits, categories, success, ent, queryParams }) {
                 </div>
                 <div className='flex items-center space-x-2 mt-2 sm:mt-0'>
                   <button
-                    onClick={handleSearch}
+                    onClick={handleFilterByDate}
                     className='bg-emerald-500 text-white px-4 py-2 rounded shadow hover:bg-emerald-600 transition-all'
                   >
-                    Rechercher
+                    Filtrer par Date
+                  </button>
+                  <button
+                    onClick={() => openModal('add')}
+                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
+                  >
+                    <FontAwesomeIcon icon={faPlus} className='mr-2' /> Ajouter
                   </button>
                 </div>
               </div>
@@ -173,21 +188,6 @@ function Index({ auth, produits, categories, success, ent, queryParams }) {
                 <table className='min-w-full bg-white dark:bg-gray-800'>
                   <thead className='bg-gray-50 dark:bg-gray-700'>
                     <tr>
-                      {/* <th
-                        className='px-3 py-3 cursor-pointer'
-                        onClick={() => handleSort('product_id')}
-                      >
-                        ID
-                        {sortConfig.key === 'product_id' && (
-                          <FontAwesomeIcon
-                            icon={
-                              sortConfig.direction === 'ascending'
-                                ? faSortUp
-                                : faSortDown
-                            }
-                          />
-                        )}
-                      </th> */}
                       <th
                         className='px-3 py-3 cursor-pointer'
                         onClick={() => handleSort('product_name')}
@@ -250,10 +250,10 @@ function Index({ auth, produits, categories, success, ent, queryParams }) {
                       </th>
                       <th
                         className='px-3 py-3 cursor-pointer'
-                        onClick={() => handleSort('total_sortie')}
+                        onClick={() => handleSort('created_at')}
                       >
                         Sortie
-                        {sortConfig.key === 'total_sortie' && (
+                        {sortConfig.key === 'created_at' && (
                           <FontAwesomeIcon
                             icon={
                               sortConfig.direction === 'ascending'
@@ -263,50 +263,47 @@ function Index({ auth, produits, categories, success, ent, queryParams }) {
                           />
                         )}
                       </th>
-                      <th className='px-3 py-3 text-right'>Action</th>
+                      <th className='px-3 py-3'>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredProduits.map((produit) => (
                       <tr
                         key={produit.product_id}
-                        className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'
+                        className='border-b dark:border-gray-700'
                       >
-                        {/* <td className='px-3 py-2'>{produit.product_id}</td> */}
                         <td className='px-3 py-2'>{produit.product_name}</td>
                         <td className='px-3 py-2'>{produit.category_name}</td>
                         <td className='px-3 py-2'>{produit.total_entree}</td>
-                        <td className='px-3 py-2'>{produit.stock}</td>
-                        <td className='px-3 py-2'>
-                          {produit.total_sortie ? -produit.total_sortie : produit.total_sortie}
-                        </td>
-                        <td className='px-3 py-2 text-right flex justify-end'>
+                        <td className='px-3 py-2'>{produit.stock <0 ? -produit.stock : produit.stock}</td>
+                        <td className='px-3 py-2'>{produit.total_sortie < 0 ? -produit.total_sortie :produit.total_sortie }</td>
+
+                        <td className='px-3 py-2 flex space-x-2'>
                           <button
                             onClick={() => openModal('edit', produit)}
-                            className='text-blue-600 dark:text-blue-500 mx-1 flex items-center'
+                            className='text-blue-500 hover:text-blue-700'
                           >
-                            <FontAwesomeIcon icon={faEdit} className='mr-1' />
+                            <FontAwesomeIcon icon={faEdit} />
                           </button>
                           <button
                             onClick={() => deleteProduit(produit)}
-                            className='text-red-600 dark:text-red-500 mx-1 flex items-center'
+                            className='text-red-500 hover:text-red-700'
                           >
-                            <FontAwesomeIcon icon={faTrashAlt} className='mr-1' />
+                            <FontAwesomeIcon icon={faTrashAlt} />
                           </button>
                         </td>
                       </tr>
                     ))}
-
                   </tbody>
                 </table>
               </div>
-              <Pagination links={ent.links} />
+              <Pagination className='mt-6' links={ent.links} />
             </div>
           </div>
         </div>
       </div>
 
-      {isModalOpen && (
+{isModalOpen && (
         <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center'>
           <div className='relative p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white dark:bg-gray-800'>
             <form
