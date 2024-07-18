@@ -352,7 +352,7 @@ function Index({ auth, produits, categories, success, ent, queryParams = null })
                       required
                     >
                       <option value=''>Sélectionnez une catégorie</option>
-                      {categories.map((category) => (
+                      {categories.data.map((category) => (
                         <option key={category.category_id} value={category.category_id}>
                           {category.category_name}
                         </option>
