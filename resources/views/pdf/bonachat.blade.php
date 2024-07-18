@@ -1,9 +1,10 @@
+
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bon d'achat</title>
+    <title>Demande d'achat</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -54,7 +55,7 @@
         }
         .invoice-box table th,
         .invoice-box table td {
-            border: 1px solid ;
+            border: 1px solid;
             padding: 10px;
             text-align: center;
         }
@@ -64,9 +65,6 @@
         .invoice-box table tr:last-child td {
             border-bottom: 1px solid black; /* Set the bottom border color to black */
         }
-        .invoice-box table tr:nth-child(even) {
-            
-        }
         .center p {
             margin: 0;
             padding: 0;
@@ -75,8 +73,8 @@
             margin-bottom: 120px;
         }
         img {
-            width: 200px;
-            height: 160px;
+            width: 100px;
+            height: auto;
             text-align: center;
             margin: 20px 15px;
         }
@@ -88,48 +86,55 @@
         .bottom-signatures td {
             padding: 10px;
         }
+        .underline {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <table class="surmeme_ligne">
             <tr>
-                <td class="left"><h4>Institut pédagogique National IPN</h4></td>
-                <td><img src="../../images/logoipn.jpg" alt="Logo IPN"></td>
-                <td class="right">
-                    <h3 class="rtl">المعهد التربوي الوطني</h3>
+                <td class="left">
+                    <p>République Islamique de Mauritanie<br>
+                    Ministère de l'Éducation Nationale et de la Réforme du Système Éducatif<br>
+                    Institut Pédagogique National</p>
                 </td>
+                <td class="center"><img src="../../images/logoipn.jpg" alt="Logo IPN"></td>
+                <td class="right"><p>Honneur – Fraternité – Justice</p></td>
             </tr>
         </table>
 
         <table class="surmeme_ligne">
             <tr>
                 <td class="left">
-                    <h4>N°: {{ $BonAchat->id }} :الرقم</h4>
+                    <h4>N°: {{ $BonAchat->id }}</h4>
                 </td>
                 <td class="right">
-                    <h4>Date: {{ $BonAchat->created_at->format('Y-m-d') }} :التاريخ</h4>
+                    <h4>Nouakchott, le {{ $BonAchat->created_at->format('Y-m-d') }}</h4>
                 </td>
             </tr>
         </table>
 
-        <h3 class="center">BON D'ACHAT وثيقة شراء</h3>
+        <h3 class="center">A&nbsp;Madame la Directrice Générale</h3>
+        <h3 class="center underline">DEMANDE D'ACHAT</h3>
 
         <div class="invoice-box">
             <table>
                 <thead>
                     <tr>
-                        <th>Désignation<br><span class="rtl">المادة</span></th>
-                        <th>Quantité<br><span class="rtl">الكمية</span></th>
-                        <th>Motif<br><span class="rtl">الغرض</span></th>
+                        <th>Quantité</th>
+                        <th>Désignation des Fournitures</th>
+                        <th>Observations</th>
                     </tr>
                 </thead>
                 <tbody>
-                  <?php $firstRow = true; ?>
+                    <?php $firstRow = true; ?>
                     @foreach($details_BonAchats as $detail)
                         <tr>
-                            <td>{{ $detail->produits->designation }}</td>
                             <td>{{ $detail->quantite }}</td>
+                            <td>{{ $detail->produits->designation }}</td>
+                           
                             <!-- Display description only in the first row -->
                             @if($firstRow)
                                 <td rowspan="{{ count($details_BonAchats) }}">{{ $BonAchat->description }}</td>
@@ -143,21 +148,13 @@
 
         <table class="surmeme_ligne bottom-signatures">
             <tr>
-                <td class="left"><p>Chef DEIS<br><span class="rtl">رئيس القطاع</span></p></td>
-                <td class="right"><p>La Directrice<br><span class="rtl">المديرة</span><br>Signature et cachet</p></td>
-            </tr>
-            <tr>
-                <td class="center" colspan="2"><p>Chef de Service<br><span class="rtl">رئيس المصلحة</span></p></td>
+                <td class="left"><p>Service Demandeur</p></td>
+                <td class="right"><p>Le Chef du Dept Concerné</p></td>
             </tr>
         </table>
     </div>
 
-    <div class="center" style="margin-top: 100px;">
-        <p>استلم مطابقا للمواصفات من طرف</p>
-        <p>Reçu conforme par</p>
-    </div>
-                  <div class="center" style="margin-top: 100px;">
-        
-    </div>
+    
 </body>
 </html>
+
