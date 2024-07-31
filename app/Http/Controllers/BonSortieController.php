@@ -168,31 +168,27 @@ class BonSortieController extends Controller
         return to_route('detailBonSortie.index_par_bonSortie',['bonSortie' => $bonSortie])->with('success','Bien Modifier le status');
     }
 
+    
     public function exportPdf($bonSortie)
     {
-
-
-        $BonSortie = BonSortie::findOrFail($bonSortie);
-        $details_BonSorties = DetailBonSortie::with('produits')->where('idBonDeSortie', $bonSortie)->get();
-        $totalQuantite = $details_BonSorties->sum('quantite');
-
-
-        $html = View::make('pdf.bonsortie', [
-            'details_BonSorties' => $details_BonSorties,
-            'BonSortie' => $BonSortie,
-            'totalQuantite' => $totalQuantite
-        ])->render();
-
-        try {
+            $BonSortie = BonSortie::findOrFail($bonSortie);
+            $detailsexpresionbesoins = DetailBonSortie::where('idBonDeSortie', $bonSortie)->get();
+            $html = View::make('pdf.bonsortie', [
+                'BonSortie' => $BonSortie,
+                // 'details_BonSorties' =>$detailsexpresionbesoins
+            ])->render();
             $mpdf = new \Mpdf\Mpdf();
             $mpdf->autoScriptToLang = true;
             $mpdf->autoLangToFont = true;
             $mpdf->WriteHTML($html);
             return $mpdf->Output('BonSortie.pdf', 'D');
-        } catch (\Mpdf\MpdfException $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+       
     }
+    
+
+
+
+    
     public function exportExcel()
     {
         $categories = BonSortie::get();

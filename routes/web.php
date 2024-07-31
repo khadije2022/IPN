@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
-use App\Http\Controllers\NotificationController;
+// use App\Http\Controllers\NotificationController;
 
 use function Termwind\render;
 
@@ -81,7 +81,7 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/export-produit', [CatelogueProduitController::class, 'exportExcel'])->name('export-produit');
     Route::get('/export-bonachat', [BonAchatController::class, 'exportExcel'])->name('export-bonachat');
     Route::get('/export-bonsortie', [BonSortieController::class, 'exportExcel'])->name('export-bonsortie');
-    Route::get('/api/notifications', [NotificationController::class, 'getNotifications']);
+    // Route::get('/api/notifications', [NotificationController::class, 'getNotifications']);
     Route::get('/non-valider-expbesoin', [ExpressionBesoinController::class, 'nonvaliderExpbesoin']);
     Route::get('/non-valider-bonAchat', [BonAchatController::class, 'nonvaliderbonAchat']);
     Route::get('/non-valider-bonsortie', [BonSortieController::class, 'nonvaliderbonsortie']);

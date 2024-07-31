@@ -98,10 +98,10 @@ height: 160;
         <table class="surmeme_ligne">
             <tr>
                 <td class="left">
-                    <h4>N°: {{ $BonAchat->id }} الرقم</h4>
+                    <!-- <h4>N°: {{ $BonAchat->id }} الرقم</h4> -->
                 </td>
                 <td class="right">
-                    <h4>Date: {{ $BonAchat->created_at->format('Y-m-d') }} التاريخ</h4>
+                    <!-- <h4>Date: {{ $BonAchat->created_at->format('Y-m-d') }} التاريخ</h4> -->
                 </td>
             </tr>
         </table>
@@ -116,13 +116,13 @@ height: 160;
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($details_BonAchats as $detail)
+                    <!-- @foreach($details_BonAchats as $detail)
                     <tr>
                         <td>{{ $detail->produits->designation }}</td>
                         <td>{{ $detail->quantite }}</td>
                         <td>{{ $BonAchat->description }}</td>
                     </tr>
-                    @endforeach
+                    @endforeach -->
                 </tbody>
             </table>
         </div>
@@ -143,6 +143,5 @@ height: 160;
             <p>استلم مطابقا للمواصفات من طرف</p>
             <p>Reçu conforme par</p>
         </div>
-    <!-- </div> -->
 </body>
 </html>

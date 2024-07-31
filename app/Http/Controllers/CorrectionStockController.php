@@ -141,7 +141,7 @@ class CorrectionStockController extends Controller
         $correctionStock = $query->paginate(10); // Exécutez la requête avec la pagination
     
         // Retourner la vue avec les données des bons de sortie
-        inertia('CorrectionStock/Index', [
+        return inertia('CorrectionStock/Index', [
             'correctionStocks' => CorrectionStockResource::collection($correctionStock),
         ]);
 

@@ -9,7 +9,7 @@ class Magasin extends Model
 {
     use HasFactory;
     protected $fillable =[
-        'nomMagasin',
+        'nomMagasin'=>'IPN Magasin',
     ];
 
     public function categorie(){
