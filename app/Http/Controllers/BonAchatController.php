@@ -115,13 +115,13 @@ class BonAchatController extends Controller
         $BonAchat->status = 'validé';
         $BonAchat->save();
 
-        DB::table('catelogue_produits AS cp')
-        ->join('product_stocks AS ps', 'cp.id', '=', 'ps.product_id')
-     ->where('cp.id', '=', DB::raw('ps.product_id'))
-        ->update(['cp.stock' => DB::raw('ps.stock'),
-        'cp.entre' => DB::raw('ps.entre'),
-        'cp.sortie' => DB::raw('ps.sortie'),
-    ]);
+    //     DB::table('catelogue_produits AS cp')
+    //     ->join('product_stocks AS ps', 'cp.id', '=', 'ps.product_id')
+    //  ->where('cp.id', '=', DB::raw('ps.product_id'))
+    //     ->update(['cp.stock' => DB::raw('ps.stock'),
+    //     'cp.entre' => DB::raw('ps.entre'),
+    //     'cp.sortie' => DB::raw('ps.sortie'),
+    // ]);
 
 
 
@@ -164,7 +164,7 @@ class BonAchatController extends Controller
         {
             $query = BonAchat::where('status', 'non-validé');
             $bonAchats = $query->paginate(10); // Exécutez la requête avec la pagination
-        
+
             // Retourner la vue avec les données des bons de sortie
             return inertia('BonAchat/Index', [
                 'bonAchats' => BonAchatResource::collection($bonAchats),

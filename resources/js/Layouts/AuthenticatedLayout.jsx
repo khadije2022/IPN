@@ -8,19 +8,21 @@ import { Inertia } from '@inertiajs/inertia';
 import {
     DocumentTextIcon,
     TagIcon,
-    CubeIcon,
-    UserCircleIcon,
-    UserIcon,
-    Squares2X2Icon,
-    BuildingOffice2Icon,
-    ClipboardDocumentIcon,
-    ShoppingCartIcon,
-    Bars3BottomRightIcon,
-    SunIcon,
-    BellIcon,
-    UsersIcon,
-    NewspaperIcon,
-    ArrowLeftIcon
+  CubeIcon,
+  UserCircleIcon,
+  UserIcon,
+
+  Squares2X2Icon,
+  BuildingOffice2Icon,
+  ClipboardDocumentIcon,
+  ShoppingCartIcon,
+  CubeTransparentIcon,
+  Bars3BottomRightIcon,
+  ArrowLeftIcon,
+  SunIcon,
+  BellIcon,
+  UsersIcon,
+  NewspaperIcon
 } from '@heroicons/react/24/outline';
 import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/16/solid';
 

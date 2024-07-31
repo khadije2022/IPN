@@ -22,7 +22,7 @@ class MouvmentStockController extends Controller
 
         // Execute the query with pagination
         $mouvmentStock = $mv->paginate(10);
-
+        
         return inertia('DetailsMouvement/Index', [
             'mouvmentStocks' => MouvmentStockResource::collection($mouvmentStock),
             'success' => session('success'),

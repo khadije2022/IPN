@@ -131,7 +131,7 @@ class DetailBonAchatController extends Controller
 
         $detailBonAchat->update($data);
 
-        return to_route('detailBonAchat.index-par-bonAchat',['bonAchat' => $data['idBonAchat']])->with('success','Bien modifié');
+        return to_route('detailBonAchat.index-par-bonAchat',['bonAchat' => $data['idBonAchat']])->with('success','Le detail a été mis à jour');
     }
 
     /**

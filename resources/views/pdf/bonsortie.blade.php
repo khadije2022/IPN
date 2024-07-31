@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bon de Sortie</title>
+    <title>Bon de sortie</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin:0;
+            margin: 0;
             padding: 0;
             font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         .container {
             width: 100%;
             margin: auto;
+            flex: 1;
         }
         .surmeme_ligne {
             width: 100%;
@@ -38,7 +42,6 @@
             display: inline-block;
         }
         .invoice-box {
-            border: 1px solid #eee;
             padding: 20px;
             margin-top: 20px;
         }
@@ -47,19 +50,19 @@
             line-height: inherit;
             text-align: left;
             border-collapse: collapse;
+            border: 1px solid black; /* Set the border color to black */
         }
-        .invoice-box table th {
-            border-bottom: 1px solid #ddd;
-            font-weight: bold;
-            text-align: center;
-        }
+        .invoice-box table th,
         .invoice-box table td {
-            border-bottom: 1px solid #ddd;
+            border: 1px solid ;
             padding: 10px;
             text-align: center;
         }
+        .invoice-box table th {
+            background-color: #f2f2f2;
+        }
         .invoice-box table tr:last-child td {
-            border-bottom: none;
+            border-bottom: 1px solid black; /* Set the bottom border color to black */
         }
         .invoice-box table tr:nth-child(even) {
             background: #f9f9f9;
@@ -71,9 +74,9 @@
         .margin-bottom {
             margin-bottom: 120px;
         }
-        img{
-            width:200px;
-height: 160;
+        img {
+            width: 200px;
+            height: 160px;
             text-align: center;
             margin: 20px 15px;
         }
@@ -81,6 +84,18 @@ height: 160;
 </head>
 <body>
     <!-- <div class="container"> -->
+        .bottom-signatures {
+            width: 100%;
+            margin-top: 40px;
+            border-collapse: collapse;
+        }
+        .bottom-signatures td {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
         <table class="surmeme_ligne">
             <tr>
                 <td class="left"><h4>Institut pédagogique National IPN</h4></td>
@@ -89,6 +104,7 @@ height: 160;
                     <h3 class="rtl">
                         المعهد التربوي الوطني
     </h3>
+                    <h3 class="rtl">المعهد التربوي الوطني</h3>
                 </td>
             </tr>
         </table>
@@ -102,9 +118,19 @@ height: 160;
                 </td>
                 <td class="right">
                     <h4>Date: {{ $BonSortie->created_at->format('Y-m-d') }} التاريخ</h4>
+        <table class="surmeme_ligne">
+            <tr>
+                <td class="left">
+                    <h4>N°: {{ $BonSortie->id }} :الرقم</h4>
+                </td>
+                <td class="right">
+                    <h4>Date: {{ $BonSortie->created_at->format('Y-m-d') }} :التاريخ</h4>
+>>>>>>> 211e03e6f7ceb4752bbde30c7707770c461aa8fd
                 </td>
             </tr>
         </table>
+
+        <h3 class="center">BON DE SORTIE وثيقة استخراج</h3>
 
         <div class="invoice-box">
             <table>
@@ -117,6 +143,24 @@ height: 160;
                 </thead>
                 <tbody>
                 <!--  -->
+                        <th>Désignation<br><span class="rtl">المادة</span></th>
+                        <th>Quantité<br><span class="rtl">الكمية</span></th>
+                        <th>Motif<br><span class="rtl">الغرض</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $firstRow = true; ?>
+                    @foreach($details_BonSorties as $detail)
+                        <tr>
+                            <td>{{ $detail->produits->designation }}</td>
+                            <td>{{ $detail->quantite }}</td>
+                            <!-- Display description only in the first row -->
+                            @if($firstRow)
+                                <td rowspan="{{ count($details_BonSorties) }}">{{ $BonSortie->description }}</td>
+                                <?php $firstRow = false; ?>
+                            @endif
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

@@ -4,9 +4,11 @@ import { Head, router, useForm } from '@inertiajs/react';
 import TextInput from '@/Components/TextInput';
 import InputLabel from '@/Components/InputLabel';
 import InputError from '@/Components/InputError';
-import Pagination from '@/Components/Pagination';
+import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus, faFilePdf, faSort } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faFileExcel, faFilePdf, faSort } from '@fortawesome/free-solid-svg-icons';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Index_par_expbesoin({
   auth,
@@ -16,12 +18,15 @@ function Index_par_expbesoin({
   success,
   categories = [],
   produits = [],
+  valider,
+  error,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
   const [currentDetail, setCurrentDetail] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [successMessage, setSuccessMessage] = useState(success);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
   const [validationErrors, setValidationErrors] = useState({});
 
@@ -33,6 +38,28 @@ function Index_par_expbesoin({
       setFilteredProducts([]);
     }
   }, [selectedCategory, produits]);
+
+  useEffect(() => {
+    if (success) {
+      setSuccessMessage(success);
+      const timer = setTimeout(() => {
+        setSuccessMessage(null);
+      }, 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (valider) {
+      toast.success(valider);
+    }
+  }, [valider]);
+
+  useEffect(() => {
+    if (error) {
+      toast.warning(error);
+    }
+  }, [error]);
 
   const { data, setData, post, put, errors, reset } = useForm({
     id_expbesoin: id_expbesoin,
@@ -111,16 +138,6 @@ function Index_par_expbesoin({
     router.delete(route('detailsexpresionbesoin.destroy', detailsexpresionbesoin.id));
   };
 
-  const getProduitname = (id) => {
-    const produit = produits.data.find((produit) => produit.id === id);
-    return produit ? produit.designation : 'N/A';
-  };
-
-  const getcategoriename = (id) => {
-    const categorie = categories.find((categorie) => categorie.id === id);
-    return categorie ? categorie.type : 'N/A';
-  };
-
   const requestSort = (key) => {
     let direction = 'ascending';
     if (sortConfig.key === key && sortConfig.direction === 'ascending') {
@@ -151,149 +168,144 @@ function Index_par_expbesoin({
       }
     >
       <Head title="Expression des Besoins" />
+
       <div className='py-12'>
         <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
-          {success && (
+          <ToastContainer />
+          {successMessage && (
             <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
-              {success}
+              {successMessage}
             </div>
           )}
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
-              <div className='flex flex-col lg:flex-row justify-between'>
-                <div className='font-semibold'>
-                  <h1>Expression du Besoin N° {expressionbesoin.id}</h1>
-                  <h1>Nom de Responsabilité: {expressionbesoin.service.nom_responsabiliter}</h1>
+              <div className='flex flex-col sm:flex-row justify-between mb-4'>
+                <div>
+                  <h1 className='font-semibold text-lg'>Expression du Besoin N°: {expressionbesoin.id}</h1>
                   <h1>Description: {expressionbesoin.description}</h1>
                 </div>
-                <div className='mt-4 lg:mt-0'>
-                  <button
-                    onClick={() => openModal('add')}
-                    className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
-                  >
-                    <FontAwesomeIcon icon={faPlus} /> Ajouter
-                  </button>
-                  
-                  {expressionbesoin.status !== 'validé' && (
+                <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
+                  <a href={route('export-expressionbesoin', { id_expbesoin: id_expbesoin })}
+                    className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
+                  ><FontAwesomeIcon icon={faFileExcel} /> Excel
+                  </a>
+
+                  {expressionbesoin.status === 'non-validé' &&
+                    auth.user.role === 'service' && (
+                      <button
+                        onClick={() => openModal('add')}
+                        className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
+                      >
+                        <FontAwesomeIcon icon={faPlus} /> Ajouter
+                      </button>
+                    )}
+
+                  {expressionbesoin.status === 'non-validé' && auth.user.role === 'admin' && (
                     <a
                       href={route('valider', { id_expbesoin: id_expbesoin })}
-                      className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600 mr-2'
+                      className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
                     >
                       Valider
                     </a>
                   )}
                   <a
                     href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
-                    className='bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600'
+                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
                   >
-                    <FontAwesomeIcon icon={faFilePdf} className="mr-2" />PDF
+                    <FontAwesomeIcon icon={faFilePdf} className="mr-2" /> PDF
                   </a>
                 </div>
               </div>
-              <div className='overflow-x-auto'>
-                <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
-                  <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
-                    <tr className='text-nowrap'>
-                      <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('id')}>
-                        ID <FontAwesomeIcon icon={faSort} />
-                      </th>
-                      <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('id_categorie')}>
-                        Catégorie <FontAwesomeIcon icon={faSort} />
-                      </th>
-                      <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('id_catproduit')}>
-                        Produit <FontAwesomeIcon icon={faSort} />
-                      </th>
-                      <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('quantite')}>
-                        Quantité <FontAwesomeIcon icon={faSort} />
-                      </th>
-                      <th className='px-3 py-3 text-right'>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {sortedDetails.map((detailsexpresionbesoin) => (
-                      <tr key={detailsexpresionbesoin.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                        <td className='px-3 py-2'>{detailsexpresionbesoin.id}</td>
-                        <td className='px-3 py-2'>{getcategoriename(detailsexpresionbesoin.id_categorie)}</td>
-                        <td className='px-3 py-2'>{getProduitname(detailsexpresionbesoin.id_catproduit)}</td>
-                        <td className='px-3 py-2'>{detailsexpresionbesoin.quantite}</td>
+
+              <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
+                <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
+                  <tr className='text-nowrap'>
+                    <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('id')}>
+                      ID <FontAwesomeIcon icon={faSort} />
+                    </th>
+                    <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('produit.designation')}>
+                      Produits <FontAwesomeIcon icon={faSort} />
+                    </th>
+                    <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('produit.type.type')}>
+                      Catégorie <FontAwesomeIcon icon={faSort} />
+                    </th>
+                    <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('quantite')}>
+                      Quantité <FontAwesomeIcon icon={faSort} />
+                    </th>
+                    {expressionbesoin.status === 'non-validé' && auth.user.role === 'service' && (<th className='px-3 py-3 text-right'>Action</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedDetails.map((detailsexpresionbesoin) => (
+                    <tr key={detailsexpresionbesoin.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
+                      <td className='px-3 py-2'>{detailsexpresionbesoin.id}</td>
+                      <td className='px-3 py-2'>{detailsexpresionbesoin.produit.designation}</td>
+                      <td className='px-3 py-2'>{detailsexpresionbesoin.produit.type.type}</td>
+                      <td className='px-3 py-2'>{detailsexpresionbesoin.quantite}</td>
+                      {expressionbesoin.status === 'non-validé' && auth.user.role === 'service' && (
                         <td className='px-3 py-2 text-nowrap'>
                           <button
                             onClick={() => openModal('edit', detailsexpresionbesoin)}
-                            className='text-blue-600 dark:text-blue-500 mx-1'
+                            className='font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1'
                           >
                             <FontAwesomeIcon icon={faEdit} />
                           </button>
                           <button
                             onClick={() => deleteDetailsexpresionbesoin(detailsexpresionbesoin)}
-                            className='text-red-600 dark:text-red-500 mx-1'
+                            className='font-medium text-red-600 dark:text-red-500 hover:underline mx-1'
                           >
                             <FontAwesomeIcon icon={faTrashAlt} />
                           </button>
                         </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
       </div>
 
       {isModalOpen && (
-        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full'>
-          <div className='relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white'>
+        <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full' onClick={closeModal}>
+          <div className='relative top-20 mx-auto p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white dark:bg-gray-800' onClick={(e) => e.stopPropagation()}>
             <form onSubmit={handleFormSubmit} className='p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg'>
               <div className='mt-4'>
-                <InputLabel htmlFor='id_categorie' value='Catégorie' />
-                <select
-                  name="id_categorie"
-                  id="id_categorie"
-                  value={data.id_categorie}
+                <InputLabel htmlFor='type' value='Catégorie Type' />
+                <SelectInput
+                  name="type"
+                  id="type"
+                  className="mt-1 block w-full"
                   onChange={(e) => {
-                    const value = e.target.value;
-                    setSelectedCategory(value);
-                    setData('id_categorie', value); //the category in form data
+                    setSelectedCategory(e.target.value);
+                    setData('produit', ''); // Reset produit when category changes
                   }}
-                  className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  value={selectedCategory}
                 >
-                  <option value="" className="text-gray-500">Sélectionner une catégorie</option>
-                  {categories.map((category) => (
-                    <option key={category.id} value={category.id} className="text-gray-800 dark:text-gray-200">
-                      {category.type}
-                    </option>
+                  <option value=''>Sélectionner une option</option>
+                  {categories && categories.data && categories.data.map((categorie) => (
+                    <option key={categorie.id} value={categorie.id}>{categorie.type}</option>
                   ))}
-                </select>
-                {validationErrors.id_categorie && (
-                  <div className='text-red-500 mt-2'>{validationErrors.id_categorie}</div>
-                )}
-                <InputError message={errors.id_categorie} className='mt-2' />
+                </SelectInput>
+                <InputError message={errors.type} className='mt-2' />
               </div>
-
               <div className='mt-4'>
-                <InputLabel htmlFor='id_catproduit' value='Produit' />
-                <select
-                  name="id_catproduit"
-                  id="id_catproduit"
-                  value={data.id_catproduit}
-                  onChange={(e) => 
-                    setData('id_catproduit', e.target.value)
-                  }
-                  className="mt-1 block w-full bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                <InputLabel htmlFor='produit' value='Produit' />
+                <SelectInput
+                  name="produit"
+                  id="produit"
+                  value={data.produit}
+                  className="mt-1 block w-full"
+                  onChange={(e) => setData('produit', e.target.value)}
                 >
-                  <option value="" className="text-gray-500">Sélectionner un produit</option>
+                  <option value=''>Sélectionner un produit</option>
                   {filteredProducts.map((product) => (
-                    <option key={product.id} value={product.id} className="text-gray-800 dark:text-gray-200">
-                      {product.designation}
-                    </option>
+                    <option key={product.id} value={product.id}>{product.designation}</option>
                   ))}
-                </select>
-                {validationErrors.id_catproduit && (
-                  <div className='text-red-500 mt-2'>{validationErrors.id_catproduit}</div>
-                )}
-                <InputError message={errors.id_catproduit} className='mt-2' />
+                </SelectInput>
+                <InputError message={validationErrors.produit || errors.produit} className='mt-2' />
               </div>
-
               <div className='mt-4'>
                 <InputLabel htmlFor='quantite' value='Quantité' />
                 <TextInput
@@ -304,10 +316,7 @@ function Index_par_expbesoin({
                   className="mt-1 block w-full"
                   onChange={handleQuantityChange}
                 />
-                {validationErrors.quantite && (
-                  <div className='text-red-500 mt-2'>{validationErrors.quantite}</div>
-                )}
-                <InputError message={errors.quantite} className='mt-2' />
+                <InputError message={validationErrors.quantite || errors.quantite} className='mt-2' />
               </div>
 
               <div className='mt-4 text-right'>
@@ -320,9 +329,9 @@ function Index_par_expbesoin({
                 </button>
                 <button
                   type="submit"
-                  className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600"
+                  className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600"
                 >
-                  {modalMode === 'add' ? 'Ajouter' : 'Sauvegarder'}
+                  {modalMode === 'add' ? 'Ajouter' : 'Enregistrer'}
                 </button>
               </div>
             </form>

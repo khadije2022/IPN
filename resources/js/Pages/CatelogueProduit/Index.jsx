@@ -7,15 +7,16 @@ import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 
-
-
-function Index({ auth, produits, categories, success, stock }) {
+function Index({ auth, produits, categories, success, ent, queryParams = null }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
   const [currentProduit, setCurrentProduit] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [startDate, setStartDate] = useState(queryParams?.start_date || '');
+  const [endDate, setEndDate] = useState(queryParams?.end_date || '');
+  const [filteredProduits, setFilteredProduits] = useState(ent.data);
   const [sortConfig, setSortConfig] = useState({ key: 'id', direction: 'ascending' });
   const [successMessage, setSuccessMessage] = useState(success);
   const [validationErrors, setValidationErrors] = useState({});
@@ -36,18 +37,43 @@ function Index({ auth, produits, categories, success, stock }) {
     }
   }, [success]);
 
+  useEffect(() => {
+    let filtered = ent.data;
+
+    if (searchQuery) {
+      filtered = filtered.filter(produit =>
+        produit.product_name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    setFilteredProduits(filtered);
+  }, [searchQuery, ent.data]);
+
+  const handleSearchChange = (e) => setSearchQuery(e.target.value);
+
+  const deleteProduit = (produit) => {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette catégorie?')) {
+      return;
+    }
+    router.delete(route('catelogueProduit.destroy', produit.product_id));
+  };
+
   const openModal = (mode, produit = null) => {
     setModalMode(mode);
     setCurrentProduit(produit);
-    setData(produit ? {
-      designation: produit.designation,
-      type: produit.type.id,
-      created_at: produit.created_at,
-    } : {
-      designation: '',
-      type: '',
-      created_at: '',
-    });
+    setData(
+      produit
+        ? {
+            designation: produit.product_name,
+            type: produit.category_id,
+            created_at: produit.created_at,
+          }
+        : {
+            designation: '',
+            type: '',
+            created_at: '',
+          }
+    );
     setValidationErrors({});
     setIsModalOpen(true);
   };
@@ -55,140 +81,229 @@ function Index({ auth, produits, categories, success, stock }) {
   const closeModal = () => {
     setIsModalOpen(false);
     reset();
-    Inertia.reload();
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!data.designation) errors.designation = 'La désignation est requise.';
+    if (!data.type) errors.type = 'La catégorie est requise.';
+    if (!data.created_at) errors.created_at = 'La date de création est requise.';
+    setValidationErrors(errors);
+    return errors;
   };
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
     if (Object.keys(validateForm()).length) return;
     const action = modalMode === 'add' ? post : put;
-    action(route(modalMode === 'add' ? 'catelogueProduit.store' : 'catelogueProduit.update', currentProduit?.id), {
-      onSuccess: closeModal,
-      onError: errors => console.error("Error submitting form:", errors),
+    action(
+      route(modalMode === 'add' ? 'catelogueProduit.store' : 'catelogueProduit.update', currentProduit?.category_id),
+      {
+        onSuccess: closeModal,
+        onError: (errors) => console.error('Error submitting form:', errors),
+      }
+    );
+  };
+
+  const handleDateChange = (setter) => (e) => setter(e.target.value);
+
+  const handleFilterByDate = () => {
+    router.get(route('catelogueProduit.index'), {
+      start_date: startDate,
+      end_date: endDate,
     });
   };
 
-  const handleSearchChange = (e) => setSearchQuery(e.target.value);
-
-  const handleSort = (key) => setSortConfig({
-    key,
-    direction: sortConfig.key === key && sortConfig.direction === 'ascending' ? 'descending' : 'ascending'
-  });
-
-  const filteredProduits = produits?.data?.filter(produit => Object.values(produit).some(val => val.toString().toLowerCase().includes(searchQuery.toLowerCase()))) || [];
+  const handleSort = (key) =>
+    setSortConfig({
+      key,
+      direction: sortConfig.key === key && sortConfig.direction === 'ascending' ? 'descending' : 'ascending',
+    });
 
   return (
     <AuthenticatedLayout
       user={auth.user}
-      header={<div className='flex justify-between items-center'>
-        <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>Catalogue Produit</h2>
-      </div>}
+      header={
+        <div className='flex justify-between items-center'>
+          <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
+            Catalogue Produit
+          </h2>
+        </div>
+      }
     >
-      <Head title="Catalogue Produit" />
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {successMessage && <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>{successMessage}</div>}
-          <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-            <div className="p-6 text-gray-900 dark:text-gray-100">
+      <Head title='Catalogue Produit' />
+      <div className='py-12'>
+        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+          {successMessage && (
+            <div className='bg-emerald-400 py-2 px-4 rounded mb-4'>
+              {successMessage}
+            </div>
+          )}
+          <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
+            <div className='p-6 text-gray-900 dark:text-gray-100'>
               <div className='flex flex-col sm:flex-row justify-between mb-4'>
-                <TextInput type="text" name="search" value={searchQuery} onChange={handleSearchChange} placeholder="Rechercher..." className="mt-2 block w-full sm:w-60 " />
-
-                <div className='flex flex-col sm:flex-row items-center justify-end space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto'>
-                  <button onClick={() => openModal('add')} className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center w-full  sm-w-60 '>
-                    <FontAwesomeIcon icon={faPlus} className="mr-2" /> Ajouter
-                  </button>
-                  <a href={route('export-produit')} className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center w-full sm-w-60">
-                    <FontAwesomeIcon icon={faFileExcel} className="mr-2" /> Excel
-                  </a>
+                <div className='flex space-x-4'>
+                  <TextInput
+                    type='text'
+                    name='search'
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    placeholder='Rechercher...'
+                    className='mt-2 block w-full sm:w-60'
+                  />
                 </div>
+                <div className='flex space-x-4 mt-2 sm:mt-0'>
+                  <TextInput
+                    type='date'
+                    name='start_date'
+                    value={startDate}
+                    onChange={handleDateChange(setStartDate)}
+                    className='block w-full sm:w-auto'
+                  />
 
+                  <TextInput
+                    type='date'
+                    name='end_date'
+                    value={endDate}
+                    onChange={handleDateChange(setEndDate)}
+                    className='block w-full sm:w-auto'
+                  />
+                </div>
+                <div className='flex items-center space-x-2 mt-2 sm:mt-0'>
+                  <button
+                    onClick={handleFilterByDate}
+                    className='bg-emerald-500 text-white px-4 py-2 rounded shadow hover:bg-emerald-600 transition-all'
+                  >
+                    Filtrer par Date
+                  </button>
+                  <button
+                    onClick={() => openModal('add')}
+                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
+                  >
+                    <FontAwesomeIcon icon={faPlus} className='mr-2' /> Ajouter
+                  </button>
+                </div>
               </div>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <div className='overflow-x-auto'>
+                <table className='min-w-full bg-white dark:bg-gray-800'>
+                  <thead className='bg-gray-50 dark:bg-gray-700'>
                     <tr>
-                      <th className='px-3 py-3 cursor-pointer' onClick={() => handleSort('id')}>
-                        ID
-                        {sortConfig.key === 'id' && (
-                          <FontAwesomeIcon icon={sortConfig.direction === 'ascending' ? faSortUp : faSortDown} />
+                      <th
+                        className='px-3 py-3 cursor-pointer'
+                        onClick={() => handleSort('product_name')}
+                      >
+                        Nom du Produit
+                        {sortConfig.key === 'product_name' && (
+                          <FontAwesomeIcon
+                            icon={
+                              sortConfig.direction === 'ascending'
+                                ? faSortUp
+                                : faSortDown
+                            }
+                          />
                         )}
                       </th>
-                      <th className='px-3 py-3 cursor-pointer' onClick={() => handleSort('designation')}>
-                        Désignation
-                        {sortConfig.key === 'designation' && (
-                          <FontAwesomeIcon icon={sortConfig.direction === 'ascending' ? faSortUp : faSortDown} />
-                        )}
-                      </th>
-                      <th className='px-3 py-3 cursor-pointer' onClick={() => handleSort('type')}>
+                      <th
+                        className='px-3 py-3 cursor-pointer'
+                        onClick={() => handleSort('category_name')}
+                      >
                         Catégorie
-                        {sortConfig.key === 'type' && (
-                          <FontAwesomeIcon icon={sortConfig.direction === 'ascending' ? faSortUp : faSortDown} />
+                        {sortConfig.key === 'category_name' && (
+                          <FontAwesomeIcon
+                            icon={
+                              sortConfig.direction === 'ascending'
+                                ? faSortUp
+                                : faSortDown
+                            }
+                          />
                         )}
                       </th>
-                      <th className='px-3 py-3 cursor-pointer' onClick={() => handleSort('entre')}>
-                        Entre
-                        {sortConfig.key === 'entre' && (
-                          <FontAwesomeIcon icon={sortConfig.direction === 'ascending' ? faSortUp : faSortDown} />
+                      <th
+                        className='px-3 py-3 cursor-pointer'
+                        onClick={() => handleSort('total_entree')}
+                      >
+                        Entrée
+                        {sortConfig.key === 'total_entree' && (
+                          <FontAwesomeIcon
+                            icon={
+                              sortConfig.direction === 'ascending'
+                                ? faSortUp
+                                : faSortDown
+                            }
+                          />
                         )}
                       </th>
-                      <th className='px-3 py-3 cursor-pointer' onClick={() => handleSort('stock')}>
+                      <th
+                        className='px-3 py-3 cursor-pointer'
+                        onClick={() => handleSort('stock')}
+                      >
                         Stock
                         {sortConfig.key === 'stock' && (
-                          <FontAwesomeIcon icon={sortConfig.direction === 'ascending' ? faSortUp : faSortDown} />
+                          <FontAwesomeIcon
+                            icon={
+                              sortConfig.direction === 'ascending'
+                                ? faSortUp
+                                : faSortDown
+                            }
+                          />
                         )}
                       </th>
-                      <th className='px-3 py-3 cursor-pointer' onClick={() => handleSort('sortie')}>
-                      Sortie
-                        {sortConfig.key === 'sortie' && (
-                          <FontAwesomeIcon icon={sortConfig.direction === 'ascending' ? faSortUp : faSortDown} />
-                        )}
-                      </th>
-                      <th className='px-3 py-3 cursor-pointer' onClick={() => handleSort('created_at')}>
-                        Date
+                      <th
+                        className='px-3 py-3 cursor-pointer'
+                        onClick={() => handleSort('created_at')}
+                      >
+                        Sortie
                         {sortConfig.key === 'created_at' && (
-                          <FontAwesomeIcon icon={sortConfig.direction === 'ascending' ? faSortUp : faSortDown} />
+                          <FontAwesomeIcon
+                            icon={
+                              sortConfig.direction === 'ascending'
+                                ? faSortUp
+                                : faSortDown
+                            }
+                          />
                         )}
                       </th>
-                      <th className='px-3 py-3 text-right'>Action</th>
+                      <th className='px-3 py-3'>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {filteredProduits.map((produit) => (
-                      <tr key={produit.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
-                        <td className='px-3 py-2'>{produit.id}</td>
-                        <td className='px-3 py-2'>{produit.designation}</td>
-                        <td className='px-3 py-2'>{produit.type.type}</td>
-                        <td className='px-3 py-2'>{produit.entre}</td>
-                        <td className='px-3 py-2'>{produit.stock}</td>
-                        <td className='px-3 py-2'>{produit.sortie}</td>
-                        <td className='px-3 py-2'>{produit.created_at}</td>
-                        <td className='px-3 py-2 text-right flex justify-end'>
+                      <tr
+                        key={produit.product_id}
+                        className='border-b dark:border-gray-700'
+                      >
+                        <td className='px-3 py-2'>{produit.product_name}</td>
+                        <td className='px-3 py-2'>{produit.category_name}</td>
+                        <td className='px-3 py-2'>{produit.total_entree}</td>
+                        <td className='px-3 py-2'>{produit.stock <0 ? -produit.stock : produit.stock}</td>
+                        <td className='px-3 py-2'>{produit.total_sortie < 0 ? -produit.total_sortie :produit.total_sortie }</td>
+
+                        <td className='px-3 py-2 flex space-x-2'>
                           <button
                             onClick={() => openModal('edit', produit)}
-                            className='text-blue-600 dark:text-blue-500 mx-1 flex items-center'
+                            className='text-blue-500 hover:text-blue-700'
                           >
-                            <FontAwesomeIcon icon={faEdit} className="mr-1" />
+                            <FontAwesomeIcon icon={faEdit} />
                           </button>
                           <button
                             onClick={() => deleteProduit(produit)}
-                            className='text-red-600 dark:text-red-500 mx-1 flex items-center'
+                            className='text-red-500 hover:text-red-700'
                           >
-                            <FontAwesomeIcon icon={faTrashAlt} className="mr-1" />
+                            <FontAwesomeIcon icon={faTrashAlt} />
                           </button>
                         </td>
                       </tr>
                     ))}
-                    {/* {JSON.stringify(produits)} */}
                   </tbody>
                 </table>
               </div>
-              <Pagination links={produits.meta.links} />
+              <Pagination className='mt-6' links={ent.links} />
             </div>
           </div>
         </div>
       </div>
 
-      {isModalOpen && (
+{isModalOpen && (
         <div className='fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center'>
           <div className='relative p-5 border w-11/12 sm:w-96 shadow-lg rounded-md bg-white dark:bg-gray-800'>
             <form
@@ -206,7 +321,9 @@ function Index({ auth, produits, categories, success, stock }) {
                   onChange={(e) => setData('designation', e.target.value)}
                 />
                 {validationErrors.designation && (
-                  <div className='text-red-500 mt-2'>{validationErrors.designation}</div>
+                  <div className='text-red-500 mt-2'>
+                    {validationErrors.designation}
+                  </div>
                 )}
                 <InputError message={errors.designation} className='mt-2' />
               </div>
@@ -221,7 +338,9 @@ function Index({ auth, produits, categories, success, stock }) {
                   onChange={(e) => setData('created_at', e.target.value)}
                 />
                 {validationErrors.created_at && (
-                  <div className='text-red-500 mt-2'>{validationErrors.created_at}</div>
+                  <div className='text-red-500 mt-2'>
+                    {validationErrors.created_at}
+                  </div>
                 )}
                 <InputError message={errors.created_at} className='mt-2' />
               </div>
@@ -234,7 +353,7 @@ function Index({ auth, produits, categories, success, stock }) {
                   value={data.type}
                   onChange={(e) => setData('type', e.target.value)}
                 >
-                  <option value=''>Sélectionnez une option</option>
+                  <option value=''>Sélectionnez une categories </option>
                   {categories.data.map((category) => (
                     <option key={category.id} value={category.id}>
                       {category.type}
@@ -268,6 +387,5 @@ function Index({ auth, produits, categories, success, stock }) {
     </AuthenticatedLayout>
   );
 }
-
 
 export default Index;

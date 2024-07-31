@@ -183,7 +183,7 @@ export default function Dashboard({ auth, percentages, productQuantities = [], s
         </span>
                     </td>
                     <td className="px-3 py-2">{mouvmentStock.date}</td>
-                    <td className="px-3 py-2">{mouvmentStock.quantity<0 ? -mouvmentStock.quantity<0 : mouvmentStock.quantity<0}</td>
+                    <td className="px-3 py-2">{mouvmentStock.quantity < 0 ? -mouvmentStock.quantity : mouvmentStock.quantity}</td>
                     <td className="px-3 py-2">
                       {mouvmentStock.quantity > 0 && mouvmentStock.typeMouvments !== 'Sortie' && (
                         <ArrowTrendingUpIcon className="h-5 w-5 text-green-500" />

@@ -1,19 +1,24 @@
+
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bon de Sortie</title>
+    <title>Demande d'achat</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin:0;
+            margin: 0;
             padding: 0;
             font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         .container {
             width: 100%;
             margin: auto;
+            flex: 1;
         }
         .surmeme_ligne {
             width: 100%;
@@ -38,7 +43,6 @@
             display: inline-block;
         }
         .invoice-box {
-            border: 1px solid #eee;
             padding: 20px;
             margin-top: 20px;
         }
@@ -47,22 +51,19 @@
             line-height: inherit;
             text-align: left;
             border-collapse: collapse;
+            border: 1px solid black; /* Set the border color to black */
         }
-        .invoice-box table th {
-            border-bottom: 1px solid #ddd;
-            font-weight: bold;
-            text-align: center;
-        }
+        .invoice-box table th,
         .invoice-box table td {
-            border-bottom: 1px solid #ddd;
+            border: 1px solid;
             padding: 10px;
             text-align: center;
         }
-        .invoice-box table tr:last-child td {
-            border-bottom: none;
+        .invoice-box table th {
+            background-color: #f2f2f2;
         }
-        .invoice-box table tr:nth-child(even) {
-            background: #f9f9f9;
+        .invoice-box table tr:last-child td {
+            border-bottom: 1px solid black; /* Set the bottom border color to black */
         }
         .center p {
             margin: 0;
@@ -71,48 +72,66 @@
         .margin-bottom {
             margin-bottom: 120px;
         }
-        img{
-            width:200px;
-height: 160;
+        img {
+            width: 100px;
+            height: auto;
             text-align: center;
             margin: 20px 15px;
+        }
+        .bottom-signatures {
+            width: 100%;
+            margin-top: 40px;
+            border-collapse: collapse;
+        }
+        .bottom-signatures td {
+            padding: 10px;
+        }
+        .underline {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <!-- <div class="container"> -->
+    <div class="container">
         <table class="surmeme_ligne">
             <tr>
-                <td class="left"><h4>Institut pédagogique National IPN</h4></td>
-                <td><img src="../../images/logoipn.jpg" alt="Logo IPN"></td>
-                <td class="right">
-                    <h3 class="rtl">
-                        المعهد التربوي الوطني
-    </h3>
+                <td class="left">
+                    <p>République Islamique de Mauritanie<br>
+                    Ministère de l'Éducation Nationale et de la Réforme du Système Éducatif<br>
+                    Institut Pédagogique National</p>
                 </td>
+                <td class="center"><img src="../../images/logoipn.jpg" alt="Logo IPN"></td>
+                <td class="right"><p>Honneur – Fraternité – Justice</p></td>
             </tr>
         </table>
-
-        <h1 class="center">BON D'ACHAT وثيقة شراء</h1>
 
         <table class="surmeme_ligne">
             <tr>
                 <td class="left">
+
                     <!-- <h4>N°: {{ $BonAchat->id }} الرقم</h4> -->
                 </td>
                 <td class="right">
                     <!-- <h4>Date: {{ $BonAchat->created_at->format('Y-m-d') }} التاريخ</h4> -->
+
+                    <h4>N°: {{ $BonAchat->id }}</h4>
+                </td>
+                <td class="right">
+                    <h4>Nouakchott, le {{ $BonAchat->created_at->format('Y-m-d') }}</h4>
                 </td>
             </tr>
         </table>
+
+        <h3 class="center">A&nbsp;Madame la Directrice Générale</h3>
+        <h3 class="center underline">DEMANDE D'ACHAT</h3>
 
         <div class="invoice-box">
             <table>
                 <thead>
                     <tr>
-                        <th>Désignation <span class="rtl">المادة</span></th>
-                        <th>Quantité <span class="rtl">الكمية</span></th>
-                        <th>Motif <span class="rtl">الفرض</span></th>
+                        <th>Quantité</th>
+                        <th>Désignation des Fournitures</th>
+                        <th>Observations</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -123,14 +142,31 @@ height: 160;
                         <td>{{ $BonAchat->description }}</td>
                     </tr>
                     @endforeach -->
+
+                    <?php $firstRow = true; ?>
+                    @foreach($details_BonAchats as $detail)
+                        <tr>
+                            <td>{{ $detail->quantite }}</td>
+                            <td>{{ $detail->produits->designation }}</td>
+                           
+                            <!-- Display description only in the first row -->
+                            @if($firstRow)
+                                <td rowspan="{{ count($details_BonAchats) }}">{{ $BonAchat->description }}</td>
+                                <?php $firstRow = false; ?>
+                            @endif
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
 
-        <div class="right">
-            La Directrice <span class="rtl">المديرة</span>
-            <p>Signature et cachet<br></p>
-        </div>
+        <table class="surmeme_ligne bottom-signatures">
+            <tr>
+                <td class="left"><p>Service Demandeur</p></td>
+                <td class="right"><p>Le Chef du Dept Concerné</p></td>
+            </tr>
+        </table>
+    </div>
 
         <div class="left">
             <p>Chef DEIS <span class="rtl">رئيس القطاع </span></p>
@@ -143,5 +179,7 @@ height: 160;
             <p>استلم مطابقا للمواصفات من طرف</p>
             <p>Reçu conforme par</p>
         </div>
+
 </body>
 </html>
+
