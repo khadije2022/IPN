@@ -108,6 +108,61 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 Catégories
                             </div>
                         </NavLink>
+                        <NavLink href={route('titre.index')} active={route().current('titre.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Titre
+                            </div>
+                        </NavLink>
+
+                        <NavLink href={route('region.index')} active={route().current('region.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Region
+                            </div>
+                        </NavLink>
+
+                        <NavLink href={route('annee.index')} active={route().current('annee.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Annee
+                            </div>
+                        </NavLink>
+                        <NavLink href={route('manuel.index')} active={route().current('manuel.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Manuel
+                            </div>
+                        </NavLink>
+                        <NavLink href={route('BorderoDavoir.index')} active={route().current('BorderoDavoir.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Bordero D'avoir
+                            </div>
+                        </NavLink>
+                        <NavLink href={route('DetailsBorderoDavoi.index')} active={route().current('DetailsBorderoDavoi.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Details Bordero D'avoi
+                            </div>
+                        </NavLink>
+
+                        <NavLink href={route('reception.index')} active={route().current('reception.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Reception
+                            </div>
+                        </NavLink>
+
+
+                        <NavLink href={route('Detailsreseption.index')} active={route().current('Detailsreseption.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Details Reseption
+                            </div>
+                        </NavLink>
+
+
                         <NavLink href={route('magasin.index')} active={route().current('magasin.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <BuildingOffice2Icon className="h-5 w-5 mr-2 text-gray-500" />

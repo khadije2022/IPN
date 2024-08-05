@@ -1,10 +1,20 @@
 <?php
-
 use App\Http\Controllers\DetailBonSortieController;
 use App\Http\Controllers\BonAchatController;
 use App\Http\Controllers\BonSortieAchatController;
 use App\Http\Controllers\BonSortieController;
 use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\AnneeController;
+use App\Http\Controllers\BorderoDavoirController;
+use App\Http\Controllers\DetailsBorderoDavoiController;
+use App\Http\Controllers\DetailsreseptionController;
+use App\Http\Controllers\ManuelController;
+use App\Http\Controllers\ReceptionController;
+use App\Http\Controllers\RegionController;
+
+
+use App\Http\Controllers\TitreController;
+
 use App\Http\Controllers\CatelogueProduitController;
 use App\Http\Controllers\CorrectionStockController;
 use App\Http\Controllers\DetailBonAchatController;
@@ -40,6 +50,16 @@ Route::middleware(['auth'])->group(function() {
     Route::resource('catelogueProduit', CatelogueProduitController::class);
     Route::get('/update-stock', [CatelogueProduitController::class, 'updateStockFromMouvmentStocks']);
     Route::resource('categorie', CategorieController::class);
+    Route::resource('annee', AnneeController::class);
+    Route::resource('BorderoDavoir', BorderoDavoirController::class);
+    Route::resource('DetailsBorderoDavoi', DetailsBorderoDavoiController::class);
+    Route::resource('Detailsreseption', DetailreceptionController::class);
+    Route::resource('manuel', ManuelController::class);
+    Route::resource('reception', ReceptionController::class);
+    Route::resource('region', RegionController::class);
+
+    Route::resource('titre', TitreController::class);
+
 
     Route::resource('bonSortie', BonSortieController::class);
     Route::resource('detailBonSortie', DetailBonSortieController::class);
