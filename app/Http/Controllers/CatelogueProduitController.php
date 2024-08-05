@@ -26,6 +26,7 @@ class CatelogueProduitController extends Controller
 {
     $categories = Categorie::all();
     $produits = CatelogueProduit::all();
+    
 
     // Base query to get product movements and calculate total_entree, total_sortie, and stock
     $query = DB::table('catelogue_produits')

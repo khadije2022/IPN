@@ -203,8 +203,8 @@ function Index({ auth, manuels, titres, annees, queryParams = null, success }) {
                                         {filteredManuels.map((manuel) => (
                                             <tr key={manuel.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                                                 <td className='px-4 py-3'>{manuel.id}</td>
-                                                <td className='px-4 py-3'>{manuel.titre.nom}</td>
-                                                <td className='px-4 py-3'>{manuel.annee.nom}</td>
+                                                <td className='px-4 py-3'>{manuel.titre ? manuel.titre.nom : 'N/A'}</td>
+                                                <td className='px-4 py-3'>{manuel.annee ? manuel.annee.nom : 'N/A'}</td>
                                                 <td className='px-4 py-3 text-right flex justify-end'>
                                                     <button
                                                         onClick={() => openModal('edit', manuel)}
@@ -221,6 +221,7 @@ function Index({ auth, manuels, titres, annees, queryParams = null, success }) {
                                                 </td>
                                             </tr>
                                         ))}
+
                                     </tbody>
                                 </table>
                             </div>

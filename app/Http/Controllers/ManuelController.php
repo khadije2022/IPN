@@ -3,25 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\Manuel;
+use App\Models\Titre;
+use App\Models\Annee;
+
+
 use App\Http\Requests\StoreManuelRequest;
 use App\Http\Requests\UpdateManuelRequest;
 use App\Http\Resources\ManuelResource;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\ManuelsExport;
 
 class ManuelController extends Controller
 {
     public function index()
     {
-        $query = Manuel::query();
-        $manuels = $query->paginate(10);
-
+        $manuels = Manuel::with('titre', 'annee')->paginate(10);
+        $titres = Titre::all();
+        $annees = Annee::all();
+    
+        // dd($manuels);
+    
         return inertia('Manuel/Index', [
             'manuels' => ManuelResource::collection($manuels),
+            'titres' => $titres,
+            'annees' => $annees,
             'success' => session('success'),
         ]);
     }
+    
 
     public function create()
     {
@@ -60,14 +69,11 @@ class ManuelController extends Controller
 
     public function exportPdf()
     {
-        $manuels = Manuel::get();
-        $pdf = Pdf::loadView('pdf.manuels', ['manuels' => $manuels]);
-
-        return $pdf->download('manuels.pdf');
+       
     }
 
     public function exportExcel()
     {
-        return Excel::download(new ManuelsExport, 'manuels.xlsx');
+
     }
 }
