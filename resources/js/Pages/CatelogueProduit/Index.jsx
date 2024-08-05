@@ -7,7 +7,7 @@ import InputError from '@/Components/InputError';
 import Pagination from '@/Components/Pagination';
 import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrashAlt, faPlus, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTrashAlt, faPlus, faSortUp, faSortDown , faFileExcel } from '@fortawesome/free-solid-svg-icons';
 
 function Index({ auth, produits, categories, success, ent, queryParams = null }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -142,47 +142,54 @@ function Index({ auth, produits, categories, success, ent, queryParams = null })
           <div className='bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg'>
             <div className='p-6 text-gray-900 dark:text-gray-100'>
               <div className='flex flex-col sm:flex-row justify-between mb-4'>
-                <div className='flex space-x-4'>
-                  <TextInput
-                    type='text'
-                    name='search'
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    placeholder='Rechercher...'
-                    className='mt-2 block w-full sm:w-60'
-                  />
-                </div>
+                {/* <div className='flex space-x-4'> */}
+                {/* </div> */}
                 <div className='flex space-x-4 mt-2 sm:mt-0'>
-                  <TextInput
-                    type='date'
-                    name='start_date'
-                    value={startDate}
-                    onChange={handleDateChange(setStartDate)}
-                    className='block w-full sm:w-auto'
-                  />
+  <TextInput
+    type='text'
+    name='search'
+    value={searchQuery}
+    onChange={handleSearchChange}
+    placeholder='Rechercher...'
+    className='mt-2 block w-full sm:w-60'
+  />
+  <TextInput
+    type='date'
+    name='start_date'
+    value={startDate}
+    onChange={handleDateChange(setStartDate)}
+    className='block w-full sm:w-auto'
+  />
+  <TextInput
+    type='date'
+    name='end_date'
+    value={endDate}
+    onChange={handleDateChange(setEndDate)}
+    className='block w-full sm:w-auto'
+  />
+</div>
+<div className='flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-2 mt-2 sm:mt-0'>
+  <button
+    onClick={handleFilterByDate}
+    className='bg-emerald-500 text-white px-2 py-1 rounded shadow hover:bg-emerald-600 transition-all'
+  >
+    Filtrer par Date
+  </button>
+  <button
+    onClick={() => openModal('add')}
+    className='bg-emerald-500 py-1 px-2 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
+  >
+    <FontAwesomeIcon icon={faPlus} className='mr-2' /> Ajouter
+  </button>
+  <a
+    href={route('export-produit')}
+    className='bg-emerald-500 py-1 px-2 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto flex items-center'
+  >
+    <FontAwesomeIcon icon={faFileExcel} className='mr-2' />
+    Excel
+  </a>
+</div>
 
-                  <TextInput
-                    type='date'
-                    name='end_date'
-                    value={endDate}
-                    onChange={handleDateChange(setEndDate)}
-                    className='block w-full sm:w-auto'
-                  />
-                </div>
-                <div className='flex items-center space-x-2 mt-2 sm:mt-0'>
-                  <button
-                    onClick={handleFilterByDate}
-                    className='bg-emerald-500 text-white px-4 py-2 rounded shadow hover:bg-emerald-600 transition-all'
-                  >
-                    Filtrer par Date
-                  </button>
-                  <button
-                    onClick={() => openModal('add')}
-                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 flex items-center'
-                  >
-                    <FontAwesomeIcon icon={faPlus} className='mr-2' /> Ajouter
-                  </button>
-                </div>
               </div>
               <div className='overflow-x-auto'>
                 <table className='min-w-full bg-white dark:bg-gray-800'>

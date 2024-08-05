@@ -8,14 +8,10 @@ use App\Http\Requests\UpdateCatelogueProduitRequest;
 use App\Http\Resources\CategorieResource;
 use App\Http\Resources\CatelogueResource;
 use App\Models\Categorie;
-use App\Models\DetailBonAchat;
-use App\Models\DetailBonSortie;
-use App\Models\MouvmentStock;
+
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\CatalogueProduitExport;
-
-
+use App\Exports\MultiSheetExport;
 
 class CatelogueProduitController extends Controller
 {
@@ -121,7 +117,7 @@ class CatelogueProduitController extends Controller
 public function exportExcel()
     {
         $categories = CatelogueProduit::get();
-        return Excel::download(new CatalogueProduitExport(), 'Produits.xlsx');
+        return Excel::download(new MultiSheetExport, 'catalogue_produits.xlsx');
     }
 
 

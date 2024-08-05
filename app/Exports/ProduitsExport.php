@@ -3,44 +3,38 @@ namespace App\Exports;
 
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use Maatwebsite\Excel\Concerns\WithEvents;
-use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Events\AfterSheet;
 
-class CatalogueProduitExport implements FromCollection, WithHeadings, WithMapping, WithTitle, WithEvents, WithCustomStartCell
+class ProduitsExport implements FromCollection, WithHeadings, WithMapping, WithTitle, WithEvents , WithCustomStartCell
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+    protected $magasinName;
+
+    public function __construct($magasinName)
     {
-        return $this->getProducts();
+        $this->magasinName = $magasinName;
     }
 
-    public function headings(): array
+    public function title(): string
     {
-        return [
-            'Produit',
-            'Catégorie',
-            'Stock',
-        ];
+        return $this->magasinName;
     }
 
     public function startCell(): string
     {
         return 'A2';
     }
-
     public function registerEvents(): array
     {
         return [
-            AfterSheet::class => function(AfterSheet $event) {
+            AfterSheet::class => function (AfterSheet $event) {
                 // Merge cells for title
                 $event->sheet->mergeCells('A1:C1');
-                $event->sheet->setCellValue('A1', 'Liste des produits consommable');
+                $event->sheet->setCellValue('A1', 'Liste des produits - ' . $this->magasinName);
                 $event->sheet->getStyle('A1')->getFont()->setBold(true);
                 $event->sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
@@ -58,21 +52,31 @@ class CatalogueProduitExport implements FromCollection, WithHeadings, WithMappin
                         'color' => ['argb' => 'FFFFE0B2'], // Light orange background color
                     ],
                 ]);
-                $event->sheet->getColumnDimension('A')->setWidth(40);
+
+                // Set custom column widths
+                $event->sheet->getColumnDimension('A')->setWidth(30);
                 $event->sheet->getColumnDimension('B')->setWidth(30);
                 $event->sheet->getColumnDimension('C')->setWidth(20);
             },
         ];
     }
 
-    public function title(): string
+    public function collection()
     {
-        return 'ipn-magasin';
+        return $this->getProducts();
+    }
+
+    public function headings(): array
+    {
+        return [
+            'Produit',
+            'Catégorie',
+            'Stock',
+        ];
     }
 
     public function getProducts()
     {
-        // Execute the query to fetch the products
         $products = DB::table('catelogue_produits')
             ->leftJoin('ipn.product_movements', 'catelogue_produits.id', '=', 'product_movements.product_id')
             ->join('categories', 'catelogue_produits.type', '=', 'categories.id')
@@ -90,11 +94,10 @@ class CatalogueProduitExport implements FromCollection, WithHeadings, WithMappin
                     ELSE 0
                 END) AS stock")
             )
-            ->where('magasins.nomMagasin', '=', 'ipn-magasin')
+            ->where('magasins.nomMagasin', '=', $this->magasinName)
             ->groupBy('catelogue_produits.id', 'catelogue_produits.designation', 'categories.type', 'categories.id', 'magasins.nomMagasin')
             ->get();
 
-        // Ensure each product is treated as an object
         return $products->map(function ($produit) {
             return (object) $produit;
         });
@@ -109,4 +112,3 @@ class CatalogueProduitExport implements FromCollection, WithHeadings, WithMappin
         ];
     }
 }
-
