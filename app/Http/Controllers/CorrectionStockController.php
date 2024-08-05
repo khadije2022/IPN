@@ -134,4 +134,17 @@ class CorrectionStockController extends Controller
                          ->with('valider', 'Bon de sortie bien validé avec succès.');
     }
 
+
+    public function nonvalidercorrectionstock()
+    {
+        $query = CorrectionStock::where('status', 'non-validé');
+        $correctionStock = $query->paginate(10); // Exécutez la requête avec la pagination
+    
+        // Retourner la vue avec les données des bons de sortie
+        return inertia('CorrectionStock/Index', [
+            'correctionStocks' => CorrectionStockResource::collection($correctionStock),
+        ]);
+
+    }
+
 }

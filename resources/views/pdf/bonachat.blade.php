@@ -108,6 +108,12 @@
         <table class="surmeme_ligne">
             <tr>
                 <td class="left">
+
+                    <!-- <h4>N°: {{ $BonAchat->id }} الرقم</h4> -->
+                </td>
+                <td class="right">
+                    <!-- <h4>Date: {{ $BonAchat->created_at->format('Y-m-d') }} التاريخ</h4> -->
+
                     <h4>N°: {{ $BonAchat->id }}</h4>
                 </td>
                 <td class="right">
@@ -129,6 +135,14 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- @foreach($details_BonAchats as $detail)
+                    <tr>
+                        <td>{{ $detail->produits->designation }}</td>
+                        <td>{{ $detail->quantite }}</td>
+                        <td>{{ $BonAchat->description }}</td>
+                    </tr>
+                    @endforeach -->
+
                     <?php $firstRow = true; ?>
                     @foreach($details_BonAchats as $detail)
                         <tr>
@@ -154,7 +168,18 @@
         </table>
     </div>
 
-    
+        <div class="left">
+            <p>Chef DEIS <span class="rtl">رئيس القطاع </span></p>
+        </div>
+
+        <div class="center margin-bottom">
+            <p>Chef de Service <span class="rtl">رئيس المصلحة</span></p>
+        </div>
+        <div class="center">
+            <p>استلم مطابقا للمواصفات من طرف</p>
+            <p>Reçu conforme par</p>
+        </div>
+
 </body>
 </html>
 

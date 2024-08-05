@@ -258,12 +258,13 @@ function Index({ auth, bonAchats, success }) {
                         className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300"
                         // onClick={() => handleRowClick(bonAchat.id)}
                       >
-                        <td className="px-2 py-1">{bonAchat.id}</td>
+                        <td className="px-2 py-1"                       
+                        onClick={() => handleRowClick(bonAchat.id)}
+                        >{bonAchat.id}</td>
                         
-                        <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
-                          <Link href={route("detailBonAchat.index-par-bonAchat",bonAchat.id)}>
+                        <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline" onClick={() => handleRowClick(bonAchat.id)}
+                        >
                           {bonAchat.description}
-                          </Link>
                         </th>
                         <td className="px-2 py-1">
                         <span
@@ -275,8 +276,8 @@ function Index({ auth, bonAchats, success }) {
           {bonAchat.status === 'validé' ? 'Valide' : 'Non Valide'}
         </span>
                         </td>
-                        <td className="px-2 py-1">{bonAchat.created_at}</td>
-                        <td className="px-2 py-1">{bonAchat.createdBy.email}</td>
+                        <td className="px-2 py-1" onClick={() => handleRowClick(bonAchat.id)}>{bonAchat.created_at}</td>
+                        <td className="px-2 py-1" onClick={() => handleRowClick(bonAchat.id)}>{bonAchat.createdBy.email}</td>
                         <td className="px-2 py-1 text-right">
                           <button
                             onClick={() => openModal('edit', bonAchat)}

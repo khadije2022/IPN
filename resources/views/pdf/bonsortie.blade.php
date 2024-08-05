@@ -80,6 +80,10 @@
             text-align: center;
             margin: 20px 15px;
         }
+    </style>
+</head>
+<body>
+    <!-- <div class="container"> -->
         .bottom-signatures {
             width: 100%;
             margin-top: 40px;
@@ -97,11 +101,23 @@
                 <td class="left"><h4>Institut pédagogique National IPN</h4></td>
                 <td><img src="../../images/logoipn.jpg" alt="Logo IPN"></td>
                 <td class="right">
+                    <h3 class="rtl">
+                        المعهد التربوي الوطني
+    </h3>
                     <h3 class="rtl">المعهد التربوي الوطني</h3>
                 </td>
             </tr>
         </table>
 
+        <h1 class="center">BON DE SORTIE وثيقة استخراج</h1>
+
+        <table class="surmeme_ligne">
+            <tr>
+                <td class="left">
+                    <h4>N°: {{ $BonSortie->id }} الرقم</h4>
+                </td>
+                <td class="right">
+                    <h4>Date: {{ $BonSortie->created_at->format('Y-m-d') }} التاريخ</h4>
         <table class="surmeme_ligne">
             <tr>
                 <td class="left">
@@ -109,6 +125,7 @@
                 </td>
                 <td class="right">
                     <h4>Date: {{ $BonSortie->created_at->format('Y-m-d') }} :التاريخ</h4>
+>>>>>>> 211e03e6f7ceb4752bbde30c7707770c461aa8fd
                 </td>
             </tr>
         </table>
@@ -119,6 +136,13 @@
             <table>
                 <thead>
                     <tr>
+                        <th>Désignation <span class="rtl">المادة</span></th>
+                        <th>Quantité <span class="rtl">الكمية</span></th>
+                        <th>Motif <span class="rtl">الفرض</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <!--  -->
                         <th>Désignation<br><span class="rtl">المادة</span></th>
                         <th>Quantité<br><span class="rtl">الكمية</span></th>
                         <th>Motif<br><span class="rtl">الغرض</span></th>
@@ -141,23 +165,23 @@
             </table>
         </div>
 
-        <table class="surmeme_ligne bottom-signatures">
-            <tr>
-                <td class="left"><p>Chef DEIS<br><span class="rtl">رئيس القطاع</span></p></td>
-                <td class="right"><p>La Directrice<br><span class="rtl">المديرة</span><br>Signature et cachet</p></td>
-            </tr>
-            <tr>
-                <td class="center" colspan="2"><p>Chef de Service<br><span class="rtl">رئيس المصلحة</span></p></td>
-            </tr>
-        </table>
-    </div>
+        <div class="right">
+            La Directrice <span class="rtl">المديرة</span>
+            <p>Signature et cachet<br></p>
+        </div>
 
-    <div class="center" style="margin-top: 100px;">
-        <p>استلم مطابقا للمواصفات من طرف</p>
-        <p>Reçu conforme par</p>
-    </div>
-    <div class="center" style="margin-top: 100px;">
-        
-    </div>
+        <div class="left">
+            <p>Chef DEIS <span class="rtl">رئيس القطاع </span></p>
+        </div>
+
+        <div class="center margin-bottom">
+            <p>Chef de Service <span class="rtl">رئيس المصلحة</span></p>
+        </div>
+        <div class="center">
+            <p>استلم مطابقا للمواصفات من طرف</p>
+            <p>Reçu conforme par</p>
+        </div>
+    <!-- </div> -->
 </body>
 </html>
+

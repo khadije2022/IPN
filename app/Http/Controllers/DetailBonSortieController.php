@@ -36,7 +36,6 @@ class DetailBonSortieController extends Controller
     {
         $BonSortie = BonSortie::findOrFail($bonSortie);
         $detailsexpresionbesoins = DetailBonSortie::where('idBonDeSortie', $bonSortie)->get();
-
         $categories = Categorie::all();
         $catelogue_produits = CatelogueProduit::all();
 

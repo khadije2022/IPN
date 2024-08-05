@@ -9,7 +9,6 @@ import SelectInput from '@/Components/SelectInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrashAlt, faPlus, faFileExcel, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 
-
 function Index({ auth, expressionbesoins, services, success }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
@@ -93,7 +92,7 @@ function Index({ auth, expressionbesoins, services, success }) {
   };
 
   const deleteExpressionBesoin = (expressionbesoin) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer ce Expression ?')) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette expression de besoin ?')) {
       return;
     }
     router.delete(route('expressionbesoin.destroy', expressionbesoin.id));
@@ -164,14 +163,9 @@ function Index({ auth, expressionbesoins, services, success }) {
               <div className='mb-4'>
                 <div className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
                   <div>Liste des Expressions de Besoins</div>
-
                 </div>
 
-                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'>
-
-
-                </div>
-
+                <div className='flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2'></div>
               </div>
               <div className='flex flex-col sm:flex-row justify-between mb-4'>
                 <TextInput
@@ -209,13 +203,15 @@ function Index({ auth, expressionbesoins, services, success }) {
                   ))}
                 </select>
                 <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                  {auth.user.role ==='service' && (<button
-                    onClick={() => openModal('add')}
-                    className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center'
-                  >
-                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
-                    Ajouter
-                  </button>)}
+                  {auth.user.role === 'service' && (
+                    <button
+                      onClick={() => openModal('add')}
+                      className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center'
+                    >
+                      <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                      Ajouter
+                    </button>
+                  )}
                   <a
                     href={route('export-expressionbesoin')}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all w-full sm:w-auto hover:bg-emerald-600 flex items-center justify-center"
@@ -245,10 +241,10 @@ function Index({ auth, expressionbesoins, services, success }) {
                       <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('created_at')}>
                         Date <FontAwesomeIcon icon={sortConfig.key === 'created_at' ? (sortConfig.direction === 'ascending' ? faSortUp : faSortDown) : ''} />
                       </th>
-                      <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('created_at')}>
-                        Cree par <FontAwesomeIcon icon={sortConfig.key === 'created_by' ? (sortConfig.direction === 'ascending' ? faSortUp : faSortDown) : ''} />
+                      <th className='px-2 py-2 cursor-pointer' onClick={() => handleSort('created_by')}>
+                        Créé par <FontAwesomeIcon icon={sortConfig.key === 'created_by' ? (sortConfig.direction === 'ascending' ? faSortUp : faSortDown) : ''} />
                       </th>
-                     { auth.user.role ==='service' && ( <th className='px-2 py-2 text-right'>Action</th>)}
+                      {auth.user.role === 'service' && (<th className='px-2 py-2 text-right'>Action</th>)}
                     </tr>
                   </thead>
                   <tbody>
@@ -256,47 +252,45 @@ function Index({ auth, expressionbesoins, services, success }) {
                       <tr
                         key={expressionbesoin.id}
                         className='bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-300 transition duration-300'
-                        // onClick={() => handleRowClick(expressionbesoin.id)}
+                        onClick={() => handleRowClick(expressionbesoin.id)}
                       >
                         <td className='px-2 py-1'>{expressionbesoin.id}</td>
-                        <th className="px-3 py-2 text-gray-100 text-nowrap hover:underline">
-                          <Link href={route("detailsexpresionbesoin.index_par_expbesoin",expressionbesoin.id)}>
-                          {expressionbesoin.description}
-                          </Link>
-                        </th>
-                        <td className='px-2 py-1'>{expressionbesoin.id_service.nom_responsabiliter}</td>
+                        <td className='px-2 py-1'>{getServiceName(expressionbesoin.id_service)}</td>
+                        <td className='px-2 py-1'>{expressionbesoin.description}</td>
                         <td className='px-2 py-1'>
-                        <span
-          className={
-            "px-2 py-1 rounded text-white " +
-            (expressionbesoin.status === 'validé' ? 'bg-green-500' : 'bg-red-500')
-          }
-        >
-          {expressionbesoin.status === 'validé' ? 'Valide' : 'Non Valide'}
-        </span>
+                          <span
+                            className={
+                              "px-2 py-1 rounded text-white " +
+                              (expressionbesoin.status === 'validé' ? 'bg-green-500' : 'bg-red-500')
+                            }
+                          >
+                            {expressionbesoin.status === 'validé' ? 'Validé' : 'Non Validé'}
+                          </span>
                         </td>
-                        <td className='px-2 py-1'>{expressionbesoin.created_at}</td>
-                        <td className='px-2 py-1'>{expressionbesoin.createdBy.email}</td>
-                        {auth.user.role ==='service' && (<td className='px-2 py-1 text-right flex justify-end'>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              openModal('edit', expressionbesoin);
-                            }}
-                            className='text-blue-600 dark:text-blue-500 mx-1'
-                          >
-                            <FontAwesomeIcon icon={faEdit} />
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              deleteExpressionBesoin(expressionbesoin);
-                            }}
-                            className='text-red-600 dark:text-red-500 mx-1'
-                          >
-                            <FontAwesomeIcon icon={faTrashAlt} />
-                          </button>
-                        </td>)}
+                        <td className='px-2 py-1'>{formatDate(expressionbesoin.created_at)}</td>
+                        <td className='px-2 py-1'>{expressionbesoin.created_by}</td>
+                        {auth.user.role === 'service' && (
+                          <td className='px-2 py-1 text-right flex justify-end'>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openModal('edit', expressionbesoin);
+                              }}
+                              className='text-blue-600 dark:text-blue-500 mx-1'
+                            >
+                              <FontAwesomeIcon icon={faEdit} />
+                            </button>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteExpressionBesoin(expressionbesoin);
+                              }}
+                              className='text-red-600 dark:text-red-500 mx-1'
+                            >
+                              <FontAwesomeIcon icon={faTrashAlt} />
+                            </button>
+                          </td>
+                        )}
                       </tr>
                     ))}
                   </tbody>

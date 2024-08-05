@@ -4,12 +4,14 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import { Link } from '@inertiajs/react';
+import { Inertia } from '@inertiajs/inertia';
 import {
     DocumentTextIcon,
     TagIcon,
   CubeIcon,
   UserCircleIcon,
   UserIcon,
+
   Squares2X2Icon,
   BuildingOffice2Icon,
   ClipboardDocumentIcon,
@@ -24,24 +26,24 @@ import {
 } from '@heroicons/react/24/outline';
 import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/16/solid';
 
-// import { Inertia } from '@inertiajs/inertia';
-
 export default function AuthenticatedLayout({ user, header, children }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [darkMode, setDarkMode] = useState(false);
-    const [notifications, setNotifications] = useState({});
-    const [notificationMenuOpen, setNotificationMenuOpen] = useState(false);
+    // const [notifications, setNotifications] = useState({});
+    // const [notificationMenuOpen, setNotificationMenuOpen] = useState(false);
 
     const toggleDarkMode = () => {
         setDarkMode(!darkMode);
         document.documentElement.classList.toggle('dark');
     };
 
-    const handleNotificationClick = (path) => {
-        console.log('Navigating to:', path); // Log the path to ensure it's correct
-        Inertia.get(path); // Use Inertia.get to navigate
-        setNotificationMenuOpen(false); // Close the notification menu
-    };
+    // const handleNotificationClick = (route) => {
+    //     console.log('Navigating to:', route);
+    //     // Redirigez vers la route en utilisant, par exemple, React Router
+    //     window.location.href = route;
+
+    //     setNotificationMenuOpen(false);
+    // };
 
     useEffect(() => {
         const handleTouchOutside = (e) => {
@@ -57,22 +59,22 @@ export default function AuthenticatedLayout({ user, header, children }) {
         };
     }, [menuOpen]);
 
-    useEffect(() => {
-        if (user.role === 'admin') {
-            fetchNotifications();
-        }
-    }, [user]);
+    // useEffect(() => {
+    //     if (user.role === 'admin') {
+    //         fetchNotifications();
+    //     }
+    // }, [user]);
 
-    const fetchNotifications = async () => {
-        try {
-            const response = await axios.get('/api/notifications');
-            setNotifications(response.data);
-        } catch (error) {
-            console.error('Error fetching notifications:', error);
-        }
-    };
+    // const fetchNotifications = async () => {
+    //     try {
+    //         const response = await axios.get('/api/notifications');
+    //         setNotifications(response.data);
+    //     } catch (error) {
+    //         console.error('Error fetching notifications:', error);
+    //     }
+    // };
 
-    const totalNotifications = (notifications.bonSorties || 0) + (notifications.bonAchats || 0) + (notifications.expressionBesoins || 0);
+    // const totalNotifications = (notifications.bonSorties || 0) +(notifications.correctionstocks || 0)+ (notifications.bonAchats || 0) + (notifications.expressionBesoins || 0);
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex flex-col md:flex-row">
@@ -106,6 +108,61 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 Catégories
                             </div>
                         </NavLink>
+                        <NavLink href={route('titre.index')} active={route().current('titre.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Titre
+                            </div>
+                        </NavLink>
+
+                        <NavLink href={route('region.index')} active={route().current('region.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Region
+                            </div>
+                        </NavLink>
+
+                        <NavLink href={route('annee.index')} active={route().current('annee.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Annee
+                            </div>
+                        </NavLink>
+                        <NavLink href={route('manuel.index')} active={route().current('manuel.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Manuel
+                            </div>
+                        </NavLink>
+                        <NavLink href={route('BorderoDavoir.index')} active={route().current('BorderoDavoir.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Bordero D'avoir
+                            </div>
+                        </NavLink>
+                        <NavLink href={route('DetailsBorderoDavoi.index')} active={route().current('DetailsBorderoDavoi.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Details Bordero D'avoi
+                            </div>
+                        </NavLink>
+
+                        <NavLink href={route('reception.index')} active={route().current('reception.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Reception
+                            </div>
+                        </NavLink>
+
+
+                        <NavLink href={route('Detailsreseption.index')} active={route().current('Detailsreseption.index')}>
+                            <div className='flex flex-row space-x-2'>
+                                <CubeIcon className="h-5 w-5 mr-2 text-gray-500" />
+                                Details Reseption
+                            </div>
+                        </NavLink>
+
+
                         <NavLink href={route('magasin.index')} active={route().current('magasin.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <BuildingOffice2Icon className="h-5 w-5 mr-2 text-gray-500" />
@@ -124,7 +181,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 Expression du Besoin
                             </div>
                         </NavLink>
-                        { user.role === "admin" && (<NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
+                        {user.role === "admin" && (<NavLink href={route('bonAchat.index')} active={route().current('bonAchat.index')}>
                             <div className='flex flex-row space-x-2'>
                                 <ShoppingCartIcon className="h-5 w-5 mr-2 text-gray-500" />
                                 Bon d'achat
@@ -172,7 +229,7 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 >
                                     <SunIcon className='h-5 w-5 text-gray-500' />
                                 </button>
-                                {user.role === 'admin' && (
+                                {/* {user.role === 'admin' && (
                                     <div className="relative">
                                         <button
                                             className="relative flex items-center justify-center p-2 rounded-full bg-gray-100 dark:bg-gray-700"
@@ -204,17 +261,22 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                                         </div>
                                                     )}
 
+                                                    {notifications.correctionstocks > 0 && (
+                                                        <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-correctionstock')}>
+                                                            correctionstocks non validés: {notifications.correctionstocks}
+                                                        </div>
+                                                    )}
+
                                                     {notifications.expressionBesoins > 0 && (
                                                         <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer" onClick={() => handleNotificationClick('/non-valider-expbesoin')}>
                                                             Expressions de Besoin non validées: {notifications.expressionBesoins}
                                                         </div>
                                                     )}
-
                                                 </div>
                                             </div>
                                         )}
                                     </div>
-                                )}
+                                )} */}
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md w-full">

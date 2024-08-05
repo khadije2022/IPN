@@ -12,23 +12,32 @@ import "react-toastify/dist/ReactToastify.css";
 
 function Index_par_expbesoin({
   auth,
-  detailsexpresionbesoins = {data:[]},
+  detailsexpresionbesoins = { data: [] },
   expressionbesoin,
   id_expbesoin,
-  categories,
-  produits,
   success,
+  categories = [],
+  produits = [],
   valider,
-  error
+  error,
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
+  const [modalMode, setModalMode] = useState('add');
   const [currentDetail, setCurrentDetail] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [successMessage, setSuccessMessage] = useState(success);
-  const [sortConfig, setSortConfig] = useState({ key: '', direction: 'asc' });
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
   const [validationErrors, setValidationErrors] = useState({});
+
+  useEffect(() => {
+    if (selectedCategory && produits?.data) {
+      const filtered = produits.data.filter(product => product.id_categorie === parseInt(selectedCategory));
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredProducts([]);
+    }
+  }, [selectedCategory, produits]);
 
   useEffect(() => {
     if (success) {
@@ -39,8 +48,7 @@ function Index_par_expbesoin({
       return () => clearTimeout(timer);
     }
   }, [success]);
-  console.log(id_expbesoin)
-  // console.log(expressionbesoin.id)
+
   useEffect(() => {
     if (valider) {
       toast.success(valider);
@@ -53,19 +61,11 @@ function Index_par_expbesoin({
     }
   }, [error]);
 
-  useEffect(() => {
-    if (selectedCategory && produits?.data) {
-      const filtered = produits.data.filter(product => product.type.id === parseInt(selectedCategory));
-      setFilteredProducts(filtered);
-    } else {
-      setFilteredProducts([]);
-    }
-  }, [selectedCategory, produits]);
-
   const { data, setData, post, put, errors, reset } = useForm({
+    id_expbesoin: id_expbesoin,
+    id_categorie: "",
+    id_catproduit: "",
     quantite: "",
-    produit: "",
-    id_expbesoin: id_expbesoin
   });
 
   const openModal = (mode, detail = null) => {
@@ -73,23 +73,24 @@ function Index_par_expbesoin({
     setCurrentDetail(detail);
     if (mode === 'edit' && detail) {
       setData({
-        produit: detail.produit.id || "",
-        id_expbesoin: detail.id_expression.id || "",
-        quantite: detail.quantite || "",
+        id_expbesoin: detail.id_expbesoin,
+        id_categorie: detail.id_categorie,
+        id_catproduit: detail.id_catproduit,
+        quantite: detail.quantite,
       });
-      setSelectedCategory(detail.produit.type.id);
+      setSelectedCategory(detail.id_categorie);
     } else {
       setData({
+        id_expbesoin: id_expbesoin,
+        id_categorie: "",
+        id_catproduit: "",
         quantite: "",
-        produit: "",
-        id_expbesoin: id_expbesoin
       });
       setSelectedCategory('');
     }
     setValidationErrors({});
     setIsModalOpen(true);
   };
-
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -99,8 +100,11 @@ function Index_par_expbesoin({
 
   const validateForm = () => {
     const errors = {};
-    if (!data.produit) {
-      errors.produit = 'Le champ "Produit" est obligatoire.';
+    if (!data.id_categorie) {
+      errors.id_categorie = 'Le champ "Catégorie" est obligatoire.';
+    }
+    if (!data.id_catproduit) {
+      errors.id_catproduit = 'Le champ "Produit" est obligatoire.';
     }
     if (!data.quantite || data.quantite <= 0) {
       errors.quantite = 'Le champ "Quantité" est obligatoire et doit être un nombre positif.';
@@ -124,37 +128,33 @@ function Index_par_expbesoin({
 
   const handleQuantityChange = (e) => {
     const value = e.target.value;
-    if (value < 0) {
-      toast.error('La quantité ne peut être négative');
-      return;
-    }
-    setData('quantite', value);
+    setData('quantite', value >= 0 ? value : '');
   };
 
   const deleteDetailsexpresionbesoin = (detailsexpresionbesoin) => {
-    if (!confirm('Êtes-vous sûr de vouloir supprimer cette detail?')) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce détail?')) {
       return;
     }
     router.delete(route('detailsexpresionbesoin.destroy', detailsexpresionbesoin.id));
   };
 
-  const sortedData = [...detailsexpresionbesoins.data].sort((a, b) => {
-    if (a[sortConfig.key] < b[sortConfig.key]) {
-      return sortConfig.direction === 'asc' ? -1 : 1;
-    }
-    if (a[sortConfig.key] > b[sortConfig.key]) {
-      return sortConfig.direction === 'asc' ? 1 : -1;
-    }
-    return 0;
-  });
-
   const requestSort = (key) => {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
     }
     setSortConfig({ key, direction });
   };
+
+  const sortedDetails = [...detailsexpresionbesoins.data].sort((a, b) => {
+    if (a[sortConfig.key] < b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? -1 : 1;
+    }
+    if (a[sortConfig.key] > b[sortConfig.key]) {
+      return sortConfig.direction === 'ascending' ? 1 : -1;
+    }
+    return 0;
+  });
 
   return (
     <AuthenticatedLayout
@@ -162,12 +162,12 @@ function Index_par_expbesoin({
       header={
         <div className='flex justify-between items-center'>
           <h2 className='font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight'>
-            Détail  Expression du besoin
+            Expression des Besoins
           </h2>
         </div>
       }
     >
-      <Head title="BonAchat" />
+      <Head title="Expression des Besoins" />
 
       <div className='py-12'>
         <div className='max-w-7xl mx-auto sm:px-6 lg:px-8'>
@@ -185,27 +185,29 @@ function Index_par_expbesoin({
                   <h1>Description: {expressionbesoin.description}</h1>
                 </div>
                 <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
-                  <a href={route('export-expressionbesoin',{id_expbesoin: id_expbesoin})}
+                  <a href={route('export-expressionbesoin', { id_expbesoin: id_expbesoin })}
                     className="bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto"
                   ><FontAwesomeIcon icon={faFileExcel} /> Excel
                   </a>
 
                   {expressionbesoin.status === 'non-validé' &&
-                    auth.user.role ==='service'  &&
-                    (<button
-                      onClick={() => openModal('add')}
-                      className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
-                    >
-                      <FontAwesomeIcon icon={faPlus} /> Ajouter
-                    </button>)}
+                    auth.user.role === 'service' && (
+                      <button
+                        onClick={() => openModal('add')}
+                        className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
+                      >
+                        <FontAwesomeIcon icon={faPlus} /> Ajouter
+                      </button>
+                    )}
 
-                  {expressionbesoin.status === 'non-validé' && auth.user.role === 'admin' &&(
+                  {expressionbesoin.status === 'non-validé' && auth.user.role === 'admin' && (
                     <a
                       href={route('valider', { id_expbesoin: id_expbesoin })}
                       className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
                     >
                       Valider
-                    </a>)}
+                    </a>
+                  )}
                   <a
                     href={route('pdf-DetailsExpbesoin', { id_expbesoin: id_expbesoin })}
                     className='bg-emerald-500 py-2 px-4 text-white rounded shadow transition-all hover:bg-emerald-600 w-full sm:w-auto'
@@ -218,41 +220,29 @@ function Index_par_expbesoin({
               <table className='w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                   <tr className='text-nowrap'>
-                    <th className='px-3 py-3'>
-                      ID
-                      <button onClick={() => requestSort('id')}>
-                        <FontAwesomeIcon icon={faSort} className="ml-1" />
-                      </button>
+                    <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('id')}>
+                      ID <FontAwesomeIcon icon={faSort} />
                     </th>
-                    <th className='px-3 py-3'>
-                      Produits
-                      <button onClick={() => requestSort('produit.designation')}>
-                        <FontAwesomeIcon icon={faSort} className="ml-1" />
-                      </button>
+                    <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('produit.designation')}>
+                      Produits <FontAwesomeIcon icon={faSort} />
                     </th>
-                    <th className='px-3 py-3'>
-                      Catégorie
-                      <button onClick={() => requestSort('produit.type.type')}>
-                        <FontAwesomeIcon icon={faSort} className="ml-1" />
-                      </button>
+                    <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('produit.type.type')}>
+                      Catégorie <FontAwesomeIcon icon={faSort} />
                     </th>
-                    <th className='px-3 py-3'>
-                      Quantité
-                      <button onClick={() => requestSort('quantite')}>
-                        <FontAwesomeIcon icon={faSort} className="ml-1" />
-                      </button>
+                    <th className='px-3 py-3 cursor-pointer' onClick={() => requestSort('quantite')}>
+                      Quantité <FontAwesomeIcon icon={faSort} />
                     </th>
-                    {expressionbesoin.status === 'non-validé' && auth.user.role ==='service' &&(<th className='px-3 py-3 text-right'>Action</th>)}
+                    {expressionbesoin.status === 'non-validé' && auth.user.role === 'service' && (<th className='px-3 py-3 text-right'>Action</th>)}
                   </tr>
                 </thead>
                 <tbody>
-                  {sortedData.map((detailsexpresionbesoin) => (
+                  {sortedDetails.map((detailsexpresionbesoin) => (
                     <tr key={detailsexpresionbesoin.id} className='bg-white border-b dark:bg-gray-800 dark:border-gray-700'>
                       <td className='px-3 py-2'>{detailsexpresionbesoin.id}</td>
                       <td className='px-3 py-2'>{detailsexpresionbesoin.produit.designation}</td>
                       <td className='px-3 py-2'>{detailsexpresionbesoin.produit.type.type}</td>
                       <td className='px-3 py-2'>{detailsexpresionbesoin.quantite}</td>
-                      {expressionbesoin.status === 'non-validé' &&  auth.user.role ==='service'  && (
+                      {expressionbesoin.status === 'non-validé' && auth.user.role === 'service' && (
                         <td className='px-3 py-2 text-nowrap'>
                           <button
                             onClick={() => openModal('edit', detailsexpresionbesoin)}
@@ -270,7 +260,6 @@ function Index_par_expbesoin({
                       )}
                     </tr>
                   ))}
-                  {/* {JSON.stringify(detailsexpresionbesoins)} */}
                 </tbody>
               </table>
             </div>

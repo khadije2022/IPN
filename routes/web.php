@@ -1,10 +1,20 @@
 <?php
-
 use App\Http\Controllers\DetailBonSortieController;
 use App\Http\Controllers\BonAchatController;
 use App\Http\Controllers\BonSortieAchatController;
 use App\Http\Controllers\BonSortieController;
 use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\AnneeController;
+use App\Http\Controllers\BorderoDavoirController;
+use App\Http\Controllers\DetailsBorderoDavoiController;
+use App\Http\Controllers\DetailsreseptionController;
+use App\Http\Controllers\ManuelController;
+use App\Http\Controllers\ReceptionController;
+use App\Http\Controllers\RegionController;
+
+
+use App\Http\Controllers\TitreController;
+
 use App\Http\Controllers\CatelogueProduitController;
 use App\Http\Controllers\CorrectionStockController;
 use App\Http\Controllers\DetailBonAchatController;
@@ -23,7 +33,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 
-use App\Http\Controllers\NotificationController;
+// use App\Http\Controllers\NotificationController;
 
 use function Termwind\render;
 
@@ -35,14 +45,21 @@ Route::redirect('/', '/Accueil');
 Route::middleware(['auth'])->group(function() {
     Route::get('/Accueil', [MouvmentStockController::class, 'Mouvement'])->name('mouvmentStock.Accueil');
 
-    // Suppression de la route du tableau de bord
-    // Route::get('/dashboard', fn() => Inertia::render('Dashboard'))->name('dashboard');
-
     Route::resource('user', UserController::class);
     Route::resource('magasin', MagasinController::class);
     Route::resource('catelogueProduit', CatelogueProduitController::class);
     Route::get('/update-stock', [CatelogueProduitController::class, 'updateStockFromMouvmentStocks']);
     Route::resource('categorie', CategorieController::class);
+    Route::resource('annee', AnneeController::class);
+    Route::resource('BorderoDavoir', BorderoDavoirController::class);
+    Route::resource('DetailsBorderoDavoi', DetailsBorderoDavoiController::class);
+    Route::resource('Detailsreseption', DetailreceptionController::class);
+    Route::resource('manuel', ManuelController::class);
+    Route::resource('reception', ReceptionController::class);
+    Route::resource('region', RegionController::class);
+
+    Route::resource('titre', TitreController::class);
+
 
     Route::resource('bonSortie', BonSortieController::class);
     Route::resource('detailBonSortie', DetailBonSortieController::class);
@@ -84,10 +101,11 @@ Route::middleware(['auth'])->group(function() {
     Route::get('/export-produit', [CatelogueProduitController::class, 'exportExcel'])->name('export-produit');
     Route::get('/export-bonachat', [BonAchatController::class, 'exportExcel'])->name('export-bonachat');
     Route::get('/export-bonsortie', [BonSortieController::class, 'exportExcel'])->name('export-bonsortie');
-    Route::get('/api/notifications', [NotificationController::class, 'getNotifications']);
+    // Route::get('/api/notifications', [NotificationController::class, 'getNotifications']);
     Route::get('/non-valider-expbesoin', [ExpressionBesoinController::class, 'nonvaliderExpbesoin']);
     Route::get('/non-valider-bonAchat', [BonAchatController::class, 'nonvaliderbonAchat']);
     Route::get('/non-valider-bonsortie', [BonSortieController::class, 'nonvaliderbonsortie']);
+    Route::get('/non-valider-correctionstock', [CorrectionStockController::class, 'nonvalidercorrectionstock']);
 
 
     Route::get('/export-detailexpbesoin/{id_expbesoin}', [Details_ExpBesoinController::class, 'exportExcel'])->name('export-detailexpbesoin');
